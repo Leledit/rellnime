@@ -1,0 +1,20 @@
+@import "../../../../../public/css/palette.scss";
+
+.containerLink {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 33px;
+  .linkForgotPassword {
+    text-align: right;
+    color: $dark-black-700;
+    text-decoration: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  @media screen and (min-width: 428px) {
+    width: 96%;
+  }
+}

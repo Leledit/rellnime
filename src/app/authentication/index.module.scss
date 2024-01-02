@@ -1,0 +1,66 @@
+@import "../../../public/css/palette.scss";
+
+.containerLayout {
+  background: url("../../../public/images/authentication/backgroundMobile.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-family: Merienda;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  .contantInfo {
+    border-top: 2px solid $light-blue-600;
+    border-bottom: 2px solid $light-blue-600;
+    background: $light-white-900;
+    width: 100%;
+    .breathingSpace {
+      width: 90%;
+      margin-left: 5%;
+    }
+  }
+
+  @media screen and (min-width: 428px) {
+    background: url("../../../public/images/authentication/backgroundTablet.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .contantInfo {
+      width: 420px;
+      border-radius: 50px;
+      border: 2px solid $light-blue-600;
+    }
+  }
+
+  @media screen and (min-width: 820px) {
+    .contantInfo {
+      width: 800px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      .breathingSpace {
+        width: 580px;
+        margin-left: 0px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    background: url("../../../public/images/authentication/backgroundDesktop.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  @media screen and (min-width: 1400px) {
+    background: url("../../../public/images/authentication/backgroundDesktopFull.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

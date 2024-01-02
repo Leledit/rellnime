@@ -1,0 +1,37 @@
+@import "../../../../../public/css/palette.scss";
+
+.contaner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  .title {
+    color: $dark-black-700;
+    font-family: Merienda;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+  .divider {
+    border-bottom: 1px solid $light-blue;
+    display: block;
+    width: 90%;
+    margin-bottom: 27px;
+  }
+  .otherProviders {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%;
+    margin-bottom: 45px;
+    .otherProvidersImg {
+      cursor: pointer;
+    }
+  }
+
+  @media screen and (min-width: 428px) {
+    width: 350px;
+    margin-left: calc(50% - 175px);
+  }
+}

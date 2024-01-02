@@ -1,22 +1,22 @@
-import type { Metadata } from 'next'
-import { Merienda } from 'next/font/google'
-import '../../public/css/reset.css'
+import type { Metadata } from "next";
+import { Merienda } from "next/font/google";
+import "../../public/css/reset.css";
 
-const merienda = Merienda({subsets:['latin']});
+const merienda = Merienda({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ReellNime archive',
-  description: 'Sua biblioteca de conteudo online',
-}
+  title: "ReellNime archive",
+  description: "Sua biblioteca de conteudo online",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <body className={merienda.className}>{children}</body>
     </html>
-  )
+  );
 }
