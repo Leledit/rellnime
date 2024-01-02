@@ -1,5 +1,7 @@
 "use client";
 import { TextField } from "@mui/material";
+import { ChangeEvent } from "react";
+import styles from './index.module.scss';
 import styled from "styled-components";
 
 const CustomizedTextField = styled(TextField)({
@@ -19,19 +21,31 @@ interface props {
   label: string;
   name: string;
   type: "text" | "email" | "password";
+  onChange: (e: any) => void;
+  error: any;
 }
 
-export default function FormInput({ label, name, type }: props) {
+export default function FormInput({
+  label,
+  name,
+  type,
+  onChange,
+  error,
+}: props) {
   return (
-    <CustomizedTextField
-      name={name}
-      label={label}
-      variant="filled"
-      type={type}
-      style={{
-        width: "100%",
-        marginBottom: "35px",
-      }}
-    />
+    <>
+      <CustomizedTextField
+        name={name}
+        label={label}
+        variant="filled"
+        type={type}
+        error={error}
+        className={styles.stylesInput}
+        onChange={(e) => {
+          onChange(e);
+        }}
+      />
+      {error ? <p className={styles.msgErroInput}>Este campo é obrigatorio</p> : <></>}
+    </>
   );
 }
