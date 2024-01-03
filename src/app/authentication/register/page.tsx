@@ -5,7 +5,16 @@ import FormInput from "@/app/_components/general/form/input";
 import Button from "@/app/_components/general/button";
 import FormLink from "@/app/_components/general/link";
 import { FormEvent, useState } from "react";
-import { handleChancheField, onValidateFieldsEmpty } from "@/app/_utils/formHandling";
+import {
+  handleChancheField,
+  onValidateFieldsEmpty,
+} from "@/app/_utils/formHandling";
+import adapterAuthenticationRegister from "@/app/_adapter/authentication/register";
+import { ImensagemRequest } from "@/app/_interface/forms";
+import { setTolkenCookie } from "@/app/_utils/cookies/cookies";
+import { useRouter } from "next/navigation";
+import FormMessage from "@/app/_components/general/form/message";
+import FormLoading from "@/app/_components/general/form/loading";
 
 interface formFild {
   email: {
@@ -27,6 +36,8 @@ interface formFild {
 }
 
 export default function AuthenticationLogin() {
+  const router = useRouter();
+
   const initialValueFormsFilds: formFild = {
     email: {
       value: "",
@@ -47,6 +58,10 @@ export default function AuthenticationLogin() {
   };
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [mensagemRequest, setMensagemRequest] = useState<ImensagemRequest>({
+    status: 0,
+    message: "",
+  });
   const [formsFilds, setFormsFilds] = useState<formFild>(
     initialValueFormsFilds
   );
@@ -56,13 +71,61 @@ export default function AuthenticationLogin() {
     setLoading(true);
 
     await onValidateFieldsEmpty(setFormsFilds);
-    
-  }
+
+    if (!Object.values(formsFilds).some((field) => field.error)) {
+      if (checkPasswordMatch()) {
+        const resultRequest = await adapterAuthenticationRegister({
+          email: formsFilds.email.value,
+          name: formsFilds.name.value,
+          password: formsFilds.password.value,
+        });
+
+        if (resultRequest === 500) {
+          setMensagemRequest({
+            message: "Problemas ao realizar o cadastro",
+            status: 500,
+          });
+        } else {
+          setMensagemRequest({
+            message: "Cadastro efetuado com sucesso",
+            status: 200,
+          });
+        }
+
+        //Cadastrando o tolken do usuario
+        setTolkenCookie(resultRequest.tolken);
+        //redireciona o usuario apos o cadastro
+
+        router.push("/");
+      } else {
+        setMensagemRequest({
+          message: "Senhas não corespondentes!",
+          status: 500,
+        });
+      }
+
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  const checkPasswordMatch = () => {
+    if (formsFilds.password.value === formsFilds.confirmPassword.value) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   return (
     <>
       <HeaderForms titleForm="Cadastro" />
-      <form>
+      <form
+        onSubmit={(e) => {
+          handleRegisterEvent(e);
+        }}
+      >
         <FormInput
           label="E-mail:"
           name="email"
@@ -100,6 +163,8 @@ export default function AuthenticationLogin() {
           error={formsFilds.confirmPassword.error}
         />
         <FormLink destiny="/authentication/login" text="Ja possui conta?" />
+        <FormLoading loading={loading} />
+        <FormMessage mensagemRequest={mensagemRequest} />
         <Button text="Cadastrar" type="submit" />
       </form>
       <AccessByOtherProviders parentComponentIdentification="login" />

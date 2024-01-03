@@ -6,7 +6,17 @@ import Button from "@/app/_components/general/button";
 import AccessByOtherProviders from "@/app/_components/user/accessByOtherProviders";
 import FormLink from "@/app/_components/general/link";
 import { FormEvent, useState } from "react";
-import { handleChancheField, onValidateFieldsEmpty } from "@/app/_utils/formHandling";
+import {
+  handleChancheField,
+  onValidateFieldsEmpty,
+} from "@/app/_utils/formHandling";
+import FormLoading from "@/app/_components/general/form/loading";
+import adapterAuthenticationLogin from "@/app/_adapter/authentication/login";
+import { ImensagemRequest } from "@/app/_interface/forms";
+import FormMessage from "@/app/_components/general/form/message";
+import { setTolkenCookie } from "@/app/_utils/cookies/cookies";
+import getUserTypeFromToken from "@/app/_utils/tolken";
+import { useRouter } from "next/navigation";
 
 interface formFild {
   email: {
@@ -20,6 +30,8 @@ interface formFild {
 }
 
 export default function AuthenticationLogin() {
+  const router = useRouter();
+
   const initialValueFormsFilds: formFild = {
     email: {
       error: false,
@@ -32,21 +44,59 @@ export default function AuthenticationLogin() {
   };
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [mensagemRequest, setMensagemRequest] = useState<ImensagemRequest>({
+    status: 0,
+    message: "",
+  });
   const [formsFilds, setFormsFilds] = useState<formFild>(
     initialValueFormsFilds
   );
-  
+
   const handleLoginEvent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     await onValidateFieldsEmpty(setFormsFilds);
-  }
+
+    if (!Object.values(formsFilds).some((field) => field.error)) {
+      const resultRequest = await adapterAuthenticationLogin({
+        email: formsFilds.email.value,
+        password: formsFilds.password.value,
+      });
+
+      if (resultRequest === 500) {
+        setMensagemRequest({ message: "Usuario não encontrado!", status: 500 });
+      } else {
+        setMensagemRequest({
+          message: "Login efetuado com sucesso!",
+          status: 200,
+        });
+
+        //Cadastrando o tolken do usuario
+        setTolkenCookie(resultRequest.tolken);
+        //Verificando o tipo de usuairio e redirecionando
+        const typeUser: any = getUserTypeFromToken(resultRequest.tolken);
+
+        if (typeUser.papel === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
+      }
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <HeaderForms titleForm="Login" />
-      <form onSubmit={(e)=>{handleLoginEvent(e)}}>
+      <form
+        onSubmit={(e) => {
+          handleLoginEvent(e);
+        }}
+      >
         <FormInput
           label="E-mail:"
           name="email"
@@ -65,7 +115,9 @@ export default function AuthenticationLogin() {
           }}
           error={formsFilds.password.error}
         />
-        <FormLink destiny="/authentication/register" text="Esqueceu a senha?" />
+        <FormLink destiny="/authentication/register" text="Não possui conta?" />
+        <FormLoading loading={loading} />
+        <FormMessage mensagemRequest={mensagemRequest} />
         <Button text="Login" type="submit" />
       </form>
       <AccessByOtherProviders parentComponentIdentification="login" />
