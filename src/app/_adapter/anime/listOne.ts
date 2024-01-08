@@ -1,6 +1,6 @@
 'use server'
-export default async function adapterListAllFilmes(){
-    const url = process.env.URL_API_BASE + "/filmes/";
+export default async function adapterListOneAnime(idAnime:string){
+    const url = process.env.URL_API_BASE + `/animes/${idAnime}`;
 
     const result = await fetch(url); 
 
@@ -10,4 +10,5 @@ export default async function adapterListAllFilmes(){
 
     const dataResult = await result.json();
     return dataResult;
+
 }

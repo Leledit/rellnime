@@ -43,6 +43,8 @@ export default function PageListingType({ params, searchParams }: IProps) {
                   id={item.id}
                   img={item.urlImg}
                   name={item.name}
+                  applicationSegment="ADM"
+                  isAnime={!("duration" in item) ? true : false}
                 />
               );
             })}

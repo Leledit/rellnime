@@ -3,13 +3,16 @@
 import styles from "./index.module.scss";
 import smallsoon from "../../../../../public/images/smalSoon.png";
 import Image from "next/image";
-import { Divider, Drawer } from "@mui/material";
+import { Divider, Drawer, Tooltip } from "@mui/material";
 import { useState } from "react";
 import ExitIcon from "@/app/_ui/exit";
 import Link from "next/link";
+import HomeIcon from "@mui/icons-material/Home";
+import { useRouter } from "next/navigation";
 
 export default function AdmMenu() {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const router = useRouter();
 
   const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -27,6 +30,10 @@ export default function AdmMenu() {
     //Fazer evento de sair da aplicação
     console.log("saindo da aplicação");
   };
+
+  const handleRedirectionToTheHomePage = () => {
+ router.push("/admin");
+  }  
 
   return (
     <>
@@ -50,15 +57,20 @@ export default function AdmMenu() {
           <div className={styles.menuHeader}>
             <h2 className={styles.menuHeaderTitle}>Recursos disponiveis</h2>
             <Divider />
-            <div className={styles.menuHeaderContainerExit}>
-              <div
-                className={styles.menuHeaderIconExit}
-                onClick={() => {
-                  HandleApplicationExitEvent();
-                }}
-              >
-                {ExitIcon("red", "45", "45")}
-              </div>
+            <div className={styles.menuHeaderContainerIcons}>
+              <Tooltip title="Voltar para a home" onClick={()=>handleRedirectionToTheHomePage()}>
+                <HomeIcon className={styles.menuHeaderIconHome} />
+              </Tooltip>
+              <Tooltip title="Sair da aplicação">
+                <div
+                  className={styles.menuHeaderIconExit}
+                  onClick={() => {
+                    HandleApplicationExitEvent();
+                  }}
+                >
+                  {ExitIcon("red", "45", "45")}
+                </div>
+              </Tooltip>
             </div>
           </div>
           <div className={styles.menuBody}>

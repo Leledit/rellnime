@@ -39,6 +39,8 @@ export default function PageAdmin() {
                   id={item.id}
                   img={item.urlImg}
                   name={item.name}
+                  applicationSegment="ADM"
+                  isAnime={!("duration" in item)?true:false}
                 />
               );
             })}
@@ -46,13 +48,14 @@ export default function PageAdmin() {
         </>
       ) : (
         <div className={styles.containerMessage}>
-          <h2 className={styles.messageText}>Nenhum registro foi encontrado!!</h2>
+          <h2 className={styles.messageText}>
+            Nenhum registro foi encontrado!!
+          </h2>
         </div>
       )}
     </div>
   );
 }
-
 
 /*
  <div className={styles.admData}>

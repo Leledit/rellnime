@@ -1,0 +1,16 @@
+@import "./palette.scss";
+
+.containerLoading{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: $light-white-300;
+    .loading{
+        width: 80px !important;
+        height: 80px !important;
+        color:$dark-black
+    }
+}
