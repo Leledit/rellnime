@@ -1,0 +1,90 @@
+@import "../../../../../public/css/palette.scss";
+.containerForm {
+  border-top: 2px solid $light-blue-600;
+  border-bottom: 2px solid $light-blue-600;
+  background: $light-white-900;
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  .breathingSpace {
+    width: 90%;
+    margin-left: 5%;
+  }
+
+  .uploadAndButton{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 428px) {
+    width: 420px;
+    border-radius: 50px;
+    border: 2px solid $light-blue-600;
+  }
+
+  @media screen and (min-width: 820px) {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    .breathingSpace {
+      width: 580px;
+      margin-left: 0px;
+    }
+
+    .aliginTwoFilds{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .filledName{
+        width: 220%;
+        margin-right: 40px;
+      }
+      .marginRight{
+        margin-right: 30px;
+      }
+      .marginLeft{
+        margin-left: 30px;
+      }
+    }
+  }
+  @media screen and (min-width: 992px) {
+    width: 900px;
+    .breathingSpace {
+      width:800px;
+    }
+    .aliginFourFilds{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      //flex-wrap: wrap;
+      .marginRight{
+        margin-right: 30px;
+      }
+    }
+    .uploadAndButton{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .marginRight{
+        margin-right: 40px;
+      }
+      .button{
+        margin-top: 50px;
+      }
+    }
+  }
+  @media screen and (min-width: 1400px) {
+    width: 1300px;
+    .breathingSpace {
+      width:1150px;
+    }
+  }
+
+}

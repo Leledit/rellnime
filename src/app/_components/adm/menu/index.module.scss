@@ -1,0 +1,121 @@
+@import "../../../../../public/css/palette.scss";
+
+.admMenu {
+  border-bottom: 1px solid $dark-black-900;
+  background: $dark-black-900;
+  width: 100%;
+  height: 220px;
+  cursor: pointer;
+  .internalSpace {
+    width: 96%;
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .admMenuSoon {
+    width: 143px;
+    height: 120px;
+    cursor: pointer;
+  }
+  .admMenuTitle {
+    color: $light-white;
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 30px;
+  }
+  @media screen and (min-width: 300px) {
+    height: 120px;
+    .internalSpace {
+      flex-direction: row;
+      justify-content: space-between;
+      align-content: center;
+    }
+    .admMenuTitle {
+      text-align: center;
+      width: 100%;
+    }
+  }
+  @media screen and (min-width: 428px) {
+    .admMenuTitle {
+      font-size: 36px;
+      line-height: 48px;
+    }
+  }
+  @media screen and (min-width: 992px) {
+    .internalSpace {
+      width: 90%;
+      margin-left: 5%;
+    }
+  }
+  @media screen and (min-width: 1400px) {
+    .internalSpace {
+      width: 80%;
+      margin-left: 10%;
+    }
+  }
+}
+
+.drawerMenu {
+  width: 200px;
+  .menuHeader {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 20px;
+    .menuHeaderTitle {
+      text-align: center;
+      color: $dark-black;
+      font-size: 20px;
+      line-height: 30px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .menuHeaderContainerExit {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 20px;
+
+      .menuHeaderIconExit {
+        cursor: pointer;
+      }
+    }
+  }
+  .menuBody {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 30px;
+    .blockOptions {
+      .blockOptionsTitle {
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: $dark-black;
+        font-weight: 700;
+      }
+      .blockOption {
+        display: block;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 10px;
+        background: $light-blue-600;
+        color: $dark-black-900;
+        text-align: center;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-bottom: 20px;
+        &:hover {
+          background: $light-blue;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 428px) {
+    width: 300px;
+  }
+}

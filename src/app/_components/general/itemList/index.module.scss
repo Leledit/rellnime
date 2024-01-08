@@ -1,0 +1,30 @@
+@import "../../../../../public/css/palette.scss";
+.containerItem {
+  width: 80%;
+  height: 280px;
+  margin-bottom: 40px;
+  position: relative;
+  cursor: pointer;
+  .itemImg {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .itemName {
+    background: $light-blue-800;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    color: $dark-black-900;
+  }
+
+  @media screen and (min-width: 350px) {
+    width: 200px;
+    height: 250px;
+  }
+  @media screen and (min-width: 428px) {
+  }
+}

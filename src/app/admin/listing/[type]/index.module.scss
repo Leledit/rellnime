@@ -1,0 +1,68 @@
+@import "../../../../../public/css/palette.scss";
+
+.cotainerListing {
+  background: $dark-black-900;
+  width: 100%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+
+  .listingHeader {
+    width: 96%;
+    margin-left: 2%;
+
+    .listingHeaderTitle {
+      padding-top: 44px;
+      color: $light-white;
+      text-align: center;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 40px;
+    }
+  }
+
+  .listingData {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  .containerMessage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-top: 60px;
+    margin-bottom: 60px;
+
+    .messageText {
+      font-size: 30px;
+      color: $light-white;
+      font-weight: 700;
+    }
+  }
+
+  @media screen and (min-width: 428px) {
+    .listingData {
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 90%;
+      margin-left: 5%;
+    }
+  }
+  @media screen and (min-width: 600px) {
+    border-radius: 20px;
+    width: 90%;
+    border: 1px solid $dark-black;
+    .listingHeader {
+      width: 400px;
+      margin-left: 28px;
+    }
+  }
+}

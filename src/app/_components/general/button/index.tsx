@@ -5,11 +5,12 @@ interface props {
   text: string;
   type: "submit" | "button";
   destiny?: string;
+  customClassComponent?:any,
 }
 
-export default function Button({ text, type, destiny }: props) {
+export default function Button({ text, type, destiny,customClassComponent }: props) {
   return (
-    <div className={styles.containerButton}>
+    <div className={styles.containerButton +" "+ customClassComponent}>
       {destiny ? (
         <>
           <Link href={destiny} className={styles.linkButton}>

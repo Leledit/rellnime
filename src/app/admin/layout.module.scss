@@ -1,0 +1,37 @@
+.containerAdmin {
+  background: url("../../../public/images/adm/background/backgroundMobile.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  height: 100%;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  .test {
+    position: relative;
+  }
+
+  @media screen and (min-width: 428px) {
+    background: url("../../../public/images/adm/background/backgroundTablet.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  @media screen and (min-width: 992px) {
+    background: url("../../../public/images/adm/background/backgroundDesktop.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  @media screen and (min-width: 1400px) {
+    background: url("../../../public/images/adm/background/backgroundDesktopFull.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
