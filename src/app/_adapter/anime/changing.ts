@@ -1,5 +1,6 @@
 "use server";
-import { post } from "../http.service";
+
+import { put } from "../http.service";
 
 interface dataAnime {
   name: string;
@@ -14,13 +15,14 @@ interface dataAnime {
   img: any;
 }
 
-export default async function adapterAnimeRegister(
+export default async function adapterAnimeChanging(
   dataAnime: dataAnime,
-  accessToken: string
+  accessToken: string,
+  idAnime: string,
 ) {
-  const url = process.env.URL_API_BASE + "/animes/";
+  const url = process.env.URL_API_BASE + `/animes/${idAnime}`;
 
-  const result = await post(
+  const result = await put(
     url,
     {
       name: dataAnime.name,
@@ -37,7 +39,7 @@ export default async function adapterAnimeRegister(
     accessToken
   );
 
-  if (result.status !== 201) {
+  if (result.status !== 200) {
     return result.status;
   }
 

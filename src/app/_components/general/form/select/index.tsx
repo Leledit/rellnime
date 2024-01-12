@@ -46,7 +46,7 @@ export default function FormSelect({
   }
 
   const theme = useTheme();
-
+  
   return (
     <>
       <FormControl sx={{ width: "100%", marginBottom: "35px" }}>
@@ -54,19 +54,20 @@ export default function FormSelect({
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
-          value={value}
+          value={value[0]}
           name={name}
           onChange={onChange}
           input={<OutlinedInput label="Name" />}
           MenuProps={MenuProps}
           error={error}
-          style={{color:'rgba(0, 0, 0, 0.6)'}}
+          style={{ color: "rgba(0, 0, 0, 0.6)" }}
         >
           {options.map((option) => (
             <MenuItem
               key={option}
               value={option}
               style={getStyles(name, value, theme)}
+              selected={option === value[0] ? true : false}
             >
               {option}
             </MenuItem>

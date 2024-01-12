@@ -14,7 +14,7 @@ export async function get(url: string) {
 }
 
 export async function post(url: string, body?: any, tolken?: string) {
-  //console.log("post", url, tolken);
+  //console.log("post", url, tolken,body);
 
   const response = await fetch(url, {
     method: "POST",
@@ -23,6 +23,22 @@ export async function post(url: string, body?: any, tolken?: string) {
       Authorization: tolken ? tolken : "",
       /*apiKey: process.env.API_KEY || "",
             Authorization: process.env.LOCAL_AUTH_BASIC || '',*/
+    },
+    body: body ? JSON.stringify(body) : null,
+  });
+
+  return response;
+}
+
+export async function put(url: string, body?: any, tolken?: string) {
+  
+  //console.log("PUT", url, tolken,body);
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: tolken ? tolken : "",
     },
     body: body ? JSON.stringify(body) : null,
   });

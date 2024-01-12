@@ -26,21 +26,32 @@
     height: 40px;
     display: none;
   }
-  .msgErroInput{
+  .msgErroInput {
     text-align: center;
     color: red;
     width: 100%;
     font-size: 18px;
     margin-bottom: 20px;
+  }
+  .messageImgLoaded{
+    text-align: center;
+    color: rgb(14, 201, 55);
+    padding-left: 40px;
+    margin-bottom: 20px;
+  }
 
-}
-  @media screen and (min-width:428px) {
+  .fileValue{
+    width: 100px;
+    height: 100px;
+    margin-left: 30px;
+  }
+  @media screen and (min-width: 428px) {
     .imgInputFile {
-        width: 340px;
+      width: 340px;
     }
   }
 
-  @media screen and (min-width:820px){
+  @media screen and (min-width: 820px) {
     width: 100%;
   }
 }

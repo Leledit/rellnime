@@ -1,8 +1,10 @@
+"use client";
 import { IEntitieAnime, IEntitieFilme } from "@/app/_interface/dataBd";
 import styles from "./index.module.scss";
 import { Divider } from "@mui/material";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import AdmPopUpAddGenre from "../popUp/addGenre";
 
 interface props {
   typeIten: "anime" | "filme";
@@ -12,6 +14,7 @@ interface props {
 
 export default function AdmItem({ typeIten, dataItem }: props) {
   const router = useRouter();
+  const [openModalAddGenre, setOpenModalAddGenre] = useState<boolean>(false);
 
   const returnItemsOfTheGenre = () => {
     if (dataItem.genres && dataItem.genres.length > 0) {
@@ -42,7 +45,7 @@ export default function AdmItem({ typeIten, dataItem }: props) {
 
   const handleAddGenderEvent = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Adicionando um genero ao item");
+    setOpenModalAddGenre(true);
   };
 
   const handleGenderRemoveEvent = () => {
@@ -50,115 +53,123 @@ export default function AdmItem({ typeIten, dataItem }: props) {
   };
 
   return (
-    <div className={styles.containerItem}>
-      <div className={styles.internalSpace}>
-        <h2 className={styles.itemTitle}>{dataItem.name}</h2>
-        <div className={styles.containerInfo}>
-          <img
-            className={styles.infoImg}
-            alt={`Imagem do titulo: ${dataItem.name}`}
-            src={dataItem.urlImg}
-          />
-          <div className={styles.informations}>
-            <div className={styles.noteAndButton}>
-              <div className={styles.note}>
-                <div className={styles.noteTitle}>Nota</div>
-                <div className={styles.noteValue}>
-                  {dataItem.note ? dataItem.note : "0"}
+    <>
+      <AdmPopUpAddGenre
+        onClosed={() => {
+          setOpenModalAddGenre(!openModalAddGenre);
+        }}
+        open={openModalAddGenre}
+      />
+      <div className={styles.containerItem}>
+        <div className={styles.internalSpace}>
+          <h2 className={styles.itemTitle}>{dataItem.name}</h2>
+          <div className={styles.containerInfo}>
+            <img
+              className={styles.infoImg}
+              alt={`Imagem do titulo: ${dataItem.name}`}
+              src={dataItem.urlImg}
+            />
+            <div className={styles.informations}>
+              <div className={styles.noteAndButton}>
+                <div className={styles.note}>
+                  <div className={styles.noteTitle}>Nota</div>
+                  <div className={styles.noteValue}>
+                    {dataItem.note ? dataItem.note : "0"}
+                  </div>
                 </div>
+                <button
+                  className={styles.button}
+                  onClick={(e) => {
+                    handleInformationChangeEvent(e);
+                  }}
+                >
+                  Alterar informações
+                </button>
               </div>
-              <button
-                className={styles.button}
-                onClick={(e) => {
-                  handleInformationChangeEvent(e);
-                }}
-              >
-                Alterar informações
-              </button>
-            </div>
-            <div className={styles.listInfos}>
-              {"qtdEpisodes" in dataItem ? (
+              <div className={styles.listInfos}>
+                {"qtdEpisodes" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Episodios: </strong>
+                    {dataItem.qtdEpisodes}
+                  </p>
+                ) : (
+                  <></>
+                )}
                 <p className={styles.listInfo}>
-                  <strong>Episodios: </strong>
-                  {dataItem.qtdEpisodes}
+                  <strong>Laçamento: </strong>
+                  {dataItem.releaseYear}
                 </p>
-              ) : (
-                <></>
-              )}
-              <p className={styles.listInfo}>
-                <strong>Laçamento: </strong>
-                {dataItem.releaseYear}
-              </p>
-              {"status" in dataItem ? (
-                <p className={styles.listInfo}>
-                  <strong>Status: </strong>
-                  {dataItem.status}
-                </p>
-              ) : (
-                <></>
-              )}
-              {"previousSeason" in dataItem ? (
-                <p className={styles.listInfo}>
-                  <strong>Temporada anterior: </strong>
-                  {dataItem.previousSeason}
-                </p>
-              ) : (
-                <></>
-              )}
-              {"nextSeason" in dataItem ? (
-                <p className={styles.listInfo}>
-                  <strong>Próxima Temporada: </strong>
-                  {dataItem.nextSeason}
-                </p>
-              ) : (
-                <></>
-              )}
-              {"watched" in dataItem ? (
-                <p className={styles.listInfo}>
-                  <strong>Visto: </strong>
-                  {dataItem.watched}
-                </p>
-              ) : (
-                <></>
-              )}
+                {"status" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Status: </strong>
+                    {dataItem.status}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                {"previousSeason" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Temporada anterior: </strong>
+                    {dataItem.previousSeason}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                {"nextSeason" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Próxima Temporada: </strong>
+                    {dataItem.nextSeason}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                {"watched" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Visto: </strong>
+                    {dataItem.watched}
+                  </p>
+                ) : (
+                  <></>
+                )}
 
-              {"duration" in dataItem ? (
+                {"duration" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Duração: </strong>
+                    {dataItem.duration}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                {"visa" in dataItem ? (
+                  <p className={styles.listInfo}>
+                    <strong>Visto: </strong>
+                    {dataItem.visa ? "Sim" : "Não"}
+                  </p>
+                ) : (
+                  <></>
+                )}
                 <p className={styles.listInfo}>
-                  <strong>Duração: </strong>
-                  {dataItem.duration}
+                  <strong>Sinops: </strong>
+                  {dataItem.synopsis}
                 </p>
-              ) : (
-                <></>
-              )}
-              {"visa" in dataItem ? (
-                <p className={styles.listInfo}>
-                  <strong>Visto: </strong>
-                  {dataItem.visa ? "Sim" : "Não"}
-                </p>
-              ) : (
-                <></>
-              )}
-              <p className={styles.listInfo}>
-                <strong>Sinops: </strong>
-                {dataItem.synopsis}
-              </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.containerGenres}>
-          <Divider className={styles.genresLine} />
-          <h2 className={styles.title}>Generos</h2>
-          <div className={styles.genresItens}>{returnItemsOfTheGenre()}</div>
-          <button
-            className={styles.button}
-            onClick={(e) => {
-              handleAddGenderEvent(e);
-            }}
-          >
-            Adicionar novo
-          </button>
+          <div className={styles.containerGenres}>
+            <Divider className={styles.genresLine} />
+            <h2 className={styles.title}>Generos</h2>
+            <div className={styles.genresItens}>{returnItemsOfTheGenre()}</div>
+            <button
+              className={styles.button}
+              onClick={(e) => {
+                handleAddGenderEvent(e);
+              }}
+            >
+              Adicionar novo
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

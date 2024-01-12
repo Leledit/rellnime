@@ -1,13 +1,9 @@
 "use client";
 import HeaderForms from "@/app/_components/general/form/headerFormes";
 import styles from "./index.module.scss";
-import {
-  handleChancheField,
-  handleChancheFieldFile,
-  onValidateFieldsEmpty,
-} from "@/app/_utils/formHandling";
+import { onValidateFieldsEmpty } from "@/app/_utils/formHandling";
 import FormInput from "@/app/_components/general/form/input";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import FormSelect from "@/app/_components/general/form/select";
 import FormTextArea from "@/app/_components/general/form/textArea";
 import FormFile from "@/app/_components/general/form/file";
@@ -21,6 +17,10 @@ import {
 } from "@/app/_utils/manipulatingImage";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
+import adapterListOneAnime from "@/app/_adapter/anime/listOne";
+import { useRouter } from "next/navigation";
+import { IEntitieAnime } from "@/app/_interface/dataBd";
+import adapterAnimeChanging from "@/app/_adapter/anime/changing";
 
 interface formFild {
   name: {
@@ -28,19 +28,19 @@ interface formFild {
     error: boolean;
   };
   watched: {
-    value: string;
+    value: boolean;
     error: boolean;
   };
   qtdEpisodes: {
-    value: string;
+    value: number;
     error: boolean;
   };
   releaseYear: {
-    value: string;
+    value: number;
     error: boolean;
   };
   note: {
-    value: string;
+    value: number;
     error: boolean;
   };
   status: {
@@ -73,7 +73,6 @@ interface IProps {
 }
 
 export default function AnimeForm({ params, searchParams }: IProps) {
-
   const initialValueFormsFilds: formFild = {
     name: {
       error: false,
@@ -81,19 +80,19 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     },
     watched: {
       error: false,
-      value: "",
+      value: true,
     },
     qtdEpisodes: {
       error: false,
-      value: "",
+      value: 0,
     },
     releaseYear: {
       error: false,
-      value: "",
+      value: 0,
     },
     note: {
       error: false,
-      value: "",
+      value: 0,
     },
     status: {
       error: false,
@@ -117,6 +116,7 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     },
   };
 
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [mensagemRequest, setMensagemRequest] = useState<ImensagemRequest>({
     status: 0,
@@ -126,7 +126,12 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     initialValueFormsFilds
   );
   const accessToken = getTolkenCookie();
-  const [modePage,setModePage] = useState()
+
+  useEffect(() => {
+    if (params.type === "editing" && searchParams) {
+      lookingForInformationAboutAnAnime(searchParams.id as string);
+    }
+  }, []);
 
   const handleRegisterEvent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -135,43 +140,42 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     await onValidateFieldsEmpty(setFormsFilds);
 
     if (!Object.values(formsFilds).some((field) => field.error)) {
-      const compressedImage: any = await compressImage(formsFilds.img.value);
-      const base64Image = await convertBlobToBase64(compressedImage);
+      if (params.type === "editing") {
+        //Editando um anime
+        await editingAnAlreadyRegisteredAnime();
+      } else {
+        //Cadastrando um novo anime
+        await registerNewRecordInTheDatabase();
+      }
 
-      const resultRequest = await adapterAnimeRegister(
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  async function editingAnAlreadyRegisteredAnime() {
+    if (searchParams) {
+      const resultRequest = await adapterAnimeChanging(
         {
           name: formsFilds.name.value,
           watched: formsFilds.watched.value,
-          qtdEpisodes: parseInt(formsFilds.qtdEpisodes.value),
-          releaseYear: parseInt(formsFilds.releaseYear.value),
-          note: parseInt(formsFilds.note.value),
+          qtdEpisodes: formsFilds.qtdEpisodes.value,
+          releaseYear: formsFilds.releaseYear.value,
+          note: formsFilds.note.value,
           status: formsFilds.status.value,
           nextSeason: formsFilds.nextSeason.value,
           previousSeason: formsFilds.previousSeason.value,
           synopsis: formsFilds.synopsis.value,
-          img: base64Image,
+          img: await returnImageThatMustBeSent(),
         },
-        accessToken
+        accessToken,
+        searchParams.id as string
       );
-
-      if (resultRequest === 409) {
-        setMensagemRequest({
-          message: "Existe outro anime no sistema com este nome",
-          status: 500,
-        });
-      }
 
       if (resultRequest === 400) {
         setMensagemRequest({
-          message: "Problemas ao cadastrar o anime",
-          status: 500,
-        });
-      }
-
-      if (resultRequest === 401) {
-        //Criar ação adicional aqui(tipo deslogar a pessoa se necessario)
-        setMensagemRequest({
-          message: "Tolken expirado!, faça login novamente!",
+          message: "Problemas ao editar o anime",
           status: 500,
         });
       }
@@ -182,12 +186,65 @@ export default function AnimeForm({ params, searchParams }: IProps) {
         //Limpando os campos do formulario
         setFormsFilds(initialValueFormsFilds);
       }
-
-      setLoading(false);
-    } else {
-      setLoading(false);
     }
-  };
+  }
+
+  async function registerNewRecordInTheDatabase() {
+    const resultRequest = await adapterAnimeRegister(
+      {
+        name: formsFilds.name.value,
+        watched: formsFilds.watched.value,
+        qtdEpisodes: formsFilds.qtdEpisodes.value,
+        releaseYear: formsFilds.releaseYear.value,
+        note: formsFilds.note.value,
+        status: formsFilds.status.value,
+        nextSeason: formsFilds.nextSeason.value,
+        previousSeason: formsFilds.previousSeason.value,
+        synopsis: formsFilds.synopsis.value,
+        img: await returnImageThatMustBeSent(),
+      },
+      accessToken
+    );
+
+    if (resultRequest === 409) {
+      setMensagemRequest({
+        message: "Existe outro anime no sistema com este nome",
+        status: 500,
+      });
+    }
+
+    if (resultRequest === 400) {
+      setMensagemRequest({
+        message: "Problemas ao cadastrar o anime",
+        status: 500,
+      });
+    }
+
+    if (resultRequest === 401) {
+      //Criar ação adicional aqui(tipo deslogar a pessoa se necessario)
+      setMensagemRequest({
+        message: "Tolken expirado!, faça login novamente!",
+        status: 500,
+      });
+    }
+
+    if (resultRequest.message) {
+      setMensagemRequest({ message: resultRequest.message, status: 200 });
+
+      //Limpando os campos do formulario
+      setFormsFilds(initialValueFormsFilds);
+    }
+  }
+
+  async function returnImageThatMustBeSent() {
+    if (formsFilds.img.value instanceof File) {
+      const compressedImage: any = await compressImage(formsFilds.img.value);
+      const base64Image = await convertBlobToBase64(compressedImage);
+      return base64Image;
+    } else {
+      return formsFilds.img.value;
+    }
+  }
 
   return (
     <div className={styles.containerForm}>
@@ -216,12 +273,12 @@ export default function AnimeForm({ params, searchParams }: IProps) {
             <FormSelect
               label="Visto:"
               name="watched"
-              value={[formsFilds.watched.value]}
+              value={[`${formsFilds.watched.value}`]}
               error={formsFilds.watched.error}
               onChange={(e) => {
                 handleChancheField(e, setFormsFilds, formsFilds);
               }}
-              options={["Sim", "Não"]}
+              options={["true", "false"]}
             />
           </div>
           <div className={styles.aliginFourFilds}>
@@ -306,6 +363,7 @@ export default function AnimeForm({ params, searchParams }: IProps) {
             <FormFile
               label="Imagem:"
               name="img"
+              value={formsFilds.img.value}
               onChange={(e) => {
                 handleChancheFieldFile(e, setFormsFilds, formsFilds);
               }}
@@ -324,4 +382,120 @@ export default function AnimeForm({ params, searchParams }: IProps) {
       </div>
     </div>
   );
+
+  function handleChancheField(
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    setFormsFilds: any,
+    formsFilds: any
+  ) {
+    const targetName = e.target.name;
+    const targetValue = e.target.value;
+
+    setFormsFilds({
+      ...formsFilds,
+      [targetName]: {
+        value: targetValue,
+        error: onValidateError(targetValue, targetName),
+      },
+    });
+  }
+
+  function handleChancheFieldFile(
+    e: ChangeEvent<HTMLInputElement>,
+    setFormsFilds: any,
+    formsFilds: any
+  ) {
+    const targetName = e.target.name;
+
+    if (e.target.files) {
+      const targetValue = e.target.files[0];
+
+      setFormsFilds({
+        ...formsFilds,
+        [targetName]: {
+          value: targetValue,
+          error: targetValue ? true : false,
+        },
+      });
+    }
+  }
+
+  function onValidateError(value: string, field: string) {
+    if (
+      field === "nextSeason" ||
+      field === "previousSeason" ||
+      field === "synopsis"
+    ) {
+      return value.length < 1 ? true : false;
+    }
+
+    if (field === "watched" || field === "status") {
+      return value.length === 0 ? true : false;
+    }
+
+    if (
+      field === "qtdEpisodes" ||
+      field === "releaseYear" ||
+      field === "note"
+    ) {
+      if (parseInt(value) === 0 || parseInt(value) < 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  async function lookingForInformationAboutAnAnime(idAnime: string) {
+    const dataAnime: IEntitieAnime = await adapterListOneAnime(idAnime);
+
+    if (dataAnime) {
+      setFormsFilds({
+        name: {
+          error: false,
+          value: dataAnime.name,
+        },
+        watched: {
+          error: false,
+          value: dataAnime.watched,
+        },
+        note: {
+          error: false,
+          value: dataAnime.note,
+        },
+        nextSeason: {
+          error: false,
+          value: dataAnime.nextSeason,
+        },
+        previousSeason: {
+          error: false,
+          value: dataAnime.previousSeason,
+        },
+        qtdEpisodes: {
+          error: false,
+          value: dataAnime.qtdEpisodes,
+        },
+        releaseYear: {
+          error: false,
+          value: dataAnime.releaseYear,
+        },
+        status: {
+          error: false,
+          value: dataAnime.status,
+        },
+        synopsis: {
+          error: false,
+          value: dataAnime.synopsis,
+        },
+        img: {
+          error: false,
+          value: dataAnime.urlImg,
+        },
+      });
+    } else {
+      router.push("/admin/");
+    }
+  }
 }
