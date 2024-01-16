@@ -236,13 +236,13 @@ export default function AdmPopUpAddGenre({
       } else {
         setMensagemRequest({
           status: 500,
-          message: "Problemas ao adicionar o genero ao anime!",
+          message: `Problemas ao adicionar o genero ao ${typeIten}`,
         });
       }
     } else {
       setMensagemRequest({
         status: 500,
-        message: "Problemas ao adicionar o genero ao anime!",
+        message: `Problemas ao adicionar o genero ao ${typeIten}`,
       });
     }
   }

@@ -5,6 +5,7 @@ import { Divider } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdmPopUpAddGenre from "../popUp/addGenre";
+import AdmPopUpDeleteGenre from "../popUp/deleteGenre";
 
 interface props {
   typeIten: "anime" | "filme";
@@ -15,49 +16,23 @@ interface props {
 export default function AdmItem({ typeIten, dataItem }: props) {
   const router = useRouter();
   const [openModalAddGenre, setOpenModalAddGenre] = useState<boolean>(false);
-
-  const returnItemsOfTheGenre = () => {
-    if (dataItem.genres && dataItem.genres.length > 0) {
-      return dataItem.genres.map((item, index) => (
-        <div className={styles.iten} key={index}>
-          {item}
-        </div>
-      ));
-    } else {
-      return (
-        <p className={styles.message}>
-          Opss: parece que esse {typeIten == "anime" ? "anime" : "filme"} não
-          possui nenhum genero cadastrado
-        </p>
-      );
-    }
-  };
-
-  const handleInformationChangeEvent = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    //Redirecionando o usuario para a pagina de edição correspondente
-    if (typeIten === "anime") {
-      router.push(`/admin/anime/editing?id=${dataItem.id}`);
-    } else {
-      router.push(`/admin/films/editing?id=${dataItem.id}`);
-    }
-  };
-
-  const handleGenderRemoveEvent = () => {
-    //Ao clickar em um genero vai aparecer um pop up dizendo se vou querer deletar ele ok (talvez editar tambem);
-  };
-
-  const closedPopUpAddGender = () => {
-    setOpenModalAddGenre(!openModalAddGenre);
-    router.refresh();
-  }
-
+  const [openModalDeleteGenre,setOpenModalDeleteGenre] = useState<boolean>(false);
+  const [selectedtGenre,setSelectedGenre] = useState<string>('');
+ 
   return (
     <>
       <AdmPopUpAddGenre
         onClosed={closedPopUpAddGender}
         open={openModalAddGenre}
         typeIten={typeIten}
+        idItem={dataItem.id}
+      />
+      <AdmPopUpDeleteGenre 
+        onClosed={closedPopUpDeleteGender}
+        open={openModalDeleteGenre}
+        typeIten={typeIten}
+        nameItem={dataItem.name}
+        nameGenre={selectedtGenre}
         idItem={dataItem.id}
       />
       <div className={styles.containerItem}>
@@ -172,4 +147,41 @@ export default function AdmItem({ typeIten, dataItem }: props) {
       </div>
     </>
   );
+  
+  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>){
+    e.preventDefault();
+    //Redirecionando o usuario para a pagina de edição correspondente
+    if (typeIten === "anime") {
+      router.push(`/admin/anime/editing?id=${dataItem.id}`);
+    } else {
+      router.push(`/admin/films/editing?id=${dataItem.id}`);
+    }
+  };
+
+  function closedPopUpAddGender(){
+    setOpenModalAddGenre(!openModalAddGenre);
+    router.refresh();
+  }
+
+  function closedPopUpDeleteGender(){
+    setOpenModalDeleteGenre(!openModalDeleteGenre);
+    router.refresh();
+  }
+
+  function returnItemsOfTheGenre() {
+    if (dataItem.genres && dataItem.genres.length > 0) {
+      return dataItem.genres.map((item, index) => (
+        <div className={styles.iten} key={index} onClick={()=>{setOpenModalDeleteGenre(true);setSelectedGenre(item)}}>
+          {item}
+        </div>
+      ));
+    } else {
+      return (
+        <p className={styles.message}>
+          Opss: parece que esse {typeIten == "anime" ? "anime" : "filme"} não
+          possui nenhum genero cadastrado
+        </p>
+      );
+    }
+  };
 }
