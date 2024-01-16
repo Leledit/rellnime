@@ -26,3 +26,9 @@ export interface IEntitieFilme {
   genres?: string[];
   urlImg?: string;
 }
+
+export interface IGenre{
+  name:string,
+  registrationDate:any,
+  id:string
+}

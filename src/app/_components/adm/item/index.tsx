@@ -43,22 +43,22 @@ export default function AdmItem({ typeIten, dataItem }: props) {
     }
   };
 
-  const handleAddGenderEvent = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setOpenModalAddGenre(true);
-  };
-
   const handleGenderRemoveEvent = () => {
     //Ao clickar em um genero vai aparecer um pop up dizendo se vou querer deletar ele ok (talvez editar tambem);
   };
 
+  const closedPopUpAddGender = () => {
+    setOpenModalAddGenre(!openModalAddGenre);
+    router.refresh();
+  }
+
   return (
     <>
       <AdmPopUpAddGenre
-        onClosed={() => {
-          setOpenModalAddGenre(!openModalAddGenre);
-        }}
+        onClosed={closedPopUpAddGender}
         open={openModalAddGenre}
+        typeIten={typeIten}
+        idItem={dataItem.id}
       />
       <div className={styles.containerItem}>
         <div className={styles.internalSpace}>
@@ -162,7 +162,7 @@ export default function AdmItem({ typeIten, dataItem }: props) {
             <button
               className={styles.button}
               onClick={(e) => {
-                handleAddGenderEvent(e);
+                setOpenModalAddGenre(true);
               }}
             >
               Adicionar novo
