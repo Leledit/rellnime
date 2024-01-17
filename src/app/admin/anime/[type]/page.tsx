@@ -133,7 +133,7 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     }
   }, []);
 
-  const handleRegisterEvent = async (e: FormEvent<HTMLFormElement>) => {
+  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>)  {
     e.preventDefault();
     setLoading(true);
 

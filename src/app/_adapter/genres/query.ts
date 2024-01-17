@@ -2,7 +2,7 @@
 export default async function adapterQueryGenres(query:string){
     const url = process.env.URL_API_BASE + `/genres/search?query=${query}`;
 
-    const result = await fetch(url); 
+    const result = await fetch(url,{ cache:'no-store' }); 
 
     if(result.status !== 200){
         return undefined

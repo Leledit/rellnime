@@ -52,7 +52,42 @@ export default function AuthenticationLogin() {
     initialValueFormsFilds
   );
 
-  const handleLoginEvent = async (e: FormEvent<HTMLFormElement>) => {
+  return (
+    <> 
+      <HeaderForms titleForm="Login" />
+      <form
+        onSubmit={(e) => {
+          handleLoginEvent(e);
+        }}
+      >
+        <FormInput
+          label="E-mail:"
+          name="email"
+          type="text"
+          onChange={(e) => {
+            handleChancheField(e, setFormsFilds, formsFilds);
+          }}
+          error={formsFilds.email.error}
+        />
+        <FormInput
+          label="Senha:"
+          name="password"
+          type="password"
+          onChange={(e) => {
+            handleChancheField(e, setFormsFilds, formsFilds);
+          }}
+          error={formsFilds.password.error}
+        />
+        <FormLink destiny="/authentication/register" text="Não possui conta?" />
+        <FormLoading loading={loading} />
+        <FormMessage mensagemRequest={mensagemRequest} />
+        <Button text="Login" type="submit" />
+      </form>
+      <AccessByOtherProviders parentComponentIdentification="login" />
+    </>
+  );
+
+  async function handleLoginEvent(e: FormEvent<HTMLFormElement>){
     e.preventDefault();
     setLoading(true);
 
@@ -88,39 +123,4 @@ export default function AuthenticationLogin() {
       setLoading(false);
     }
   };
-
-  return (
-    <> 
-      <HeaderForms titleForm="Login" />
-      <form
-        onSubmit={(e) => {
-          handleLoginEvent(e);
-        }}
-      >
-        <FormInput
-          label="E-mail:"
-          name="email"
-          type="text"
-          onChange={(e) => {
-            handleChancheField(e, setFormsFilds, formsFilds);
-          }}
-          error={formsFilds.email.error}
-        />
-        <FormInput
-          label="Senha:"
-          name="password"
-          type="password"
-          onChange={(e) => {
-            handleChancheField(e, setFormsFilds, formsFilds);
-          }}
-          error={formsFilds.password.error}
-        />
-        <FormLink destiny="/authentication/register" text="Não possui conta?" />
-        <FormLoading loading={loading} />
-        <FormMessage mensagemRequest={mensagemRequest} />
-        <Button text="Login" type="submit" />
-      </form>
-      <AccessByOtherProviders parentComponentIdentification="login" />
-    </>
-  );
 }

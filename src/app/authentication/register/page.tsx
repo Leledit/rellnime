@@ -66,58 +66,6 @@ export default function AuthenticationLogin() {
     initialValueFormsFilds
   );
 
-  const handleRegisterEvent = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    await onValidateFieldsEmpty(setFormsFilds);
-
-    if (!Object.values(formsFilds).some((field) => field.error)) {
-      if (checkPasswordMatch()) {
-        const resultRequest = await adapterAuthenticationRegister({
-          email: formsFilds.email.value,
-          name: formsFilds.name.value,
-          password: formsFilds.password.value,
-        });
-
-        if (resultRequest === 500) {
-          setMensagemRequest({
-            message: "Problemas ao realizar o cadastro",
-            status: 500,
-          });
-        } else {
-          setMensagemRequest({
-            message: "Cadastro efetuado com sucesso",
-            status: 200,
-          });
-        }
-
-        //Cadastrando o tolken do usuario
-        setTolkenCookie(resultRequest.tolken);
-        //redireciona o usuario apos o cadastro
-
-        router.push("/");
-      } else {
-        setMensagemRequest({
-          message: "Senhas não corespondentes!",
-          status: 500,
-        });
-      }
-
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  };
-
-  const checkPasswordMatch = () => {
-    if (formsFilds.password.value === formsFilds.confirmPassword.value) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   return (
     <>
       <HeaderForms titleForm="Cadastro" />
@@ -170,4 +118,56 @@ export default function AuthenticationLogin() {
       <AccessByOtherProviders parentComponentIdentification="login" />
     </>
   );
+
+  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    setLoading(true);
+
+    await onValidateFieldsEmpty(setFormsFilds);
+
+    if (!Object.values(formsFilds).some((field) => field.error)) {
+      if (checkPasswordMatch()) {
+        const resultRequest = await adapterAuthenticationRegister({
+          email: formsFilds.email.value,
+          name: formsFilds.name.value,
+          password: formsFilds.password.value,
+        });
+
+        if (resultRequest === 500) {
+          setMensagemRequest({
+            message: "Problemas ao realizar o cadastro",
+            status: 500,
+          });
+        } else {
+          setMensagemRequest({
+            message: "Cadastro efetuado com sucesso",
+            status: 200,
+          });
+        }
+
+        //Cadastrando o tolken do usuario
+        setTolkenCookie(resultRequest.tolken);
+
+        //redireciona o usuario apos o cadastro
+        router.push("/");
+      } else {
+        setMensagemRequest({
+          message: "Senhas não corespondentes!",
+          status: 500,
+        });
+      }
+
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  function checkPasswordMatch(){
+    if (formsFilds.password.value === formsFilds.confirmPassword.value) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 }

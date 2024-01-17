@@ -160,12 +160,12 @@ export default function AdmItem({ typeIten, dataItem }: props) {
 
   function closedPopUpAddGender(){
     setOpenModalAddGenre(!openModalAddGenre);
-    router.refresh();
+    location.reload(); 
   }
 
   function closedPopUpDeleteGender(){
     setOpenModalDeleteGenre(!openModalDeleteGenre);
-    router.refresh();
+    location.reload(); 
   }
 
   function returnItemsOfTheGenre() {

@@ -10,7 +10,7 @@ export async function adapterFilmeAddGenre(idFilme: string, nameGenre: string,to
     nameGenre: nameGenre,
   },tolken);
 
-  if (result.status !== 201) {
+  if (result.status !== 200) {
     return result.status;
   }
 

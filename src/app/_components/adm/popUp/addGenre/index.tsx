@@ -226,23 +226,27 @@ export default function AdmPopUpAddGenre({
         );
       }
 
-      if (resultRequest === 200) {
-        setMensagemRequest({
-          status: 200,
-          message: "Genero adicionado com sucesso!",
-        });
-        setResultQuery([]);
-        setFieldQuery("");
-      } else {
+      console.log(resultRequest)
+
+      if (resultRequest === 500) {
         setMensagemRequest({
           status: 500,
           message: `Problemas ao adicionar o genero ao ${typeIten}`,
         });
+      } else {
+        setMensagemRequest({
+          status: 200,
+          message: resultRequest.message,
+        });
+        setResultQuery([]);
+        setFieldQuery("");
+        setSelectedGenre(undefined);
       }
+      
     } else {
       setMensagemRequest({
         status: 500,
-        message: `Problemas ao adicionar o genero ao ${typeIten}`,
+        message: `Nenhum genero selecionado! por favor selecione um genero`,
       });
     }
   }

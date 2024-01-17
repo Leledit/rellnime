@@ -32,24 +32,6 @@ export default function PasswordRecovery() {
   );
   const router = useRouter();
 
-  const handlePasswordRecoveryEvent = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    await onValidateFieldsEmpty(setFormsFilds);
-
-    if (!Object.values(formsFilds).some((field) => field.error)) {
-      setTimeout(() => {
-        router.push("/");
-        setLoading(false);
-      }, 2000);
-
-    }else{
-      setLoading(false);
-    }
-
-  };
-
   return (
     <>
       <HeaderForms
@@ -80,4 +62,22 @@ export default function PasswordRecovery() {
       </form>
     </>
   );
+
+  async function handlePasswordRecoveryEvent(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    await onValidateFieldsEmpty(setFormsFilds);
+
+    if (!Object.values(formsFilds).some((field) => field.error)) {
+      setTimeout(() => {
+        router.push("/");
+        setLoading(false);
+      }, 2000);
+
+    }else{
+      setLoading(false);
+    }
+
+  };
 }
