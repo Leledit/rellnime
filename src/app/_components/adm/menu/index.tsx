@@ -29,11 +29,17 @@ export default function AdmMenu() {
   const HandleApplicationExitEvent = () => {
     //Fazer evento de sair da aplicação
     console.log("saindo da aplicação");
+    closeMenu();
   };
 
   const handleRedirectionToTheHomePage = () => {
- router.push("/admin");
-  }  
+    router.push("/admin");
+    closeMenu();
+  };
+
+  function closeMenu() {
+    setOpenMenu(false);
+  }
 
   return (
     <>
@@ -58,7 +64,10 @@ export default function AdmMenu() {
             <h2 className={styles.menuHeaderTitle}>Recursos disponiveis</h2>
             <Divider />
             <div className={styles.menuHeaderContainerIcons}>
-              <Tooltip title="Voltar para a home" onClick={()=>handleRedirectionToTheHomePage()}>
+              <Tooltip
+                title="Voltar para a home"
+                onClick={() => handleRedirectionToTheHomePage()}
+              >
                 <HomeIcon className={styles.menuHeaderIconHome} />
               </Tooltip>
               <Tooltip title="Sair da aplicação">
@@ -76,12 +85,17 @@ export default function AdmMenu() {
           <div className={styles.menuBody}>
             <div className={styles.blockOptions}>
               <h3 className={styles.blockOptionsTitle}>Animes</h3>
-              <Link href="/admin/anime/register" className={styles.blockOption}>
+              <Link
+                href="/admin/anime/register"
+                className={styles.blockOption}
+                onClick={closeMenu}
+              >
                 Cadastrar
               </Link>
               <Link
                 href="/admin/listing/allAnime"
                 className={styles.blockOption}
+                onClick={closeMenu}
               >
                 Lista completa
               </Link>
@@ -91,12 +105,17 @@ export default function AdmMenu() {
           <div className={styles.menuBody}>
             <div className={styles.blockOptions}>
               <h3 className={styles.blockOptionsTitle}>Filmes</h3>
-              <Link href="/admin/films/register" className={styles.blockOption}>
+              <Link
+                href="/admin/films/register"
+                className={styles.blockOption}
+                onClick={closeMenu}
+              >
                 Cadastrar
               </Link>
               <Link
                 href="/admin/listing/allFilms"
                 className={styles.blockOption}
+                onClick={closeMenu}
               >
                 Lista completa
               </Link>
@@ -107,8 +126,9 @@ export default function AdmMenu() {
             <div className={styles.blockOptions}>
               <h3 className={styles.blockOptionsTitle}>Generos</h3>
               <Link
-                href="/admin/listing/allGenres"
+                href="/admin/genres"
                 className={styles.blockOption}
+                onClick={closeMenu}
               >
                 Generos disponiveis
               </Link>

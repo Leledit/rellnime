@@ -1,0 +1,16 @@
+@import "../../../../../public/css/palette.scss";
+
+.containerItem{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 30px;
+    color: $light-white;
+    background: $gray;
+    font-size: 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+
+}

@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
@@ -13,7 +13,15 @@ import Button from "@/app/_components/general/button";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import { onValidateFieldsEmpty } from "@/app/_utils/formHandling";
-import { compressImage, convertBlobToBase64 } from "@/app/_utils/manipulatingImage";
+import {
+  compressImage,
+  convertBlobToBase64,
+} from "@/app/_utils/manipulatingImage";
+import adapterFilmsRegister from "@/app/_adapter/films/register";
+import { returnImageThatMustBeSent } from "@/app/_utils/images/preparingToSendToApi";
+import adapterListOneFilme from "@/app/_adapter/films/listOne";
+import { IEntitieFilme } from "@/app/_interface/dataBd";
+import adapterFilmsChanging from "@/app/_adapter/films/changing";
 
 interface formFild {
   name: {
@@ -95,23 +103,28 @@ export default function FilmeForm({ params, searchParams }: IProps) {
     initialValueFormsFilds
   );
   const accessToken = getTolkenCookie();
-interface IProps {
-  params: {
-    type: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
+
+  useEffect(() => {
+    if (params.type === "editing" && searchParams) {
+      lookingForInformationAboutFilm(searchParams.id as string);
+    }
+  }, []);
+
   return (
     <>
       <div className={styles.containerForm}>
         <div className={styles.breathingSpace}>
           <HeaderForms
-            titleForm="Cadastro de filme"
+            titleForm={
+              params.type === "editing"
+                ? "Edição de filme"
+                : "Cadastro de filme"
+            }
             customStylesTitle={{ fontSize: "36px" }}
           />
           <form
             onSubmit={(e) => {
-              handleRegisterEvent(e);
+              handlingFormSubmissionEvent(e);
             }}
           >
             <div className={styles.aliginTwoFilds}>
@@ -141,7 +154,7 @@ interface IProps {
               <FormInput
                 label="Duração:"
                 name="duration"
-                type="number"
+                type="text"
                 value={formsFilds.duration.value}
                 onChange={(e) => {
                   handleChancheField(e, setFormsFilds, formsFilds);
@@ -206,7 +219,46 @@ interface IProps {
     </>
   );
 
-  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>) {
+  async function lookingForInformationAboutFilm(idFilm: string) {
+    const dataFilm: IEntitieFilme = await adapterListOneFilme(idFilm);
+
+    if (dataFilm) {
+      setFormsFilds({
+        name: {
+          value: dataFilm.name,
+          error: false,
+        },
+        duration: {
+          value: dataFilm.duration,
+          error: false,
+        },
+        launch: {
+          value: dataFilm.releaseYear.toString(),
+          error: false,
+        },
+        note: {
+          value: dataFilm.note.toString(),
+          error: false,
+        },
+        synopsis: {
+          value: dataFilm.synopsis,
+          error: false,
+        },
+        visa: {
+          value: `${dataFilm.visa}`,
+          error: false,
+        },
+        img: {
+          value: dataFilm.urlImg,
+          error: false,
+        },
+      });
+    } else {
+      router.push("/admin/");
+    }
+  }
+
+  async function handlingFormSubmissionEvent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
@@ -215,7 +267,7 @@ interface IProps {
     if (!Object.values(formsFilds).some((field) => field.error)) {
       if (params.type === "editing") {
         //Editando um filme
-      
+        await editingAnAlreadyRegisteredAnime();
       } else {
         //Cadastrando um novo filme
         await registerNewRecordInTheDatabase();
@@ -228,18 +280,46 @@ interface IProps {
   }
 
   async function registerNewRecordInTheDatabase() {
+    const resultRequest = await adapterFilmsRegister(
+      {
+        name: formsFilds.name.value,
+        visa: formsFilds.visa.value,
+        duration: formsFilds.visa.value,
+        note: formsFilds.note.value,
+        synopsis: formsFilds.synopsis.value,
+        releaseYear: parseInt(formsFilds.launch.value),
+        img: await returnImageThatMustBeSent(formsFilds.img.value),
+      },
+      accessToken
+    );
 
-    console.log(await returnImageThatMustBeSent())
+    if (resultRequest === 409) {
+      setMensagemRequest({
+        message: "Existe outro filme no sistema com este nome",
+        status: 500,
+      });
+    }
 
-  }
+    if (resultRequest === 400) {
+      setMensagemRequest({
+        message: "Problemas ao cadastrar o filme",
+        status: 500,
+      });
+    }
 
-  async function returnImageThatMustBeSent() {
-    if (formsFilds.img.value instanceof File) {
-      const compressedImage: any = await compressImage(formsFilds.img.value);
-      const base64Image = await convertBlobToBase64(compressedImage);
-      return base64Image;
-    } else {
-      return formsFilds.img.value;
+    if (resultRequest === 401) {
+      //Criar ação adicional aqui(tipo deslogar a pessoa se necessario)
+      setMensagemRequest({
+        message: "Tolken expirado!, faça login novamente!",
+        status: 500,
+      });
+    }
+
+    if (resultRequest.message) {
+      setMensagemRequest({ message: resultRequest.message, status: 200 });
+
+      //Limpando os campos do formulario
+      setFormsFilds(initialValueFormsFilds);
     }
   }
 
@@ -300,7 +380,35 @@ interface IProps {
     return true;
   }
 
-  async function lookingForInformationAboutFilm(idAnime: string) {
+  async function editingAnAlreadyRegisteredAnime() {
+    if (searchParams) {
+      const resultRequest = await adapterFilmsChanging(
+        {
+          name: formsFilds.name.value,
+          visa: formsFilds.visa.value,
+          duration: formsFilds.visa.value,
+          note: formsFilds.note.value,
+          synopsis: formsFilds.synopsis.value,
+          releaseYear: parseInt(formsFilds.launch.value),
+          img: await returnImageThatMustBeSent(formsFilds.img.value),
+        },
+        accessToken,
+        searchParams.id as string
+      );
+      
+      if (resultRequest === 400) {
+        setMensagemRequest({
+          message: "Problemas ao editar o filme",
+          status: 500,
+        });
+      }
 
+      if (resultRequest.message) {
+        setMensagemRequest({ message: resultRequest.message, status: 200 });
+
+        //Limpando os campos do formulario
+        setFormsFilds(initialValueFormsFilds);
+      }
+    }
   }
 }

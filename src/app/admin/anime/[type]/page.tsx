@@ -133,7 +133,7 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     }
   }, []);
 
-  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>)  {
+  async function handlingFormSubmissionEvent(e: FormEvent<HTMLFormElement>)  {
     e.preventDefault();
     setLoading(true);
 
@@ -250,12 +250,12 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     <div className={styles.containerForm}>
       <div className={styles.breathingSpace}>
         <HeaderForms
-          titleForm="Cadastro de anime"
+          titleForm={params.type==='editing'?"Edição de anime":"Cadastro de anime"}
           customStylesTitle={{ fontSize: "36px" }}
         />
         <form
           onSubmit={(e) => {
-            handleRegisterEvent(e);
+            handlingFormSubmissionEvent(e);
           }}
         >
           <div className={styles.aliginTwoFilds}>
