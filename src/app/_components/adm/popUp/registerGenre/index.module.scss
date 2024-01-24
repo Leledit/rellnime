@@ -1,10 +1,21 @@
 @import "../../../../../../public/css/palette.scss";
 
+
+.dialogTitle {
+  color: $dark-black;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .containerForm {
     margin-left: 32px;
     margin-right: 32px;
     width: calc(100% - 64px);
     margin-top: 50px;
+    font-family: '__Merienda_9ceaa0', '__Merienda_Fallback_9ceaa0';
+    
     .formLabel {
       color: $dark-black-600;
       font-size: 24px;
