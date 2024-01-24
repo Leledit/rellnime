@@ -4,8 +4,8 @@ import styles from "./index.module.scss";
 import { Divider } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import AdmPopUpAddGenre from "../popUp/addGenre";
-import AdmPopUpDeleteGenre from "../popUp/deleteGenre";
+import AdmPopUpAddGenre from "../popUp/addGenreInItem";
+import AdmPopUpDeleteGenre from "../popUp/deleteGenreInItem";
 
 interface props {
   typeIten: "anime" | "filme";

@@ -19,7 +19,7 @@ import { adapterAnimeAddGenre } from "@/app/_adapter/anime/genre";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { adapterFilmeAddGenre } from "@/app/_adapter/films/genre";
 
-interface props {
+interface IProps {
   open: boolean;
   onClosed: () => void;
   typeIten: string;
@@ -44,7 +44,7 @@ export default function AdmPopUpAddGenre({
   onClosed,
   typeIten,
   idItem,
-}: props) {
+}: IProps) {
   const [resultQuery, setResultQuery] = useState<ICustonGenre[]>([]);
   const [fieldQuery, setFieldQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
