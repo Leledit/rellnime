@@ -46,14 +46,13 @@ export async function put(url: string, body?: any, tolken?: string) {
   return response;
 }
 
-export async function delet(url: string, body?: any, tolken?: string) {
+export async function delet(url: string, tolken?: string) {
   const response = await fetch(url, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       Authorization: tolken ? tolken : "",
     },
-    body: body ? JSON.stringify(body) : null,
   });
 
   return response;

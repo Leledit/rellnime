@@ -5,10 +5,16 @@ import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.scss";
+import { IGenre } from "@/app/_interface/dataBd";
+import AdapterGenresDelete from "@/app/_adapter/genres/delete";
+import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
+import FormLoading from "@/app/_components/general/form/loading";
+import FormMessage from "@/app/_components/general/form/message";
 
 interface IProps {
   open: boolean;
   onClosed: () => void;
+  genre: IGenre;
 }
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
@@ -19,7 +25,11 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
 
 type ModalState = "options" | "deletionConfirmation" | "edition";
 
-export default function AdmPopUpAvailableShares({ open, onClosed }: IProps) {
+export default function AdmPopUpAvailableShares({
+  open,
+  onClosed,
+  genre,
+}: IProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [modalState, setModalState] = useState<ModalState>("options");
   const [fildGenre, setFildGenre] = useState<string>("");
@@ -27,6 +37,8 @@ export default function AdmPopUpAvailableShares({ open, onClosed }: IProps) {
     message: "",
     status: 0,
   });
+
+  const accessToken = getTolkenCookie();
 
   const renderPopUp = () => {
     switch (modalState) {
@@ -141,17 +153,40 @@ export default function AdmPopUpAvailableShares({ open, onClosed }: IProps) {
       >
         <CloseIcon />
       </IconButton>
-      <DialogContent dividers>{renderPopUp()}</DialogContent>
+      <DialogContent dividers>
+        <div>{renderPopUp()}</div>
+       
+        <FormMessage mensagemRequest={mensagemRequest} />
+      </DialogContent>
     </CustomDialog>
   );
 
-  function handleEditAction(e:MouseEvent<HTMLButtonElement>) {
+  /*
+   <div>
+        //
+      </div>
+  */
+
+  function handleEditAction(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     console.log("editando um genero");
   }
 
-  function handleTheDeleteAction() {
-    console.log("deletando o genero!!");
+  async function handleTheDeleteAction() {
+    const resultRequest = await AdapterGenresDelete(genre.id, accessToken);
+
+    if (resultRequest === 500) {
+      setMensagemRequest({
+        status: 500,
+        message: "Problemas ao fazer a exclusão do genero!",
+      });
+    } else {
+      setMensagemRequest({
+        status: 200,
+        message: resultRequest,
+      });
+      //setModalState("options");
+    }
   }
 
   function returnPopUpTitle() {

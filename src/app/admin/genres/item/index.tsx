@@ -13,7 +13,11 @@ export default function GenreItem({ dataComponent }: IProps) {
 
   return (
     <>
-      <AdmPopUpAvailableShares onClosed={closePopIpOfAvailableOptions} open={openPopUpOps} />
+      <AdmPopUpAvailableShares
+        genre={dataComponent}
+        onClosed={closePopIpOfAvailableOptions}
+        open={openPopUpOps}
+      />
       <div
         className={styles.containerItem}
         onClick={() => {
@@ -25,7 +29,7 @@ export default function GenreItem({ dataComponent }: IProps) {
     </>
   );
 
-  function closePopIpOfAvailableOptions(){
+  function closePopIpOfAvailableOptions() {
     setOpenPopUpOps(false);
   }
 }
