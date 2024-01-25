@@ -1,20 +1,45 @@
 @import "../../../../../../public/css/palette.scss";
 
-
 .dialogTitle {
   color: $dark-black;
   font-size: 32px;
   font-style: normal;
   font-weight: 400;
-  margin-top: 10px;
   line-height: normal;
+  margin-top: 10px;
+}
+
+.containerShares {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  .share {
+    text-align: center;
+    border-radius: 25px;
+    border: 1px solid $light-blue;
+    background: $light-blue-800;
+    height: 60px;
+    line-height: 60px;
+    width: 200px;
+    color: $light-white;
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+    &:hover {
+      background: $light-blue-600;
+    }
+  }
 }
 
 .containerForm {
     margin-left: 32px;
     margin-right: 32px;
     width: calc(100% - 64px);
-    margin-top: 50px;
+    margin-top: 40px;
     font-family: '__Merienda_9ceaa0', '__Merienda_Fallback_9ceaa0';
     
     .formLabel {
@@ -42,29 +67,16 @@
     }
 }
 
-.containerButtons{
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: center;
-    width: 80%;
-    margin-left: 10%;
-    .button{
-      border-radius: 25px;
-      border: 1px solid $light-blue;
-      background: $light-blue-800;
-      height: 63px;
-      line-height: 63px;
-      width: 200px;
-      color: $light-white;
-      font-size: 24px;
-      font-weight: 400;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      margin-right: 20px;
-      cursor: pointer;
-      &:hover{
-        background: $light-blue-600;
-      }
+
+
+.containerDeletion{
+    .deletionTitle{
+        text-align: center;
+        font-size: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
-  }
+    .containerButtons{
+
+    }
+}

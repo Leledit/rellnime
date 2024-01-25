@@ -7,7 +7,7 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import { FormEvent, MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 import styles from "./index.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
