@@ -6,6 +6,7 @@ import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdmPopUpAddGenre from "../popUp/addGenreInItem";
 import AdmPopUpDeleteGenre from "../popUp/deleteGenreInItem";
+import AdmPopUpDeleteItem from "../popUp/deleteItem";
 
 interface props {
   typeIten: "anime" | "filme";
@@ -16,9 +17,11 @@ interface props {
 export default function AdmItem({ typeIten, dataItem }: props) {
   const router = useRouter();
   const [openModalAddGenre, setOpenModalAddGenre] = useState<boolean>(false);
-  const [openModalDeleteGenre,setOpenModalDeleteGenre] = useState<boolean>(false);
-  const [selectedtGenre,setSelectedGenre] = useState<string>('');
- 
+  const [openModalDeleteGenre, setOpenModalDeleteGenre] =
+    useState<boolean>(false);
+  const [selectedtGenre, setSelectedGenre] = useState<string>("");
+  const [openPopUpDelete, setOpenPopUpDelete] = useState<boolean>(false);
+
   return (
     <>
       <AdmPopUpAddGenre
@@ -27,7 +30,7 @@ export default function AdmItem({ typeIten, dataItem }: props) {
         typeIten={typeIten}
         idItem={dataItem.id}
       />
-      <AdmPopUpDeleteGenre 
+      <AdmPopUpDeleteGenre
         onClosed={closedPopUpDeleteGender}
         open={openModalDeleteGenre}
         typeIten={typeIten}
@@ -52,14 +55,24 @@ export default function AdmItem({ typeIten, dataItem }: props) {
                     {dataItem.note ? dataItem.note : "0"}
                   </div>
                 </div>
-                <button
-                  className={styles.button}
-                  onClick={(e) => {
-                    handleInformationChangeEvent(e);
-                  }}
-                >
-                  Alterar informações
-                </button>
+                <div className={styles.containerButtons}>
+                  <button
+                    className={styles.button}
+                    onClick={(e) => {
+                      handleInformationChangeEvent(e);
+                    }}
+                  >
+                    Alterar informações
+                  </button>
+                  <button
+                    className={styles.button}
+                    onClick={(e) => {
+                      setOpenPopUpDelete(true);
+                    }}
+                  >
+                    Excluir
+                  </button>
+                </div>
               </div>
               <div className={styles.listInfos}>
                 {"qtdEpisodes" in dataItem ? (
@@ -145,10 +158,27 @@ export default function AdmItem({ typeIten, dataItem }: props) {
           </div>
         </div>
       </div>
+      <AdmPopUpDeleteItem
+        onClosed={onClosedPopUpDelete}
+        open={openPopUpDelete}
+        typeIten={typeIten}
+        infoItem={{ id: dataItem.id || "", name: dataItem.name }}
+      />
     </>
   );
-  
-  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>){
+
+  function onClosedPopUpDelete(backToThePreviousPage: boolean) {
+    if (backToThePreviousPage === true) {
+      if (typeIten === "anime") {
+        router.push(`/admin/listing/allAnime`);
+      } else {
+        router.push(`/admin/listing/allFilms`);
+      }
+    }
+    setOpenPopUpDelete(false);
+  }
+
+  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     //Redirecionando o usuario para a pagina de edição correspondente
     if (typeIten === "anime") {
@@ -156,22 +186,29 @@ export default function AdmItem({ typeIten, dataItem }: props) {
     } else {
       router.push(`/admin/films/editing?id=${dataItem.id}`);
     }
-  };
-
-  function closedPopUpAddGender(){
-    setOpenModalAddGenre(!openModalAddGenre);
-    location.reload(); 
   }
 
-  function closedPopUpDeleteGender(){
+  function closedPopUpAddGender() {
+    setOpenModalAddGenre(!openModalAddGenre);
+    location.reload();
+  }
+
+  function closedPopUpDeleteGender() {
     setOpenModalDeleteGenre(!openModalDeleteGenre);
-    location.reload(); 
+    location.reload();
   }
 
   function returnItemsOfTheGenre() {
     if (dataItem.genres && dataItem.genres.length > 0) {
       return dataItem.genres.map((item, index) => (
-        <div className={styles.iten} key={index} onClick={()=>{setOpenModalDeleteGenre(true);setSelectedGenre(item)}}>
+        <div
+          className={styles.iten}
+          key={index}
+          onClick={() => {
+            setOpenModalDeleteGenre(true);
+            setSelectedGenre(item);
+          }}
+        >
           {item}
         </div>
       ));
@@ -183,5 +220,5 @@ export default function AdmItem({ typeIten, dataItem }: props) {
         </p>
       );
     }
-  };
+  }
 }

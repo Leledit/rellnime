@@ -65,24 +65,31 @@
               border-radius: 5px;
             }
           }
-          .button {
-            width: 90%;
-            height: 60px;
-            line-height: 60px;
-            background: $light-blue;
-            display: block;
-            border: 1px solid $light-blue-800;
-            border-radius: 25px;
-            color: $light-white;
-            font-size: 20px;
-            margin-right: 20px;
-            cursor: pointer;
-            &:hover {
-              background: $light-blue-700;
-            }
+          .containerButtons {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            .button {
+              width: 90%;
+              height: 60px;
+           
+              background: $light-blue;
+              display: block;
+              border: 1px solid $light-blue-800;
+              border-radius: 25px;
+              color: $light-white;
+              font-size: 20px;
+              margin-bottom: 20px;
+              cursor: pointer;
+              &:hover {
+                background: $light-blue-700;
+              }
 
-            @media screen and (min-width: 428px) {
-              width: 300px;
+              @media screen and (min-width: 428px) {
+                width: 300px;
+              }
             }
           }
         }
@@ -111,6 +118,10 @@
           width: 400px;
         }
 
+        
+      }
+
+      @media screen and (min-width: 600px) {
         .informations {
           .noteAndButton {
             display: flex;
@@ -118,6 +129,11 @@
             justify-content: space-between;
             align-items: center;
             width: 90%;
+            margin-top: 30px;
+            .note {
+              margin-bottom: 20px;
+              margin-top: 0px;
+            }
           }
           .listInfos {
             margin-top: 20px;
@@ -131,9 +147,11 @@
         justify-content: space-around;
         .informations {
           .noteAndButton {
+            .containerButtons {
+              align-items: start;
+            }
             .note {
-              margin-top: 0px;
-              margin-bottom: 0px;
+             
             }
           }
         }
@@ -189,6 +207,7 @@
           cursor: pointer;
         }
       }
+
       .button {
         width: 90%;
         height: 60px;

@@ -2,7 +2,7 @@
 import { IGenre } from "@/app/_interface/dataBd";
 import styles from "./index.module.scss";
 import { useState } from "react";
-import AdmPopUpAvailableShares from "@/app/_components/adm/popUp/availableShares";
+import AdmPopUpAvailableShares from "@/app/_components/adm/popUp/availableSharesGenre";
 
 interface IProps {
   dataComponent: IGenre;

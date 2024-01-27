@@ -44,7 +44,7 @@ export default function AnimeItem({ searchParams }: IProps) {
         </>
       );
     } else {
-      return <>Deu ruin</>;
+      return <></>;
     }
   }
 }
