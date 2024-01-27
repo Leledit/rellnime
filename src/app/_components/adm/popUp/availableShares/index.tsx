@@ -13,7 +13,7 @@ import FormMessage from "@/app/_components/general/form/message";
 
 interface IProps {
   open: boolean;
-  onClosed: () => void;
+  onClosed: (reloadComponents:boolean) => void;
   genre: IGenre;
 }
 
@@ -23,7 +23,7 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-type ModalState = "options" | "deletionConfirmation" | "edition";
+type ModalState = "options" | "deletionConfirmation" | "edition" | "messages";
 
 export default function AdmPopUpAvailableShares({
   open,
@@ -130,6 +130,24 @@ export default function AdmPopUpAvailableShares({
           </form>
         );
         break;
+      case "messages":
+        return <div className={styles.containerMessages}>
+          {/*mensagemRequest */}
+          <p
+            style={{ color: mensagemRequest.status === 500 ? "red" : "green" }}
+          >
+            {mensagemRequest.message}
+          </p>
+          <button
+            className={styles.share}
+            onClick={() => {
+              onClosed(true);
+            }}
+          >
+            Ok
+          </button>
+        </div>;
+        break;
     }
   };
 
@@ -141,7 +159,7 @@ export default function AdmPopUpAvailableShares({
       <IconButton
         aria-label="close"
         onClick={() => {
-          onClosed();
+          onClosed(false);
           setModalState("options");
         }}
         sx={{
@@ -155,17 +173,9 @@ export default function AdmPopUpAvailableShares({
       </IconButton>
       <DialogContent dividers>
         <div>{renderPopUp()}</div>
-       
-        <FormMessage mensagemRequest={mensagemRequest} />
       </DialogContent>
     </CustomDialog>
   );
-
-  /*
-   <div>
-        //
-      </div>
-  */
 
   function handleEditAction(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -183,9 +193,9 @@ export default function AdmPopUpAvailableShares({
     } else {
       setMensagemRequest({
         status: 200,
-        message: resultRequest,
+        message: resultRequest.details,
       });
-      //setModalState("options");
+      setModalState("messages");
     }
   }
 
@@ -199,6 +209,9 @@ export default function AdmPopUpAvailableShares({
         break;
       case "deletionConfirmation":
         return "Exclusão de genero";
+        break;
+      case "messages":
+        return "Status da ação";
         break;
     }
   }

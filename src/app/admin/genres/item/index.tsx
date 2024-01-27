@@ -29,7 +29,10 @@ export default function GenreItem({ dataComponent }: IProps) {
     </>
   );
 
-  function closePopIpOfAvailableOptions() {
+  function closePopIpOfAvailableOptions(reloadComponents:boolean) {
+    if(reloadComponents===true){
+      window.location.reload();
+    }
     setOpenPopUpOps(false);
   }
 }
