@@ -26,7 +26,7 @@
     }
     .genresHeaderContainerButton {
       padding-top: 50px;
-      margin-bottom: 30px ;
+      margin-bottom: 30px;
       .genresHeaderButton {
         background: $light-blue-800;
         display: inline-block;
@@ -38,6 +38,9 @@
         font-weight: 400px;
         color: $light-white;
         cursor: pointer;
+        &:hover {
+          background: $light-blue-700;
+        }
       }
     }
 

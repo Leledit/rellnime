@@ -6,7 +6,8 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  .button, .linkButton {
+  .button,
+  .linkButton {
     width: 90%;
     color: $light-white-900;
     text-align: center;
@@ -18,8 +19,11 @@
     background: $light-blue-800;
     cursor: pointer;
     margin-bottom: 30px;
+    &:hover {
+      background: $light-blue-600;
+    }
   }
-  .linkButton{
+  .linkButton {
     line-height: 63px;
     text-decoration: none;
   }

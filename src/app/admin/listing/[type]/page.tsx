@@ -27,10 +27,26 @@ export default function PageListingType({ params, searchParams }: IProps) {
   return (
     <div className={styles.cotainerListing}>
       <div className={styles.listingHeader}>
-        <h2 className={styles.listingHeaderTitle}>
-          {returnCorrespondingTitle()}
-        </h2>
-        <Divider style={{ background: "#7BC0FF" }} />
+        <div className={styles.listingContainerTitle}>
+          <h2 className={styles.listingHeaderTitle}>
+            {returnCorrespondingTitle()}
+          </h2>
+          <Divider style={{ background: "#7BC0FF" }} />
+        </div>
+        <div className={styles.listingHeaderContainerButton}>
+          <button
+            className={styles.listingHeaderButton}
+            onClick={() => {
+              if (typeListing === "allAnime") {
+                router.push("/admin/anime/register");
+              } else {
+                router.push("/admin/films/register");
+              }
+            }}
+          >
+            Novo
+          </button>
+        </div>
       </div>
 
       {dataListingm ? (

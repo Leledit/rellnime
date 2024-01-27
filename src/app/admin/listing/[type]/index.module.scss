@@ -9,15 +9,41 @@
   .listingHeader {
     width: 96%;
     margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    .listingContainerTitle {
+      .listingHeaderTitle {
+        padding-top: 44px;
+        color: $light-white;
+        text-align: center;
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 20px;
+        line-height: 40px;
+      }
+    }
+    .listingHeaderContainerButton {
+      padding-top: 50px;
+      margin-bottom: 30px;
 
-    .listingHeaderTitle {
-      padding-top: 44px;
-      color: $light-white;
-      text-align: center;
-      font-size: 36px;
-      font-weight: 400;
-      margin-bottom: 20px;
-      line-height: 40px;
+      .listingHeaderButton {
+        background: $light-blue-800;
+        display: inline-block;
+        width: 250px;
+        margin-left: calc(50% - 125px);
+        height: 63px;
+        border: none;
+        border-radius: 25px;
+        font-size: 24px;
+        font-weight: 400px;
+        color: $light-white;
+        cursor: pointer;
+        &:hover {
+          background: $light-blue-700;
+        }
+      }
     }
   }
 
@@ -60,9 +86,31 @@
     border-radius: 20px;
     width: 90%;
     border: 1px solid $dark-black;
+
     .listingHeader {
       width: 400px;
-      margin-left: 28px;
+      margin-left: calc(50% - 200px);
+    }
+  }
+  @media screen and (min-width: 992px) {
+    .listingHeader {
+      width: 100%;
+      margin-left: 0%;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .listingHeaderContainerButton {
+        .listingHeaderButton {
+          margin-left: 0px;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 1400px) {
+    .listingHeader {
+      width: 86%;
+      margin-left: 7%;
+      justify-content: space-between;
     }
   }
 }
