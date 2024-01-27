@@ -69,6 +69,11 @@
       font-size: 24px;
     }
   }
+  .validationMessages {
+    text-align: center;
+    font-size: 18px;
+    color: rgb(255, 40, 40);
+  }
 }
 
 .containerDeletion {
@@ -85,7 +90,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  .share{
+  .share {
     @include buttonShareStyles;
   }
 }

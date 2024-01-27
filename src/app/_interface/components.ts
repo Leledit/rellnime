@@ -1,0 +1,1 @@
+export type AvailableSharesModalState = "options" | "deletionConfirmation" | "edition" | "messages";
