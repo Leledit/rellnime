@@ -1,20 +1,29 @@
 "use client";
-
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Divider } from "@mui/material";
 import styles from "./index.module.scss";
-import { useEffect, useState } from "react";
 import adapterListAllGenres from "@/app/_adapter/genres/listAll";
 import { IGenre } from "@/app/_interface/dataBd";
 import GenreItem from "./item";
 import AdmPopUpRegisterGenre from "@/app/_components/adm/popUp/registerGenre";
 
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
+
 export default function PageGenres() {
   const [dataGenres, setDataGenres] = useState<IGenre[]>();
   const [openPopUpRegister, setOpenPopUpRegister] = useState<boolean>(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     searchingAllRegisteredGenres();
-  }, []);
+
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
+  }, [router]);
 
   return (
     <>

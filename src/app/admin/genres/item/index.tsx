@@ -1,8 +1,10 @@
 "use client";
-import { IGenre } from "@/app/_interface/dataBd";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./index.module.scss";
-import { useState } from "react";
+import { IGenre } from "@/app/_interface/dataBd";
 import AdmPopUpAvailableShares from "@/app/_components/adm/popUp/availableSharesGenre";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
 interface IProps {
   dataComponent: IGenre;
@@ -10,6 +12,15 @@ interface IProps {
 
 export default function GenreItem({ dataComponent }: IProps) {
   const [openPopUpOps, setOpenPopUpOps] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
+  });
 
   return (
     <>
@@ -29,8 +40,8 @@ export default function GenreItem({ dataComponent }: IProps) {
     </>
   );
 
-  function closePopIpOfAvailableOptions(reloadComponents:boolean) {
-    if(reloadComponents===true){
+  function closePopIpOfAvailableOptions(reloadComponents: boolean) {
+    if (reloadComponents === true) {
       window.location.reload();
     }
     setOpenPopUpOps(false);

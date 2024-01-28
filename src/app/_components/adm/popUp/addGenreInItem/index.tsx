@@ -1,4 +1,5 @@
 "use client";
+import { FormEvent, MouseEvent, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -6,10 +7,9 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import styles from "./index.module.scss";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
-import { FormEvent, MouseEvent, useRef, useState } from "react";
+import styles from "./index.module.scss";
 import { IGenre } from "@/app/_interface/dataBd";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import FormLoading from "@/app/_components/general/form/loading";
@@ -226,7 +226,7 @@ export default function AdmPopUpAddGenre({
         );
       }
 
-      console.log(resultRequest)
+      console.log(resultRequest);
 
       if (resultRequest === 500) {
         setMensagemRequest({
@@ -242,7 +242,6 @@ export default function AdmPopUpAddGenre({
         setFieldQuery("");
         setSelectedGenre(undefined);
       }
-      
     } else {
       setMensagemRequest({
         status: 500,

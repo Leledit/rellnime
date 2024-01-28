@@ -9,7 +9,7 @@ interface Iprops {
   name: string;
   id: string | undefined;
   applicationSegment: string;
-  isAnime:boolean;
+  isAnime: boolean;
 }
 
 export default function ItemList({
@@ -17,27 +17,30 @@ export default function ItemList({
   name,
   id,
   applicationSegment,
-  isAnime
+  isAnime,
 }: Iprops) {
-
   const router = useRouter();
 
-  const handleComponentClick = (e:MouseEvent<HTMLAnchorElement>) => {
+  const handleComponentClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
-    if (applicationSegment === 'ADM') {
-      if(isAnime){
+    if (applicationSegment === "ADM") {
+      if (isAnime) {
         router.push(`/admin/anime/item?id=${id}`);
-      }else{
+      } else {
         router.push(`/admin/films/item?id=${id}`);
-      } 
+      }
     } else {
-
     }
   };
 
   return (
-    <a onClick={(e)=>{handleComponentClick(e)}} className={styles.containerItem}>
+    <a
+      onClick={(e) => {
+        handleComponentClick(e);
+      }}
+      className={styles.containerItem}
+    >
       <img src={img} className={styles.itemImg} />
       <div className={styles.itemName}>{name}</div>
     </a>

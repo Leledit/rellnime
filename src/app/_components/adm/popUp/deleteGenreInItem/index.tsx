@@ -1,4 +1,5 @@
 "use client";
+import { MouseEvent, useRef, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -9,7 +10,6 @@ import {
 } from "@mui/material";
 import styles from "./index.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
-import { MouseEvent, useRef, useState } from "react";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import { adapterAnimeDeleteGenre } from "@/app/_adapter/anime/genre";

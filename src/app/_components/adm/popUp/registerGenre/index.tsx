@@ -1,5 +1,5 @@
 "use client";
-import { ImensagemRequest } from "@/app/_interface/forms";
+import { MouseEvent, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -7,10 +7,10 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 import styles from "./index.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
+import { ImensagemRequest } from "@/app/_interface/forms";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import adapterGenresRegister from "@/app/_adapter/genres/register";
@@ -99,29 +99,31 @@ export default function AdmPopUpRegisterGenre({ open, onClosed }: IProps) {
       </CustomDialog>
     </>
   );
-  async function registerANewGenreInTheDatabase(e: MouseEvent<HTMLButtonElement>) {
+  async function registerANewGenreInTheDatabase(
+    e: MouseEvent<HTMLButtonElement>
+  ) {
     if (fildGenre.length !== 0 && fildGenre !== "") {
       setLoading(true);
       setMensagemRequest({ message: "", status: 0 });
-      
-      const resultRequest = await adapterGenresRegister(fildGenre,accessToken);
 
-      if(resultRequest === 409){
+      const resultRequest = await adapterGenresRegister(fildGenre, accessToken);
+
+      if (resultRequest === 409) {
         setMensagemRequest({
           status: 500,
           message: "Ja existe outro genero com esse nome cadastrado!",
         });
-      }else if(resultRequest === 500){
+      } else if (resultRequest === 500) {
         setMensagemRequest({
           status: 500,
           message: "Problemas ao realizar o cadastro do genero",
         });
-      }else{
+      } else {
         setMensagemRequest({
           status: 200,
           message: resultRequest.details,
         });
-        setFildGenre('');
+        setFildGenre("");
       }
 
       setLoading(false);

@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
-import imgInputFile from "../../../../../../public/images/adm/form/inputFile.png";
 import Image from "next/image";
+import imgInputFile from "../../../../../../public/images/adm/form/inputFile.png";
 
 interface props {
   label: string;
@@ -19,7 +19,6 @@ export default function FormFile({
   error,
   customClassComponent,
 }: props) {
-
   return (
     <div className={styles.containerFile + " " + customClassComponent}>
       <label className={styles.label}>{label}</label>
@@ -39,9 +38,11 @@ export default function FormFile({
           className={styles.inputFile}
         />
       </div>
-      {value !== ''?(
+      {value !== "" ? (
         <p className={styles.messageImgLoaded}>Imagem Carreagda com sucesso!</p>
-      ):<></>}
+      ) : (
+        <></>
+      )}
       {error ? (
         <p className={styles.msgErroInput}>Este campo é obrigatorio</p>
       ) : (

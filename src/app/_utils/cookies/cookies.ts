@@ -7,7 +7,7 @@ export function setTolkenCookie(tolken: string) {
   });
 }
 
-export function getTolkenCookie() {
+export function getTolkenCookie() {//substitui o nome
   const cookies = parseCookies();
   return cookies["rellnime_Archive.token"];
 }

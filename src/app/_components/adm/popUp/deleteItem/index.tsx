@@ -1,15 +1,9 @@
 "use client";
+import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 import styles from "./index.module.scss";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MouseEvent, useState } from "react";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import AdapterAnimeDelete from "@/app/_adapter/anime/delete";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
@@ -21,10 +15,12 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
+type typeItem = "anime" | "filme";
+
 interface IProps {
   open: boolean;
-  onClosed: (reloadComponents: boolean) => void;
-  typeIten: string;
+  onClosed: (reloadComponents: boolean, typeIten: typeItem) => void;
+  typeIten: typeItem;
   infoItem: {
     name: string;
     id: string;
@@ -51,7 +47,7 @@ export default function AdmPopUpDeleteItem({
         <IconButton
           aria-label="close"
           onClick={() => {
-            onClosed(false);
+            onClosed(false, typeIten);
           }}
           sx={{
             position: "absolute",
@@ -74,7 +70,7 @@ export default function AdmPopUpDeleteItem({
             <div className={styles.containerButtons}>
               <button
                 onClick={() => {
-                  onClosed(true);
+                  onClosed(true, typeIten);
                 }}
                 className={styles.button}
               >
@@ -137,19 +133,20 @@ export default function AdmPopUpDeleteItem({
     }
   }
 
-  function returnTitleMessage(typeIten: String, nameItem: string) {
-    if (typeIten === "anime") {
-      return `Deseja realmente excluir o anime: "${nameItem}" `;
-    } else {
-      return `Deseja realmente excluir o filme: "${nameItem}" `;
-    }
+  function returnTitleMessage(typeIten: typeItem, nameItem: string) {
+    const routeMapping: Record<typeItem, string> = {
+      anime: `Deseja realmente excluir o anime: "${nameItem}" `,
+      filme: `Deseja realmente excluir o filme: "${nameItem}" `,
+    };
+
+    return routeMapping[typeIten];
   }
 
-  function returnTitleMessagePopUp(typeIten: String) {
-    if (typeIten === "anime") {
-      return "Exclusão de anime";
-    } else {
-      return "Exclusão de filme";
-    }
+  function returnTitleMessagePopUp(typeItem: String) {
+    const routeMapping: Record<typeItem, string> = {
+      anime: `Exclusão de anime`,
+      filme: `Exclusão de filme`,
+    };
+    return routeMapping[typeIten];
   }
 }

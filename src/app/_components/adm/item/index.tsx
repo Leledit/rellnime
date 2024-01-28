@@ -1,16 +1,18 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import { IEntitieAnime, IEntitieFilme } from "@/app/_interface/dataBd";
-import styles from "./index.module.scss";
-import { Divider } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { IEntitieAnime, IEntitieFilme } from "@/app/_interface/dataBd";
+import { Divider } from "@mui/material";
+import styles from "./index.module.scss";
 import AdmPopUpAddGenre from "../popUp/addGenreInItem";
 import AdmPopUpDeleteGenre from "../popUp/deleteGenreInItem";
 import AdmPopUpDeleteItem from "../popUp/deleteItem";
 
-interface props {
-  typeIten: "anime" | "filme";
+type typeItem = "anime" | "filme";
 
+interface props {
+  typeIten: typeItem;
   dataItem: IEntitieAnime | IEntitieFilme;
 }
 
@@ -59,7 +61,7 @@ export default function AdmItem({ typeIten, dataItem }: props) {
                   <button
                     className={styles.button}
                     onClick={(e) => {
-                      handleInformationChangeEvent(e);
+                      handleInformationChangeEvent(e,typeIten);
                     }}
                   >
                     Alterar informações
@@ -167,25 +169,28 @@ export default function AdmItem({ typeIten, dataItem }: props) {
     </>
   );
 
-  function onClosedPopUpDelete(backToThePreviousPage: boolean) {
+  function onClosedPopUpDelete(
+    backToThePreviousPage: boolean,
+    typeItem: typeItem
+  ) {
+    const routeMapping: Record<typeItem, string> = {
+      anime: "/admin/listing/allAnime",
+      filme: "/admin/listing/allFilms",
+    };
     if (backToThePreviousPage === true) {
-      if (typeIten === "anime") {
-        router.push(`/admin/listing/allAnime`);
-      } else {
-        router.push(`/admin/listing/allFilms`);
-      }
+      router.push(routeMapping[typeItem]);
     }
     setOpenPopUpDelete(false);
   }
 
-  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>) {
+  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>,typeItem:typeItem) {
     e.preventDefault();
+    const routeMapping: Record<typeItem, string> = {
+      anime: `/admin/anime/editing?id=${dataItem.id}`,
+      filme: `/admin/films/editing?id=${dataItem.id}`,
+    };
     //Redirecionando o usuario para a pagina de edição correspondente
-    if (typeIten === "anime") {
-      router.push(`/admin/anime/editing?id=${dataItem.id}`);
-    } else {
-      router.push(`/admin/films/editing?id=${dataItem.id}`);
-    }
+    router.push(routeMapping[typeItem]);
   }
 
   function closedPopUpAddGender() {

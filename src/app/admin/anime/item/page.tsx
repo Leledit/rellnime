@@ -1,10 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AdmItem from "@/app/_components/adm/item";
 import { IEntitieAnime } from "@/app/_interface/dataBd";
 import adapterListOneAnime from "@/app/_adapter/anime/listOne";
 import Loading from "@/app/loading";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
 interface IProps {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -21,18 +22,29 @@ export default function AnimeItem({ searchParams }: IProps) {
     if (!idAnime) {
       router.push("/admin");
     }
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
     //Buscando os dados de um anime
     lookingForInformationAboutAnAnime();
-  }, []);
 
-  const lookingForInformationAboutAnAnime = async () => {
-    const dataAnime = await adapterListOneAnime(idAnime as string);
+    async function lookingForInformationAboutAnAnime() {
+      try {
+        setLoadingData(true);
 
-    if (dataAnime) {
-      setDataAnime(dataAnime);
+        const dataAnime = await adapterListOneAnime(idAnime as string);
+
+        if (dataAnime) {
+          setDataAnime(dataAnime);
+        }
+      } catch (error) {
+        console.error("Erro ao procurar informações sobre o anime:", error);
+      } finally {
+        setLoadingData(false);
+      }
     }
-    setLoadingData(false);
-  };
+  }, [idAnime, router]);
 
   if (loadingData) {
     return <Loading />;

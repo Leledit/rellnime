@@ -1,31 +1,30 @@
 @import "../../../../../../public/css/palette.scss";
 
-.containerTextArea{
-    margin-bottom: 40px;
-    .label{
-        color: $dark-black-600;
-        font-size: 24px;
-        font-weight: 400;
-        
-    }
-    .textArea{
-        margin-top: 20px;
-        border-radius: 5px;
-        border: 1px solid #7BC0FF;
-        background: #FFF;     
-        box-shadow: 7px 7px 16px 1px rgba(123, 192, 255, 0.25);
-        width: 90%;
-        height: 180px;
-        max-width: 100%;
-        min-width: 100%;
-        min-height: 180px;
-        max-height: 180px;
-    }
-    .msgErroInput{
-        margin-bottom: 20px;
-        text-align: center;
-        color: red;
-        font-size: 18px;
-        margin-top: 30px;
-    }
+.containerTextArea {
+  margin-bottom: 40px;
+  .label {
+    color: $dark-black-600;
+    font-size: 24px;
+    font-weight: 400;
+  }
+  .textArea {
+    margin-top: 20px;
+    border-radius: 5px;
+    border: 1px solid #7bc0ff;
+    background: #fff;
+    box-shadow: 7px 7px 16px 1px rgba(123, 192, 255, 0.25);
+    width: 90%;
+    height: 180px;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 180px;
+    max-height: 180px;
+  }
+  .msgErroInput {
+    margin-bottom: 20px;
+    text-align: center;
+    color: red;
+    font-size: 18px;
+    margin-top: 30px;
+  }
 }

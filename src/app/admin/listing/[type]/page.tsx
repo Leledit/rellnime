@@ -1,35 +1,62 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Divider } from "@mui/material";
 import styles from "./index.module.scss";
 import adapterListAllAnime from "@/app/_adapter/anime/listAll";
 import ItemList from "@/app/_components/general/itemList";
-import { Divider } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import adapterListAllFilmes from "@/app/_adapter/films/listAll";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
 interface IProps {
   params: {
-    type: string;
+    type: typeListingSupported;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default function PageListingType({ params, searchParams }: IProps) {
+type typeListingSupported = "allAnime" | "allFilms";
+
+export default function PageListingType({ params }: IProps) {
   const [dataListingm, setDataListing] = useState<any[]>();
-  const typeListing = params.type;
+  const typeListing:typeListingSupported = params.type;
 
   const router = useRouter();
 
   useEffect(() => {
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
+
     fetchingPageData();
-  }, []);
+    async function fetchingPageData() {
+      let resutlData;
+      switch (typeListing) {
+        case "allAnime":
+          resutlData = await adapterListAllAnime();
+          if (resutlData) {
+            setDataListing(resutlData);
+          }
+          break;
+        case "allFilms":
+          resutlData = await adapterListAllFilmes();
+          if (resutlData) {
+            setDataListing(resutlData);
+          }
+          break;
+        default:
+          router.push("/admin/");
+          break;
+      }
+    }
+  }, [router, typeListing]);
 
   return (
     <div className={styles.cotainerListing}>
       <div className={styles.listingHeader}>
         <div className={styles.listingContainerTitle}>
           <h2 className={styles.listingHeaderTitle}>
-            {returnCorrespondingTitle()}
+            {returnCorrespondingTitle(typeListing)}
           </h2>
           <Divider style={{ background: "#7BC0FF" }} />
         </div>
@@ -37,11 +64,7 @@ export default function PageListingType({ params, searchParams }: IProps) {
           <button
             className={styles.listingHeaderButton}
             onClick={() => {
-              if (typeListing === "allAnime") {
-                router.push("/admin/anime/register");
-              } else {
-                router.push("/admin/films/register");
-              }
+              redirectToEditPage(typeListing);
             }}
           >
             Novo
@@ -76,35 +99,20 @@ export default function PageListingType({ params, searchParams }: IProps) {
     </div>
   );
 
-  async function fetchingPageData() {
-    let resutlData;
-    switch (typeListing) {
-      case "allAnime":
-        resutlData = await adapterListAllAnime();
-        if (resutlData) {
-          setDataListing(resutlData);
-        }
-        break;
-      case "allFilms":
-        resutlData = await adapterListAllFilmes();
-        if (resutlData) {
-          setDataListing(resutlData);
-        }
-        break;
-      default:
-        router.push("/admin/");
-        break;
-    }
+  function returnCorrespondingTitle(typeListing:typeListingSupported) {
+    const titleMapping: {[key: string]: string } = {
+      allAnime: "Animes Cadastrados",
+      allFilms: "Filmes Cadastrados",
+    };
+
+    return titleMapping[typeListing] || "";
   }
 
-  function returnCorrespondingTitle() {
-    switch (typeListing) {
-      case "allAnime":
-        return "Animes Cadastrados";
-        break;
-      case "allFilms":
-        return "Filmes Cadastrados";
-        break;
-    }
+  function redirectToEditPage(typeListing: typeListingSupported) {
+    const routeMapping: Record<typeListingSupported, string> = {
+      allAnime: "/admin/anime/register",
+      allFilms: "/admin/films/register",
+    };
+    router.push(routeMapping[typeListing]);
   }
 }

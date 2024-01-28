@@ -1,9 +1,10 @@
 "use client";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import HeaderForms from "@/app/_components/general/form/headerFormes";
 import styles from "./index.module.scss";
 import { onValidateFieldsEmpty } from "@/app/_utils/formHandling";
 import FormInput from "@/app/_components/general/form/input";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import FormSelect from "@/app/_components/general/form/select";
 import FormTextArea from "@/app/_components/general/form/textArea";
 import FormFile from "@/app/_components/general/form/file";
@@ -18,9 +19,9 @@ import {
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import adapterListOneAnime from "@/app/_adapter/anime/listOne";
-import { useRouter } from "next/navigation";
 import { IEntitieAnime } from "@/app/_interface/dataBd";
 import adapterAnimeChanging from "@/app/_adapter/anime/changing";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
 interface formFild {
   name: {
@@ -128,31 +129,89 @@ export default function AnimeForm({ params, searchParams }: IProps) {
   const accessToken = getTolkenCookie();
 
   useEffect(() => {
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
     if (params.type === "editing" && searchParams) {
       lookingForInformationAboutAnAnime(searchParams.id as string);
     }
-  }, []);
 
-  async function handlingFormSubmissionEvent(e: FormEvent<HTMLFormElement>)  {
+    async function lookingForInformationAboutAnAnime(idAnime: string) {
+      const dataAnime: IEntitieAnime = await adapterListOneAnime(idAnime);
+
+      if (dataAnime) {
+        setFormsFilds({
+          name: {
+            error: false,
+            value: dataAnime.name,
+          },
+          watched: {
+            error: false,
+            value: dataAnime.watched,
+          },
+          note: {
+            error: false,
+            value: dataAnime.note,
+          },
+          nextSeason: {
+            error: false,
+            value: dataAnime.nextSeason,
+          },
+          previousSeason: {
+            error: false,
+            value: dataAnime.previousSeason,
+          },
+          qtdEpisodes: {
+            error: false,
+            value: dataAnime.qtdEpisodes,
+          },
+          releaseYear: {
+            error: false,
+            value: dataAnime.releaseYear,
+          },
+          status: {
+            error: false,
+            value: dataAnime.status,
+          },
+          synopsis: {
+            error: false,
+            value: dataAnime.synopsis,
+          },
+          img: {
+            error: false,
+            value: dataAnime.urlImg,
+          },
+        });
+      } else {
+        router.push("/admin/");
+      }
+    }
+  }, [params.type, router, searchParams]);
+
+  async function handlingFormSubmissionEvent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
-    await onValidateFieldsEmpty(setFormsFilds);
+    try {
+      await onValidateFieldsEmpty(setFormsFilds);
 
-    if (!Object.values(formsFilds).some((field) => field.error)) {
-      if (params.type === "editing") {
-        //Editando um anime
-        await editingAnAlreadyRegisteredAnime();
+      if (!Object.values(formsFilds).some((field) => field.error)) {
+        if (params.type === "editing") {
+          await editingAnAlreadyRegisteredAnime();
+        } else {
+          await registerNewRecordInTheDatabase();
+        }
+
+        setLoading(false);
       } else {
-        //Cadastrando um novo anime
-        await registerNewRecordInTheDatabase();
+        setLoading(false);
       }
-
-      setLoading(false);
-    } else {
+    } catch (error) {
+      console.error("Erro ao lidar com envio do formulário:", error);
+    } finally {
       setLoading(false);
     }
-  };
+  }
 
   async function editingAnAlreadyRegisteredAnime() {
     if (searchParams) {
@@ -220,14 +279,6 @@ export default function AnimeForm({ params, searchParams }: IProps) {
       });
     }
 
-    if (resultRequest === 401) {
-      //Criar ação adicional aqui(tipo deslogar a pessoa se necessario)
-      setMensagemRequest({
-        message: "Tolken expirado!, faça login novamente!",
-        status: 500,
-      });
-    }
-
     if (resultRequest.message) {
       setMensagemRequest({ message: resultRequest.message, status: 200 });
 
@@ -250,7 +301,9 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     <div className={styles.containerForm}>
       <div className={styles.breathingSpace}>
         <HeaderForms
-          titleForm={params.type==='editing'?"Edição de anime":"Cadastro de anime"}
+          titleForm={
+            params.type === "editing" ? "Edição de anime" : "Cadastro de anime"
+          }
           customStylesTitle={{ fontSize: "36px" }}
         />
         <form
@@ -446,56 +499,5 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     }
 
     return true;
-  }
-
-  async function lookingForInformationAboutAnAnime(idAnime: string) {
-    const dataAnime: IEntitieAnime = await adapterListOneAnime(idAnime);
-
-    if (dataAnime) {
-      setFormsFilds({
-        name: {
-          error: false,
-          value: dataAnime.name,
-        },
-        watched: {
-          error: false,
-          value: dataAnime.watched,
-        },
-        note: {
-          error: false,
-          value: dataAnime.note,
-        },
-        nextSeason: {
-          error: false,
-          value: dataAnime.nextSeason,
-        },
-        previousSeason: {
-          error: false,
-          value: dataAnime.previousSeason,
-        },
-        qtdEpisodes: {
-          error: false,
-          value: dataAnime.qtdEpisodes,
-        },
-        releaseYear: {
-          error: false,
-          value: dataAnime.releaseYear,
-        },
-        status: {
-          error: false,
-          value: dataAnime.status,
-        },
-        synopsis: {
-          error: false,
-          value: dataAnime.synopsis,
-        },
-        img: {
-          error: false,
-          value: dataAnime.urlImg,
-        },
-      });
-    } else {
-      router.push("/admin/");
-    }
   }
 }

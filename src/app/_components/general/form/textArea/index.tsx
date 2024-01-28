@@ -6,7 +6,7 @@ interface props {
   onChange: (e: any) => void;
   error: any;
   customClassComponent?: any;
-  value?:any,
+  value?: any;
 }
 
 export default function FormTextArea({
@@ -15,12 +15,17 @@ export default function FormTextArea({
   onChange,
   error,
   customClassComponent,
-  value
+  value,
 }: props) {
   return (
     <div className={styles.containerTextArea + " " + customClassComponent}>
       <label className={styles.label}>{label}</label>
-      <textarea className={styles.textArea} onChange={onChange} name={name}  value={value}/>
+      <textarea
+        className={styles.textArea}
+        onChange={onChange}
+        name={name}
+        value={value}
+      />
       {error ? (
         <p className={styles.msgErroInput}>Este campo é obrigatorio</p>
       ) : (

@@ -27,8 +27,8 @@ export interface IEntitieFilme {
   urlImg?: string;
 }
 
-export interface IGenre{
-  name:string,
-  registrationDate:any,
-  id:string
+export interface IGenre {
+  name: string;
+  registrationDate: any;
+  id: string;
 }

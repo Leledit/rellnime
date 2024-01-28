@@ -1,5 +1,5 @@
-import styles from "./index.module.scss";
 import Link from "next/link";
+import styles from "./index.module.scss";
 
 interface props {
   text: string;

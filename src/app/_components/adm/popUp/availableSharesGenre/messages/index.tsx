@@ -1,5 +1,5 @@
-import { ImensagemRequest } from "@/app/_interface/forms";
 import styles from "../index.module.scss";
+import { ImensagemRequest } from "@/app/_interface/forms";
 
 interface IProps {
   mensagemRequest: ImensagemRequest;

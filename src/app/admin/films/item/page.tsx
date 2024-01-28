@@ -1,10 +1,11 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import adapterListOneFilme from "@/app/_adapter/films/listOne";
 import AdmItem from "@/app/_components/adm/item";
 import { IEntitieFilme } from "@/app/_interface/dataBd";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 import Loading from "@/app/loading";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface IProps {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -21,18 +22,22 @@ export default function FilmsItem({ searchParams }: IProps) {
     if (!idFilme) {
       router.push("/admin");
     }
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
     //Buscando os dados de um filme
     lookingForInformationAboutAnFilme();
-  }, []);
 
-  const lookingForInformationAboutAnFilme = async () => {
-    const dataFilme = await adapterListOneFilme(idFilme as string);
+    async function lookingForInformationAboutAnFilme() {
+      const dataFilme = await adapterListOneFilme(idFilme as string);
 
-    if (dataFilme) {
-      setDataFilme(dataFilme);
+      if (dataFilme) {
+        setDataFilme(dataFilme);
+      }
+      setLoadingData(false);
     }
-    setLoadingData(false);
-  };
+  }, [idFilme, router]);
 
   if (loadingData) {
     return <Loading />;

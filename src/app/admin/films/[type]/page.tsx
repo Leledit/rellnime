@@ -1,9 +1,9 @@
 "use client";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./index.module.scss";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
-import styles from "./index.module.scss";
 import HeaderForms from "@/app/_components/general/form/headerFormes";
 import FormInput from "@/app/_components/general/form/input";
 import FormSelect from "@/app/_components/general/form/select";
@@ -13,15 +13,12 @@ import Button from "@/app/_components/general/button";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import { onValidateFieldsEmpty } from "@/app/_utils/formHandling";
-import {
-  compressImage,
-  convertBlobToBase64,
-} from "@/app/_utils/manipulatingImage";
 import adapterFilmsRegister from "@/app/_adapter/films/register";
 import { returnImageThatMustBeSent } from "@/app/_utils/images/preparingToSendToApi";
 import adapterListOneFilme from "@/app/_adapter/films/listOne";
 import { IEntitieFilme } from "@/app/_interface/dataBd";
 import adapterFilmsChanging from "@/app/_adapter/films/changing";
+import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
 interface formFild {
   name: {
@@ -105,10 +102,53 @@ export default function FilmeForm({ params, searchParams }: IProps) {
   const accessToken = getTolkenCookie();
 
   useEffect(() => {
+    //Validando token jwt
+    if (!checkingAdministratorJwtCredentials()) {
+      router.push("/authentication/login");
+    }
     if (params.type === "editing" && searchParams) {
       lookingForInformationAboutFilm(searchParams.id as string);
     }
-  }, []);
+
+    async function lookingForInformationAboutFilm(idFilm: string) {
+      const dataFilm: IEntitieFilme = await adapterListOneFilme(idFilm);
+
+      if (dataFilm) {
+        setFormsFilds({
+          name: {
+            value: dataFilm.name,
+            error: false,
+          },
+          duration: {
+            value: dataFilm.duration,
+            error: false,
+          },
+          launch: {
+            value: dataFilm.releaseYear.toString(),
+            error: false,
+          },
+          note: {
+            value: dataFilm.note.toString(),
+            error: false,
+          },
+          synopsis: {
+            value: dataFilm.synopsis,
+            error: false,
+          },
+          visa: {
+            value: `${dataFilm.visa}`,
+            error: false,
+          },
+          img: {
+            value: dataFilm.urlImg,
+            error: false,
+          },
+        });
+      } else {
+        router.push("/admin/");
+      }
+    }
+  }, [params.type, router, searchParams]);
 
   return (
     <>
@@ -218,45 +258,6 @@ export default function FilmeForm({ params, searchParams }: IProps) {
       </div>
     </>
   );
-
-  async function lookingForInformationAboutFilm(idFilm: string) {
-    const dataFilm: IEntitieFilme = await adapterListOneFilme(idFilm);
-
-    if (dataFilm) {
-      setFormsFilds({
-        name: {
-          value: dataFilm.name,
-          error: false,
-        },
-        duration: {
-          value: dataFilm.duration,
-          error: false,
-        },
-        launch: {
-          value: dataFilm.releaseYear.toString(),
-          error: false,
-        },
-        note: {
-          value: dataFilm.note.toString(),
-          error: false,
-        },
-        synopsis: {
-          value: dataFilm.synopsis,
-          error: false,
-        },
-        visa: {
-          value: `${dataFilm.visa}`,
-          error: false,
-        },
-        img: {
-          value: dataFilm.urlImg,
-          error: false,
-        },
-      });
-    } else {
-      router.push("/admin/");
-    }
-  }
 
   async function handlingFormSubmissionEvent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -395,7 +396,7 @@ export default function FilmeForm({ params, searchParams }: IProps) {
         accessToken,
         searchParams.id as string
       );
-      
+
       if (resultRequest === 400) {
         setMensagemRequest({
           message: "Problemas ao editar o filme",

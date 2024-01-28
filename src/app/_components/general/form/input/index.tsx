@@ -1,8 +1,7 @@
 "use client";
 import { TextField } from "@mui/material";
-import { ChangeEvent } from "react";
-import styles from './index.module.scss';
-import styled, { CSSProperties } from "styled-components";
+import styles from "./index.module.scss";
+import styled from "styled-components";
 
 const CustomizedTextField = styled(TextField)({
   "&.css-1u3bzj6-MuiFormControl-root-MuiTextField-root": {
@@ -20,11 +19,11 @@ const CustomizedTextField = styled(TextField)({
 interface props {
   label: string;
   name: string;
-  type: "text" | "email" | "password" | "number"| "file";
+  type: "text" | "email" | "password" | "number" | "file";
   onChange: (e: any) => void;
   error: any;
-  customClassComponent?: any,
-  value?:any
+  customClassComponent?: any;
+  value?: any;
 }
 
 export default function FormInput({
@@ -34,10 +33,10 @@ export default function FormInput({
   onChange,
   error,
   customClassComponent,
-  value
+  value,
 }: props) {
   return (
-    <div className={customClassComponent} style={{width:'100%'}}>
+    <div className={customClassComponent} style={{ width: "100%" }}>
       <CustomizedTextField
         name={name}
         label={label}
@@ -50,7 +49,11 @@ export default function FormInput({
           onChange(e);
         }}
       />
-      {error ? <p className={styles.msgErroInput}>Este campo é obrigatorio</p> : <></>}
+      {error ? (
+        <p className={styles.msgErroInput}>Este campo é obrigatorio</p>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
