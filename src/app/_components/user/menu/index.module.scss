@@ -1,0 +1,93 @@
+@import "../../../../../public/css/palette.scss";
+
+.containerMenu {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: $dark-black;
+  color: $light-white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 120px;
+  .alignmentContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 120px;
+    width: 90%;
+
+    .containerLogo {
+      .logo {
+        height: 100px;
+        width: 100px;
+      }
+
+      .menuButtonLabel {
+        display: none;
+        height: 100%;
+        width: 30px;
+        cursor: pointer;
+
+      }
+    }
+
+    .containerMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      width: auto;
+      .iconeMenu {
+        width: 30px;
+        height: 20px;
+        cursor: pointer;
+      }
+      .containerItens {
+        border-top: 1px solid $light-white-300;
+        padding-top: 20px;
+        width: 100%;
+        position: absolute;
+        top: 140px;
+        left: 0;
+        background-color: $dark-black;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        .item {
+          font-size: 26px;
+          margin-bottom: 20px;
+          color: $light-white;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        .item:hover {
+          color: $light-blue-800;
+        }
+        .containerButtons {
+          margin-bottom: 20px;
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .divider {
+            width: 100px;
+            border: 1px solid $light-blue;
+            margin-bottom: 20px;
+          }
+          .iconLogin,
+          .iconRegister {
+            width: 150px;
+            height: 50px;
+            margin-bottom: 20px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

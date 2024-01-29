@@ -1,7 +1,9 @@
+import UserMenu from "./_components/user/menu";
+
 export default function Home() {
   return (
     <main>
-        Pagina inicial
+        <UserMenu/>
     </main>
   )
 }
