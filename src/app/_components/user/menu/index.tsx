@@ -10,16 +10,25 @@ import Link from "next/link";
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [positionMenuItem, setPositionMenuItem] = useState<string>();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    if (!isOpen) {
+      setPositionMenuItem("140px");
+    } else {
+      setPositionMenuItem("-100%");
+    }
   };
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 992) {
         setIsOpen(true);
-        console.log("okkkkk");
+        setPositionMenuItem("0px");
+      } else {
+        setIsOpen(false);
+        setPositionMenuItem("-100%");
       }
     };
 
@@ -27,6 +36,7 @@ export default function UserMenu() {
 
     if (window.innerWidth > 992) {
       setIsOpen(true);
+      setPositionMenuItem("0px");
     }
 
     return () => {
@@ -36,7 +46,10 @@ export default function UserMenu() {
 
   return (
     <>
-      <div className={styles.containerMenu}>
+      <div
+        className={styles.containerMenu}
+        style={{ marginBottom: isOpen ? "300px" : "0px" }}
+      >
         <div className={styles.alignmentContainer}>
           <div className={styles.containerLogo}>
             <Image src={logo} alt="Logo do projeto" className={styles.logo} />
@@ -48,56 +61,41 @@ export default function UserMenu() {
               className={styles.iconeMenu}
               onClick={toggleMenu}
             />
-            {isOpen ? (
-              <div className={styles.containerItens}>
-                <div>
-                  <Link href={""} className={styles.item}>
-                    Animes
-                  </Link>
-                  <Link href={""} className={styles.item}>
-                    Filmes
-                  </Link>
-                </div>
-                <div className={styles.containerButtons}>
-                  <Link href={"/authentication/login"}>
-                    <Image
-                      src={iconButtonLogin}
-                      alt="Icone que representa o login"
-                      className={styles.iconLogin}
-                      onClick={toggleMenu}
-                    />
-                  </Link>
-                  <hr className={styles.divider} />
-                  <Link href={"/authentication/register"}>
-                    <Image
-                      src={iconButtonRegister}
-                      alt="Icone que representa o registro"
-                      className={styles.iconRegister}
-                      onClick={toggleMenu}
-                    />
-                  </Link>
-                </div>
+            <div
+              className={styles.containerItens}
+              style={{ top: positionMenuItem }}
+            >
+              <div>
+                <Link href={""} className={styles.item}>
+                  Animes
+                </Link>
+                <Link href={""} className={styles.item}>
+                  Filmes
+                </Link>
               </div>
-            ) : (
-              <></>
-            )}
+              <div className={styles.containerButtons}>
+                <Link href={"/authentication/login"}>
+                  <Image
+                    src={iconButtonLogin}
+                    alt="Icone que representa o login"
+                    className={styles.iconLogin}
+                    onClick={toggleMenu}
+                  />
+                </Link>
+                <hr className={styles.divider} />
+                <Link href={"/authentication/register"}>
+                  <Image
+                    src={iconButtonRegister}
+                    alt="Icone que representa o registro"
+                    className={styles.iconRegister}
+                    onClick={toggleMenu}
+                  />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </>
   );
 }
-
-/*
-<input id={styles.menuToggle} type="checkbox" />
-          <label className={styles.menuButtonLabel} htmlFor="menu-toggle">
-            <div className={styles.menuButton}></div>
-          </label>
-          <ul className={styles.menu}>
-            <li className={styles.menuOption}>One</li>
-            <li className={styles.menuOption}>Two</li>
-            <li className={styles.menuOption}>Three</li>
-            <li className={styles.menuOption}>Four</li>
-            <li className={styles.menuOption}>Five</li>
-          </ul>
- */

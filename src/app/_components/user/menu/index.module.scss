@@ -39,6 +39,7 @@
       justify-content: space-around;
       align-items: center;
       width: auto;
+
       .iconeMenu {
         width: 30px;
         height: 20px;
@@ -49,8 +50,9 @@
         padding-top: 20px;
         width: 100%;
         position: absolute;
-        top: 140px;
+        top: -100%; /* Mova o menu para cima, fora da tela */
         left: 0;
+        transition: top 0.2s;
         background-color: $dark-black;
         display: flex;
         flex-direction: column;
@@ -106,6 +108,7 @@
         width: 100%;
         padding-top: 0px;
         padding-bottom: 0px;
+        
         .iconeMenu {
           display: none;
         }
