@@ -1,7 +1,7 @@
 @import "../../../../../public/css/palette.scss";
 
 .containerMenu {
-  width: 100%;
+  width: calc(100% - 40px);
   padding: 10px 20px;
   background-color: $dark-black;
   color: $light-white;
@@ -30,7 +30,6 @@
         height: 100%;
         width: 30px;
         cursor: pointer;
-
       }
     }
 
@@ -88,6 +87,72 @@
           }
         }
       }
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    .alignmentContainer {
+      width: 80%;
+      margin-left: 10%;
+    }
+  }
+  @media screen and (min-width: 992px) {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    .alignmentContainer {
+      width: 100%;
+      margin-left: 0px;
+      .containerMenu {
+        width: 100%;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        .iconeMenu {
+          display: none;
+        }
+        .containerItens {
+          position: relative;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          top: 0px;
+          padding-top: 0px;
+
+          border: none;
+          .item {
+            margin-left: 35px;
+            margin-left: 35px;
+          }
+
+          .containerButtons {
+            flex-direction: row;
+            width: 424px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            .divider {
+              width: 2px;
+              margin-bottom: 0px;
+              height: 50px;
+            }
+            .iconLogin,
+            .iconRegister {
+              margin-left: 30px;
+              margin-right: 30px;
+              margin-bottom: 0px;
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    .alignmentContainer {
+      width: calc(100% - 200px);
+      margin-left: 100px;
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    .alignmentContainer {
+      width: calc(100% - 200px);
     }
   }
 }

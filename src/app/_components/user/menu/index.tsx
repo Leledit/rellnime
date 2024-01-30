@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import logo from "../../../../../public/images/smalSoon.png";
 import iconMenu from "../../../../../public/images/user/iconMenu.png";
@@ -14,52 +14,74 @@ export default function UserMenu() {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setIsOpen(true);
+        console.log("okkkkk");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    if (window.innerWidth > 992) {
+      setIsOpen(true);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <div className={styles.containerMenu}>
         <div className={styles.alignmentContainer}>
-        <div className={styles.containerLogo}>
-          <Image src={logo} alt="Logo do projeto" className={styles.logo} />
-        </div>
-        <div className={styles.containerMenu}>
-          <Image
-            src={iconMenu}
-            alt="Icone do menu"
-            className={styles.iconeMenu}
-            onClick={toggleMenu}
-          />
-          {isOpen ? (
-            <div className={styles.containerItens}>
-              <Link href={"#"} className={styles.item}>
-                Animes
-              </Link>
-              <Link href={"#"} className={styles.item}>
-                Filmes
-              </Link>
-              <div className={styles.containerButtons}>
-                <Link href={"#"}>
-                  <Image
-                    src={iconButtonLogin}
-                    alt="Icone que representa o login"
-                    className={styles.iconLogin}
-                    onClick={toggleMenu}
-                  />
-                </Link>
-                <hr className={styles.divider} />
-                <Link href={"#"}>
-                  <Image
-                    src={iconButtonRegister}
-                    alt="Icone que representa o registro"
-                    className={styles.iconRegister}
-                    onClick={toggleMenu}
-                  />
-                </Link>
+          <div className={styles.containerLogo}>
+            <Image src={logo} alt="Logo do projeto" className={styles.logo} />
+          </div>
+          <div className={styles.containerMenu}>
+            <Image
+              src={iconMenu}
+              alt="Icone do menu"
+              className={styles.iconeMenu}
+              onClick={toggleMenu}
+            />
+            {isOpen ? (
+              <div className={styles.containerItens}>
+                <div>
+                  <Link href={""} className={styles.item}>
+                    Animes
+                  </Link>
+                  <Link href={""} className={styles.item}>
+                    Filmes
+                  </Link>
+                </div>
+                <div className={styles.containerButtons}>
+                  <Link href={"/authentication/login"}>
+                    <Image
+                      src={iconButtonLogin}
+                      alt="Icone que representa o login"
+                      className={styles.iconLogin}
+                      onClick={toggleMenu}
+                    />
+                  </Link>
+                  <hr className={styles.divider} />
+                  <Link href={"/authentication/register"}>
+                    <Image
+                      src={iconButtonRegister}
+                      alt="Icone que representa o registro"
+                      className={styles.iconRegister}
+                      onClick={toggleMenu}
+                    />
+                  </Link>
+                </div>
               </div>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
     </>
