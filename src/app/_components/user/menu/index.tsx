@@ -11,6 +11,7 @@ import Link from "next/link";
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [positionMenuItem, setPositionMenuItem] = useState<string>();
+  const [marginBottomMenu, setMarginBottomMenu] = useState<string>();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,6 +19,11 @@ export default function UserMenu() {
       setPositionMenuItem("140px");
     } else {
       setPositionMenuItem("-100%");
+    }
+    if (!isOpen) {
+      setMarginBottomMenu("300px");
+    } else {
+      setMarginBottomMenu("0px");
     }
   };
 
@@ -29,6 +35,7 @@ export default function UserMenu() {
       } else {
         setIsOpen(false);
         setPositionMenuItem("-100%");
+        setMarginBottomMenu("0px");
       }
     };
 
@@ -37,6 +44,8 @@ export default function UserMenu() {
     if (window.innerWidth > 992) {
       setIsOpen(true);
       setPositionMenuItem("0px");
+    } else {
+      setMarginBottomMenu("0px");
     }
 
     return () => {
@@ -48,7 +57,7 @@ export default function UserMenu() {
     <>
       <div
         className={styles.containerMenu}
-        style={{ marginBottom: isOpen ? "300px" : "0px" }}
+        style={{ marginBottom: marginBottomMenu }}
       >
         <div className={styles.alignmentContainer}>
           <div className={styles.containerLogo}>

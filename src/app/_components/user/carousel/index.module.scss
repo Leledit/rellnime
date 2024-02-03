@@ -1,31 +1,161 @@
+@import "../../../../../public/css/palette.scss";
+
 .containerCarousel {
   position: relative;
-  width: 100%;
+  width: 96%;
+  margin-left: 2%;
   overflow: hidden;
   margin-top: 30px;
+  .carouselTitle {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: $light-white;
+    font-size: 32px;
+    text-align: center;
+    line-height: 40px;
+    width: 90%;
+    margin-left: 5%;
+  }
   .carouselInner {
-    display: flex;
     transition: transform 0.5s ease;
+    display: flex;
     .carouselItem {
-      flex: 0 0 100%;
+      flex: 0 0 60%;
+      margin: 0 20%;
+      height: 220px;
+      cursor: pointer;
+      .carouselItemImg {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .carouselControl {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
     border: none;
-    color: white;
-    font-size: 20px;
-    padding: 10px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     z-index: 1;
+    background: transparent;
   }
   .prev {
     left: 0;
+    background-image: url("../../../../../public/images/user/arrowPrev.png");
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
   .next {
     right: 0;
+    background-image: url("../../../../../public/images/user/arrowNext.png");
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .lineDetail {
+    opacity: 1;
+    background: $light-white;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 60px;
+    margin-bottom: 20px;
+  }
+  @media screen and (min-width: 350px) {
+    .carouselInner {
+      .carouselItem {
+        flex: 0 0 76%;
+        margin: 0 12%;
+        height: 320px;
+      }
+    }
+  }
+  @media screen and (min-width: 428px) {
+    .carouselTitle {
+      width: 200px;
+      margin-left: calc(50% - 100px);
+    }
+    .carouselInner {
+      .carouselItem {
+        flex: 0 0 270px;
+        margin: 0 calc(50% - 135px);
+        height: 380px;
+      }
+    }
+    .lineDetail {
+      width: 300px;
+      margin-left: calc(50% - 150px);
+    }
+  }
+  @media screen and (min-width: 710px) {
+    width: 700px;
+    margin-left: calc(50% - 350px);
+    .carouselTitle {
+      width: 100%;
+      margin-left: 0px;
+      font-size: 40px;
+      margin-bottom: 80px;
+    }
+    .carouselInner {
+      .carouselItem {
+        margin: 0 0px;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+    }
+    .lineDetail {
+      width: 600px;
+      margin-left: calc(50% - 300px);
+    }
+  }
+  @media screen and (min-width: 992px) {
+    width: 990px;
+    margin-left: calc(50% - 495px);
+    .carouselInner {
+      width: 96%;
+      margin-left: 2%;
+      .carouselItem {
+        margin-left: 23.5px;
+        margin-right: 23.5px;
+      }
+    }
+    .lineDetail {
+      width: 800px;
+      margin-left: calc(50% - 400px);
+    }
+  }
+  @media screen and (min-width: 1410px) {
+    width: 1400px;
+    margin-left: calc(50% - 700px);
+    .carouselInner {
+      padding-bottom: 10px;
+      width: 100%;
+      margin-left: 0px;
+      .carouselItem {
+        flex: 0 0 285px;
+        margin: 0px 32px;
+        height: 400px;
+      }
+    }
+    .lineDetail {
+      width: 1200px;
+      margin-left: calc(50% - 600px);
+    }
+  }
+  @media screen and (min-width: 1810px) {
+    width: 1700px;
+    margin-left: calc(50% - 850px);
+
+    .carouselInner {
+      .carouselItem {
+        margin: 0px 27.5px;
+      }
+    }
+    .lineDetail {
+      width: 1300px;
+      margin-left: calc(50% - 650px);
+    }
   }
 }
