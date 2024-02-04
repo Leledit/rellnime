@@ -1,34 +1,38 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import adapterRecentylAdded from "../_adapter/dashboard/recentylAdded";
 import UserCarrousel from "../_components/user/carousel";
+import UserComponentDivider from "../_components/user/componentDivider";
+import UserHomeListing from "../_components/user/homeListing";
 
 export default function Home() {
+  const [dataRecentylAdded, setDataRecentylAdded] = useState<any[]>();
 
-  const [dataRecentylAdded,setDataRecentylAdded] = useState<any[]>();
+  useEffect(() => {
+    searchingForNecessaryData();
+  }, []);
 
-  useEffect(()=>{
-    searchingForNecessaryData()
-  },[]);
-
- 
   return (
     <>
-        {theRecentlyAddedComponentShouldBeDisplayed()}
+      {theRecentlyAddedComponentShouldBeDisplayed()}
+      <UserComponentDivider
+        mainComponet={<UserHomeListing />}
+        sideBar={"Barra lateral"}
+      />
     </>
-  )
+  );
 
-  async function searchingForNecessaryData(){
-      //Buscando dados dos ultimos titulos lançados
-      const resultDataRecentyl = await adapterRecentylAdded();
-      setDataRecentylAdded(resultDataRecentyl);
+  async function searchingForNecessaryData() {
+    //Buscando dados dos ultimos titulos lançados
+    const resultDataRecentyl = await adapterRecentylAdded();
+    setDataRecentylAdded(resultDataRecentyl);
   }
 
-  function theRecentlyAddedComponentShouldBeDisplayed(){
-    if(dataRecentylAdded && dataRecentylAdded.length>0){
-      return <UserCarrousel dataRecentlyAdded={dataRecentylAdded} />
-    }else{
-      return <></>
+  function theRecentlyAddedComponentShouldBeDisplayed() {
+    if (dataRecentylAdded && dataRecentylAdded.length > 0) {
+      return <UserCarrousel dataRecentlyAdded={dataRecentylAdded} />;
+    } else {
+      return <></>;
     }
   }
 }

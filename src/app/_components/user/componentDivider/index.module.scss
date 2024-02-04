@@ -1,0 +1,41 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 80px;
+  .mainComponent {
+    width: 100%;
+    margin-bottom: 120px;
+  }
+  .sideBar {
+    width: 100%;
+  }
+  @media screen and (min-width: 428px) {
+    width: 90%;
+    margin-left: 5%;
+  }
+  @media screen and (min-width: 1400px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 80px;
+    .mainComponent {
+      width: calc(100% - 420px);
+      margin-right: 20px;
+      margin-bottom: 0px;
+    }
+    .sideBar {
+      width: 400px;
+    }
+  }
+  @media screen and (min-width: 1800px) {
+    width: 1700px;
+    margin-left: calc(50% - 850px);
+  }
+}
+
+/*
+
+*/
