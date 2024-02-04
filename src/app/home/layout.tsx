@@ -1,4 +1,5 @@
 
+import UserFooter from "../_components/user/footer";
 import UserMenu from "../_components/user/menu";
 import styles from "./layout.module.scss";
 export default function LayoutAdmin({
@@ -10,6 +11,7 @@ export default function LayoutAdmin({
     <main className={styles.containerHome}>
       <UserMenu/>
       {children}
+      <UserFooter/>
     </main>
   );
 }

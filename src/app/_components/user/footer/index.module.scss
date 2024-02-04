@@ -1,0 +1,105 @@
+@import "../../../../../public/css/palette.scss";
+.footer {
+  background: $dark-black;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  .containerLinks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 50px;
+    .containerLogo {
+      .logo {
+        width: 143px;
+        height: 120px;
+      }
+      .containerOption {
+        display: none;
+        .option {
+          text-decoration: none;
+          color: $light-white;
+        }
+      }
+      margin-bottom: 20px;
+    }
+    .containerAuthentication {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      .option {
+        text-decoration: none;
+        color: $light-blue-800;
+        margin-left: 5px;
+        font-size: 26px;
+        margin-right: 5px;
+      }
+      .option:hover {
+        color: $light-blue-600;
+      }
+      .divider {
+        background: $light-blue-800;
+        opacity: 1;
+        height: 30px;
+        width: 1px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  }
+  .contaienerCopy {
+    margin-bottom: 40px;
+    width: 90%;
+    .copy {
+      color: $light-white;
+      line-height: 30px;
+      font-size: 20px;
+      text-align: center;
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    .containerLinks {
+      flex-direction: row;
+      width: 90%;
+      justify-content: space-around;
+      margin-bottom: 0px;
+      .containerLogo {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        margin-bottom: 30px;
+        .logo {
+          margin-right: 20px;
+        }
+        .containerOption {
+          display: flex;
+          flex-direction: row;
+          .option {
+            margin-right: 20px;
+            font-size: 24px;
+          }
+          .option:hover {
+            color: $light-blue;
+          }
+        }
+      }
+      .containerAuthentication {
+        justify-content: end;
+      }
+    }
+  }
+  @media screen and (min-width: 1800px) {
+    .containerLinks,
+    .contaienerCopy {
+      width: 1700px;
+    }
+  }
+}
