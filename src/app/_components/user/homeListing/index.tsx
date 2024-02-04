@@ -66,6 +66,5 @@ export default function UserHomeListing() {
   async function lookingForTheLatestReleases() {
     const dataReleases = await adapterReleases();
     setDataReleases(dataReleases);
-    console.log(dataReleases);
   }
 }

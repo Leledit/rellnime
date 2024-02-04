@@ -4,6 +4,7 @@ import adapterRecentylAdded from "../_adapter/dashboard/recentylAdded";
 import UserCarrousel from "../_components/user/carousel";
 import UserComponentDivider from "../_components/user/componentDivider";
 import UserHomeListing from "../_components/user/homeListing";
+import UserSideBarPopularAndSearches from "../_components/user/sideBar/popularAndSearches";
 
 export default function Home() {
   const [dataRecentylAdded, setDataRecentylAdded] = useState<any[]>();
@@ -17,7 +18,7 @@ export default function Home() {
       {theRecentlyAddedComponentShouldBeDisplayed()}
       <UserComponentDivider
         mainComponet={<UserHomeListing />}
-        sideBar={"Barra lateral"}
+        sideBar={<UserSideBarPopularAndSearches />}
       />
     </>
   );

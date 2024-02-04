@@ -1,3 +1,5 @@
 {
-    "editor.fontSize": 11
+    "editor.fontSize": 11,
+    "screencastMode.fontSize": 20,
+    "workbench.settings.editor": "json"
 }
