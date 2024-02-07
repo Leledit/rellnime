@@ -5,7 +5,7 @@ import styles from "./index.module.scss";
 import adapterReleases from "@/app/_adapter/dashboard/releases";
 import Link from "next/link";
 
-export default function UserHomeListing() {
+export default function UserListingHome() {
   const [dataReleases, setDataReleases] = useState<any>();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function UserHomeListing() {
             <></>
           )}
         </div>
-        <Link href={"/"} className={styles.segmentLink}>
+        <Link href={"/home/listing/?all=animes"} className={styles.segmentLink}>
           Lista completa
         </Link>
       </div>
@@ -56,7 +56,7 @@ export default function UserHomeListing() {
             <></>
           )}
         </div>
-        <Link href={"/"} className={styles.segmentLink}>
+        <Link href={"/home/listing/?all=filmes"} className={styles.segmentLink}>
           Lista completa
         </Link>
       </div>

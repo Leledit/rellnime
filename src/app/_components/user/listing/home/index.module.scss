@@ -1,4 +1,4 @@
-@import "../../../../../public/css/palette.scss";
+@import "../../../../../../public/css/palette.scss";
 .containerReleases {
   background: $dark-black;
   min-height: 600px;
@@ -72,5 +72,9 @@
         }
       }
     }
+  }
+
+  @media screen and (min-width:428px) {
+    border-radius: 20px;
   }
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import adapterRecentylAdded from "../_adapter/dashboard/recentylAdded";
 import UserCarrousel from "../_components/user/carousel";
 import UserComponentDivider from "../_components/user/componentDivider";
-import UserHomeListing from "../_components/user/homeListing";
+import UserListingHome from "../_components/user/listing/home";
 import UserSideBarPopularAndSearches from "../_components/user/sideBar/popularAndSearches";
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
     <>
       {theRecentlyAddedComponentShouldBeDisplayed()}
       <UserComponentDivider
-        mainComponet={<UserHomeListing />}
+        mainComponet={<UserListingHome />}
         sideBar={<UserSideBarPopularAndSearches />}
       />
     </>
