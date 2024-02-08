@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import adapterReleases from "@/app/_adapter/dashboard/releases";
 import Link from "next/link";
+import UserListingDisplayItems from "../displayItems";
 
 export default function UserListingHome() {
   const [dataReleases, setDataReleases] = useState<any>();
@@ -11,51 +12,27 @@ export default function UserListingHome() {
   useEffect(() => {
     lookingForTheLatestReleases();
   }, []);
-
+  
   return (
     <div className={styles.containerReleases}>
       <div className={styles.segment}>
         <h2 className={styles.segmentTitle}>Animes</h2>
-        <div className={styles.segmentItens}>
-          {dataReleases ? (
-            dataReleases.dataAnime.map((item: any, index: any) => {
-              return (
-                <div className={styles.segmentItem} key={index}>
-                  <img
-                    src={item.urlImg}
-                    alt="imagem de um item"
-                    className={styles.segmentItemImg}
-                  />
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </div>
+        {dataReleases ? (
+          <UserListingDisplayItems listing={dataReleases.dataAnime} />
+        ) : (
+          <></>
+        )}
         <Link href={"/home/listing/?all=animes"} className={styles.segmentLink}>
           Lista completa
         </Link>
       </div>
       <div className={styles.segment}>
         <h2 className={styles.segmentTitle}>Filmes</h2>
-        <div className={styles.segmentItens}>
-          {dataReleases ? (
-            dataReleases.dataFilmes.map((item: any, index: any) => {
-              return (
-                <div className={styles.segmentItem} key={index}>
-                  <img
-                    src={item.urlImg}
-                    alt="imagem de um item"
-                    className={styles.segmentItemImg}
-                  />
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </div>
+        {dataReleases ? (
+          <UserListingDisplayItems listing={dataReleases.dataFilmes} />
+        ) : (
+          <></>
+        )}
         <Link href={"/home/listing/?all=filmes"} className={styles.segmentLink}>
           Lista completa
         </Link>

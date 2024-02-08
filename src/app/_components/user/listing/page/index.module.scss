@@ -1,23 +1,79 @@
 @import "../../../../../../public/css/palette.scss";
 .containerListingPage {
-  background: $dark-black;
-  min-height: 600px;
   margin-top: 80px;
   .containerListing {
+    background: $dark-black;
+    min-height: 600px;
     .listingTitle {
       color: $light-white;
       font-size: 36px;
+      line-height: 43px;
       padding-top: 60px;
       width: 90%;
       text-align: center;
       margin-left: 5%;
     }
-    @media screen and (min-width:428px) {
-        
+  }
+
+  .containerPages {
+    background: $dark-black;
+    margin-top: 30px;
+    color: $light-white;
+    .pages {
+      width: 90%;
+      margin-left: 5%;
+      height: 170px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .pagePrev,
+      .pageNext {
+        border: 1px solid $light-white;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .pagePrev:hover,
+      .pageNext:hover {
+        color: $light-blue;
+      }
+      .page {
+        border: 1px solid $light-white;
+        padding: 8px;
+        cursor: pointer;
+      }
+      .selectPag{
+        background: $light-blue-800;
+      }
+      .page:hover {
+        color: $light-blue;
+      }
+    }
+    @media screen and (min-width: 500px) {
+      .pages {
+        width: 400px;
+        margin-left: calc(50% - 200px);
+      }
+    }
+    @media screen and (min-width: 700px) {
+      .pages {
+        width: 600px;
+        margin-left: calc(50% - 300px);
+        .page {
+          padding: 15px 25px;
+        }
+        .pagePrev,
+        .pageNext {
+          padding: 15px 25px;
+        }
+      }
     }
   }
 
   @media screen and (min-width: 428px) {
-    border-radius: 20px;
+    .containerListing,
+    .containerPages {
+      border-radius: 20px;
+    }
   }
 }
