@@ -61,7 +61,9 @@ export default function UserMenu() {
       >
         <div className={styles.alignmentContainer}>
           <div className={styles.containerLogo}>
-            <Image src={logo} alt="Logo do projeto" className={styles.logo} />
+            <Link href={"/home"}>
+              <Image src={logo} alt="Logo do projeto" className={styles.logo} />
+            </Link>
           </div>
           <div className={styles.containerMenu}>
             <Image
@@ -75,10 +77,10 @@ export default function UserMenu() {
               style={{ top: positionMenuItem }}
             >
               <div>
-                <Link href={""} className={styles.item}>
+                <Link href={"/home/listing?all=animes"} className={styles.item}>
                   Animes
                 </Link>
-                <Link href={""} className={styles.item}>
+                <Link href={"/home/listing?all=filmes"} className={styles.item}>
                   Filmes
                 </Link>
               </div>

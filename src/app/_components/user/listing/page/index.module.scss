@@ -13,6 +13,16 @@
       text-align: center;
       margin-left: 5%;
     }
+    .containerMensagem{
+      width: 100%;
+      margin-top: 50px;
+      .mensagem{
+        text-align: center;
+        vertical-align: middle;
+        color:$light-white;
+        font-size: 20px;
+      }
+    }
   }
 
   .containerPages {

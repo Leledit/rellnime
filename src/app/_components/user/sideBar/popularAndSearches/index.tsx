@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import adapterPopular from "@/app/_adapter/dashboard/popular";
 import iconStary from "../../../../../../public/images/user/iconStar.png";
+import { useRouter } from 'next/navigation'
 
 export default function UserSideBarPopularAndSearches() {
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function UserSideBarPopularAndSearches() {
   const [valueQuery, setValueQuery] = useState<string>("");
   const [messageError, setMessageError] = useState<string>();
   const [dataPopular, setDataPopular] = useState<any[]>();
+  const router = useRouter()
 
   const yearAvailable: number[] = returnAvailableYears();
 
@@ -46,7 +48,7 @@ export default function UserSideBarPopularAndSearches() {
         <div className={styles.yearItens}>
           {yearAvailable.map((year, index) => {
             return (
-              <Link href={"/"} className={styles.yearIten} key={index}>
+              <Link href={`/home/listing?year=${year}`} className={styles.yearIten} key={index}>
                 {year}
               </Link>
             );
@@ -96,6 +98,7 @@ export default function UserSideBarPopularAndSearches() {
   function handlingSearchButtonClick() {
     //Realizar redirect, passando o valor da busca como parametro.
     if (valueQuery && valueQuery !== "") {
+      router.push(`/home/listing?search=${valueQuery}`);
     } else {
       setMessageError("O campo busca não pode estar vazio!");
     }
