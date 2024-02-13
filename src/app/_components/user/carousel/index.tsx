@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
+import Link from "next/link";
 
 interface IProps {
   dataRecentlyAdded: any[];
@@ -66,11 +67,13 @@ export default function UserCarrousel({ dataRecentlyAdded }: IProps) {
       >
         {dataRecentlyAdded.map((item, index) => (
           <div className={styles.carouselItem} key={index}>
-            <img
-              className={styles.carouselItemImg}
-              alt="Imagem de um titulo adicionado recentemente"
-              src={item.urlImg}
-            />
+            <Link href={`/home/item/${item.id}`}>
+              <img
+                className={styles.carouselItemImg}
+                alt="Imagem de um titulo adicionado recentemente"
+                src={item.urlImg}
+              />
+            </Link>
           </div>
         ))}
       </div>

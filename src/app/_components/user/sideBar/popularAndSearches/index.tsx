@@ -66,7 +66,7 @@ export default function UserSideBarPopularAndSearches() {
             {dataPopular?.map((item, index) => {
               if (index < 5) {
                 return (
-                  <Link href={"/"} className={styles.item} key={index}>
+                  <Link href={`/home/item/${item.id}`} className={styles.item} key={index}>
                     <img
                       src={item.urlImg}
                       className={styles.itemImg}

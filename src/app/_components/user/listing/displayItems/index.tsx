@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import styles from "./index.module.scss";
 
 interface IProps {
@@ -12,11 +13,13 @@ export default function UserListingDisplayItems({ listing }: IProps) {
         listing.map((item: any, index: any) => {
           return (
             <div className={styles.listingItem} key={index}>
-              <img
-                src={item.urlImg}
-                alt="imagem de um item"
-                className={styles.listingItemImg}
-              />
+              <Link href={`/home/item/${item.id}`}>
+                <img
+                  src={item.urlImg}
+                  alt="imagem de um item"
+                  className={styles.listingItemImg}
+                />
+              </Link>
             </div>
           );
         })

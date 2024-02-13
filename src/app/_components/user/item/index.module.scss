@@ -1,0 +1,259 @@
+@import "../../../../../public/css/palette.scss";
+
+.containerItem {
+  background: $dark-black-900;
+  min-height: 500px;
+  margin-top: 50px;
+
+  .mobileTitle {
+    font-size: 30px;
+    line-height: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    text-align: center;
+    color: $light-white;
+    width: 90%;
+    margin-left: 5%;
+  }
+  .containerImgAndInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+    .img {
+      width: 100%;
+    }
+    .information {
+      margin-top: 20px;
+      width: 100%;
+      .containerGenresAndNote {
+        display: flex;
+        border-bottom: 1px solid $light-blue;
+        margin-bottom: 20px;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        width: 90%;
+        margin-left: 5%;
+        .containerNote {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          align-items: end;
+          margin-bottom: 30px;
+          .noteLabel {
+            width: 120px;
+            height: 30px;
+            color: $light-white;
+            font-size: 16px;
+            background: $gray;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 5px;
+          }
+          .noteValue {
+            margin-top: 5px;
+            color: $light-white;
+            background: $gray;
+            width: 120px;
+            height: 51px;
+            line-height: 51px;
+            font-size: 32px;
+            color: $light-blue;
+            text-align: center;
+            border-radius: 5px;
+          }
+        }
+        .containerGenre {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-content: center;
+          margin-bottom: 10px;
+          .genreItem {
+            padding: 8px 10px;
+            color: $light-white;
+            background: $gray;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            width: auto;
+          }
+          @media screen and (min-width: 620px) {
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 60%;
+            .genreItem {
+              margin-left: 5px;
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+      .containerInformations {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: start;
+        margin-top: 30px;
+        width: 90%;
+        margin-left: 5%;
+        .info {
+          color: $light-white;
+          font-size: 16px;
+          font-weight: 400;
+          margin-bottom: 10px;
+          line-height: 30px;
+          strong {
+            font-size: 18px;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+  .lineDetail {
+    width: 80%;
+    margin-left: 10%;
+    border-bottom: 1px solid $light-blue;
+  }
+  .containerSnops {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    .snopsLabel {
+      color: $light-white;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    .snopsValue {
+      color: $light-white;
+      font-size: 16px;
+      line-height: 26px;
+    }
+  }
+  .containerRecommendations {
+    margin-top: 40px;
+    width: 90%;
+    margin-left: 5%;
+    padding-bottom: 50px;
+    .recommendationsTitle {
+      text-align: center;
+      margin-bottom: 40px;
+      color: $light-white;
+      font-size: 30px;
+    }
+    .recommendationErrorMessage{
+      text-align: center;
+      margin-bottom: 40px;
+      color: $light-white;
+      font-size: 18px;
+      margin-top: 60px;
+    }
+    .recommendationsItens {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      .iten {
+        width: 100%;
+        margin-top: 20px;
+        .itenImg {
+          height: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 300px) {
+    .containerRecommendations {
+      .recommendationsItens {
+        flex-direction: row;
+        flex-wrap: wrap;
+        .iten {
+          width: 240px;
+          height: 360px;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 350px) {
+    .containerImgAndInfo {
+      .img {
+        width: 90%;
+      }
+      .information {
+        margin-top: 30px;
+        .containerGenresAndNote {
+          flex-direction: row-reverse;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 428px) {
+    border-radius: 20px;
+    .containerImgAndInfo {
+      width: 400px;
+      margin-left: calc(50% - 200px);
+      .img {
+        width: 380px;
+      }
+    }
+    .lineDetail {
+      width: 400px;
+      margin-left: calc(50% - 200px);
+    }
+  }
+  @media screen and (min-width: 620px) {
+    .containerImgAndInfo {
+      width: 600px;
+      margin-left: calc(50% - 300px);
+    }
+  }
+  @media screen and (min-width: 992px) {
+    .mobileTitle {
+      display: none;
+    }
+    .containerImgAndInfo {
+      flex-direction: row;
+      align-items: start;
+      width: 90%;
+      margin-left: 5%;
+      padding-top: 40px;
+      .information {
+        margin-top: 0px;
+        .desktopTitle {
+          font-size: 30px;
+          line-height: 30px;
+          line-height: 40px;
+          padding-top: 0px;
+          padding-bottom: 20px;
+          text-align: center;
+          color: $light-white;
+          width: 90%;
+          margin-left: 5%;
+        }
+        .containerGenresAndNote {
+          width: 96%;
+          margin-left: 4%;
+          .containerGenre {
+            width: 100%;
+            justify-content: start;
+          }
+        }
+        .containerInformations {
+          margin-top: 0px;
+        }
+      }
+    }
+    .lineDetail {
+      width: 200px;
+      margin-left: 5%;
+    }
+  }
+}
