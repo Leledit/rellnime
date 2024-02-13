@@ -21,7 +21,7 @@ export default function UserMenu() {
       setPositionMenuItem("-100%");
     }
     if (!isOpen) {
-      setMarginBottomMenu("300px");
+      setMarginBottomMenu("400px");
     } else {
       setMarginBottomMenu("0px");
     }
@@ -76,12 +76,15 @@ export default function UserMenu() {
               className={styles.containerItens}
               style={{ top: positionMenuItem }}
             >
-              <div>
+              <div className={styles.containerLinks}>
                 <Link href={"/home/listing?all=animes"} className={styles.item}>
                   Animes
                 </Link>
                 <Link href={"/home/listing?all=filmes"} className={styles.item}>
                   Filmes
+                </Link>
+                <Link href={"/home/"} className={styles.item}>
+                  Generos
                 </Link>
               </div>
               <div className={styles.containerButtons}>

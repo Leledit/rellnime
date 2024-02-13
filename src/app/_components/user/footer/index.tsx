@@ -10,11 +10,14 @@ export default function UserFooter() {
         <div className={styles.containerLogo}>
           <Image src={logo} alt="Logo da aplicação" className={styles.logo} />
           <div className={styles.containerOption}>
-            <Link href={"/"} className={styles.option}>
+            <Link href={"/home/listing?all=animes"} className={styles.option}>
               Animes
             </Link>
-            <Link href={"/"} className={styles.option}>
+            <Link href={"/home/listing?all=filmes"} className={styles.option}>
               Filmes
+            </Link>
+            <Link href={"/home/"} className={styles.option}>
+                  Generos
             </Link>
           </div>
         </div>

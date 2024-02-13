@@ -13,13 +13,13 @@
       text-align: center;
       margin-left: 5%;
     }
-    .containerMensagem{
+    .containerMensagem {
       width: 100%;
       margin-top: 50px;
-      .mensagem{
+      .mensagem {
         text-align: center;
         vertical-align: middle;
-        color:$light-white;
+        color: $light-white;
         font-size: 20px;
       }
     }
@@ -52,7 +52,7 @@
         padding: 8px;
         cursor: pointer;
       }
-      .selectPag{
+      .selectPag {
         background: $light-blue-800;
       }
       .page:hover {
@@ -79,7 +79,9 @@
       }
     }
   }
-
+  @media screen and (min-width: 1400px) {
+    margin-top: 0px;
+  }
   @media screen and (min-width: 428px) {
     .containerListing,
     .containerPages {

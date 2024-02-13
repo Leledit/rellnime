@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import adapterPopular from "@/app/_adapter/dashboard/popular";
 import iconStary from "../../../../../../public/images/user/iconStar.png";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 export default function UserSideBarPopularAndSearches() {
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function UserSideBarPopularAndSearches() {
   const [valueQuery, setValueQuery] = useState<string>("");
   const [messageError, setMessageError] = useState<string>();
   const [dataPopular, setDataPopular] = useState<any[]>();
-  const router = useRouter()
+  const router = useRouter();
 
   const yearAvailable: number[] = returnAvailableYears();
 
@@ -43,50 +43,58 @@ export default function UserSideBarPopularAndSearches() {
         </div>
         <p className={styles.searchMensage}>{messageError}</p>
       </div>
-      <div className={styles.containerYear}>
+      <div className={styles.containerYear} style={{paddingBottom:dataPopular?'0':'50px'}}>
         <h3 className={styles.yearTitle}>Ano</h3>
         <div className={styles.yearItens}>
           {yearAvailable.map((year, index) => {
             return (
-              <Link href={`/home/listing?year=${year}`} className={styles.yearIten} key={index}>
+              <Link
+                href={`/home/listing?year=${year}`}
+                className={styles.yearIten}
+                key={index}
+              >
                 {year}
               </Link>
             );
           })}
         </div>
       </div>
-      <div className={styles.containerPopular}>
-        <h3 className={styles.popularTitle}>Populares</h3>
-        <div className={styles.containerItens}>
-          {dataPopular?.map((item, index) => {
-            if (index < 5) {
-              return (
-                <Link href={"/"} className={styles.item} key={index}>
-                  <img
-                    src={item.urlImg}
-                    className={styles.itemImg}
-                    alt="Imagem do titulo"
-                  />
-                  <div className={styles.itemInfo}>
-                    <p className={styles.itemInfoName}>{item.name}</p>
-                    <div className={styles.itemYearAndNot}>
-                      <p className={styles.year}>{item.releaseYear}</p>
-                      <Image
-                        src={iconStary}
-                        alt="Icone de uma estrela"
-                        className={styles.iconStary}
-                      />
-                      <p className={styles.note}>{item.note}</p>
+      {dataPopular ? (
+        <div className={styles.containerPopular}>
+          <h3 className={styles.popularTitle}>Populares</h3>
+          <div className={styles.containerItens}>
+            {dataPopular?.map((item, index) => {
+              if (index < 5) {
+                return (
+                  <Link href={"/"} className={styles.item} key={index}>
+                    <img
+                      src={item.urlImg}
+                      className={styles.itemImg}
+                      alt="Imagem do titulo"
+                    />
+                    <div className={styles.itemInfo}>
+                      <p className={styles.itemInfoName}>{item.name}</p>
+                      <div className={styles.itemYearAndNot}>
+                        <p className={styles.year}>{item.releaseYear}</p>
+                        <Image
+                          src={iconStary}
+                          alt="Icone de uma estrela"
+                          className={styles.iconStary}
+                        />
+                        <p className={styles.note}>{item.note}</p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            } else {
-              return <></>;
-            }
-          })}
+                  </Link>
+                );
+              } else {
+                return <></>;
+              }
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 

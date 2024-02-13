@@ -59,15 +59,22 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        .item {
-          font-size: 26px;
-          margin-bottom: 20px;
-          color: $light-white;
-          text-decoration: none;
-          cursor: pointer;
-        }
-        .item:hover {
-          color: $light-blue-800;
+        border-bottom: 2px solid $light-white-300;
+        .containerLinks {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          align-items: center;
+          .item {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: $light-white;
+            text-decoration: none;
+            cursor: pointer;
+          }
+          .item:hover {
+            color: $light-blue-800;
+          }
         }
         .containerButtons {
           margin-bottom: 20px;
@@ -109,7 +116,7 @@
         width: 100%;
         padding-top: 0px;
         padding-bottom: 0px;
-        
+
         .iconeMenu {
           display: none;
         }
@@ -122,10 +129,15 @@
           padding-top: 0px;
 
           border: none;
-          .item {
-            margin-left: 35px;
-            margin-left: 35px;
+          .containerLinks {
+            flex-direction: row;
+            .item {
+              margin-left: 35px;
+              margin-left: 35px;
+              margin-bottom: 0px;
+            }
           }
+        
 
           .containerButtons {
             flex-direction: row;

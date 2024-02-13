@@ -12,31 +12,43 @@ export default function UserListingHome() {
   useEffect(() => {
     lookingForTheLatestReleases();
   }, []);
-  
+
   return (
     <div className={styles.containerReleases}>
-      <div className={styles.segment}>
-        <h2 className={styles.segmentTitle}>Animes</h2>
-        {dataReleases ? (
-          <UserListingDisplayItems listing={dataReleases.dataAnime} />
-        ) : (
-          <></>
-        )}
-        <Link href={"/home/listing/?all=animes"} className={styles.segmentLink}>
-          Lista completa
-        </Link>
-      </div>
-      <div className={styles.segment}>
-        <h2 className={styles.segmentTitle}>Filmes</h2>
-        {dataReleases ? (
-          <UserListingDisplayItems listing={dataReleases.dataFilmes} />
-        ) : (
-          <></>
-        )}
-        <Link href={"/home/listing/?all=filmes"} className={styles.segmentLink}>
-          Lista completa
-        </Link>
-      </div>
+      {dataReleases ? (
+        <>
+          <div className={styles.segment}>
+            <h2 className={styles.segmentTitle}>Animes</h2>
+            {dataReleases ? (
+              <UserListingDisplayItems listing={dataReleases.dataAnime} />
+            ) : (
+              <></>
+            )}
+            <Link
+              href={"/home/listing/?all=animes"}
+              className={styles.segmentLink}
+            >
+              Lista completa
+            </Link>
+          </div>
+          <div className={styles.segment}>
+            <h2 className={styles.segmentTitle}>Filmes</h2>
+            {dataReleases ? (
+              <UserListingDisplayItems listing={dataReleases.dataFilmes} />
+            ) : (
+              <></>
+            )}
+            <Link
+              href={"/home/listing/?all=filmes"}
+              className={styles.segmentLink}
+            >
+              Lista completa
+            </Link>
+          </div>
+        </>
+      ) : (
+        <><h3 className={styles.alertMessage}>Nenhum registro encontrado!!</h3></>
+      )}
     </div>
   );
 

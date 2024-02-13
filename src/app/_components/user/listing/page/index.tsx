@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export default function UserListingPage({ params }: IProps) {
-  const limit = 2;
+  const limit = 10;
   const _params: any = params;
   const paramAll: string = _params["all"];
   const paramYear: string = _params["year"]; //search
@@ -66,17 +66,21 @@ export default function UserListingPage({ params }: IProps) {
           <></>
         )}
       </div>
-      <div className={styles.containerPages}>
-        <div className={styles.pages}>
-          <div className={styles.pagePrev} onClick={prevPage}>
-            Anterior
-          </div>
-          {renderPaginationButtons()}
-          <div className={styles.pageNext} onClick={nextPage}>
-            Próxima
+      {totalRecords > limit ? (
+        <div className={styles.containerPages}>
+          <div className={styles.pages}>
+            <div className={styles.pagePrev} onClick={prevPage}>
+              Anterior
+            </div>
+            {renderPaginationButtons()}
+            <div className={styles.pageNext} onClick={nextPage}>
+              Próxima
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 
@@ -142,7 +146,11 @@ export default function UserListingPage({ params }: IProps) {
       }
     }
     if (paramSearch) {
-      const resultSearch: any = await AdapterDashboarSearch(paramSearch,currentPage,limit);
+      const resultSearch: any = await AdapterDashboarSearch(
+        paramSearch,
+        currentPage,
+        limit
+      );
       setTotalRecords(resultSearch.totalRecords);
       setDataItens(resultSearch.result);
     }

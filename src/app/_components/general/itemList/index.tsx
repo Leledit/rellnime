@@ -3,6 +3,7 @@
 import { MouseEvent } from "react";
 import styles from "./index.module.scss";
 import { useRouter } from "next/navigation";
+import { limitingTheNumberOfCharacters } from "@/app/_utils/text/limitingTheNumberOfCharacters";
 
 interface Iprops {
   img: string | undefined;
@@ -42,7 +43,7 @@ export default function ItemList({
       className={styles.containerItem}
     >
       <img src={img} className={styles.itemImg} />
-      <div className={styles.itemName}>{name}</div>
+      <div className={styles.itemName}>{limitingTheNumberOfCharacters(name,18)}</div>
     </a>
   );
 }
