@@ -13,10 +13,10 @@ interface IProps {
 }
 
 export default function UserListingPage({ params }: IProps) {
-  const limit = 10;
+  const limit = 24;
   const _params: any = params;
   const paramAll: string = _params["all"];
-  const paramYear: string = _params["year"]; //search
+  const paramYear: string = _params["year"];
   const paramSearch: string = _params["search"];
 
   const [dataItens, setDataItens] = useState<any>();
@@ -31,7 +31,7 @@ export default function UserListingPage({ params }: IProps) {
       currentPage,
       limit
     );
-  }, [paramAll, currentPage, paramYear]);
+  }, [paramAll, currentPage, paramYear, paramSearch]);
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
@@ -90,7 +90,7 @@ export default function UserListingPage({ params }: IProps) {
     const start = Math.max(1, currentPage - Math.floor(numButtons / 2));
     const end = Math.min(totalRecords / limit, start + numButtons - 1);
 
-    for (let i = start; i <= end; i++) {
+    for (let i = start; i <= Math.ceil(end); i++) {
       pageButtons.push(
         <div
           className={`${styles.page} ${
@@ -120,15 +120,19 @@ export default function UserListingPage({ params }: IProps) {
           currentPage,
           limit
         );
-        setTotalRecords(resultPagAllAnime.totalRecords);
-        setDataItens(resultPagAllAnime.result);
+        if (resultPagAllAnime) {
+          setTotalRecords(resultPagAllAnime.totalRecords);
+          setDataItens(resultPagAllAnime.result);
+        }
       } else if (paramAll === "filmes") {
         const resultPagAllFilmes: any = await AdapterPaginationFilmes(
           currentPage,
           limit
         );
-        setTotalRecords(resultPagAllFilmes.totalRecords);
-        setDataItens(resultPagAllFilmes.result);
+        if (resultPagAllFilmes) {
+          setTotalRecords(resultPagAllFilmes.totalRecords);
+          setDataItens(resultPagAllFilmes.result);
+        }
       }
     }
     if (paramYear) {

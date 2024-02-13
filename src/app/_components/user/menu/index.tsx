@@ -83,7 +83,7 @@ export default function UserMenu() {
                 <Link href={"/home/listing?all=filmes"} className={styles.item}>
                   Filmes
                 </Link>
-                <Link href={"/home/"} className={styles.item}>
+                <Link href={"/home/gender/"} className={styles.item}>
                   Generos
                 </Link>
               </div>

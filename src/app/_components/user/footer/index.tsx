@@ -16,7 +16,7 @@ export default function UserFooter() {
             <Link href={"/home/listing?all=filmes"} className={styles.option}>
               Filmes
             </Link>
-            <Link href={"/home/"} className={styles.option}>
+            <Link href={"/home/gender/"} className={styles.option}>
                   Generos
             </Link>
           </div>
