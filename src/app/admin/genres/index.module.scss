@@ -78,6 +78,15 @@
     }
   }
 
+  .containerLoading{
+    min-height: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   @media screen and (min-width: 428px) {
     .listGenres {
       flex-direction: row;

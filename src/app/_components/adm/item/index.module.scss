@@ -75,7 +75,7 @@
             .button {
               width: 90%;
               height: 60px;
-           
+
               background: $light-blue;
               display: block;
               border: 1px solid $light-blue-800;
@@ -118,8 +118,6 @@
         .infoImg {
           width: 400px;
         }
-
-        
       }
 
       @media screen and (min-width: 600px) {
@@ -152,7 +150,6 @@
               align-items: start;
             }
             .note {
-             
             }
           }
         }
@@ -171,6 +168,32 @@
       @media screen and (min-width: 1850px) {
         .informations {
           margin-left: 80px;
+        }
+      }
+    }
+    .containerSinops {
+      .genresLine {
+        background: $light-blue;
+        display: none;
+      }
+      .sinops {
+        color: $light-white;
+        font-size: 15px;
+        line-height: 20px;
+        font-weight: 400;
+        margin-bottom: 20px;
+        strong {
+          font-size: 18px;
+          font-weight: 700;
+        }
+      }
+      @media screen and (min-width: 428px) {
+        .genresLine {
+          display: block;
+          width: 400px;
+          margin-left: calc(50% - 200px);
+          margin-bottom: 20px;
+          margin-top: 20px;
         }
       }
     }

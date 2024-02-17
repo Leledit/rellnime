@@ -3,6 +3,10 @@
   background: $dark-black;
   min-height: 600px;
   padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .segment {
     .segmentTitle {
       color: $light-white;
@@ -23,7 +27,6 @@
   }
   .alertMessage {
     text-align: center;
-    padding-top: 300px;
     color: $light-white;
     font-size: 30px;
     width: 90%;

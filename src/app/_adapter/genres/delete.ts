@@ -1,20 +1,21 @@
 "use server";
 
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 import { delet } from "../http.service";
 
 export default async function AdapterGenresDelete(
   idGenre: string,
   tolken: string
-) {
+): Promise<IMessageReturn | undefined> {
   const url = process.env.URL_API_BASE + `/genres/${idGenre}`;
 
   const result = await delet(url, tolken);
 
-  if (result.status !== 200) {
-    return result.status;
+  if (result) {
+    const resutlData = await result.json();
+
+    return resutlData;
+  } else {
+    return undefined;
   }
-
-  const resutlData = await result.json();
-
-  return resutlData;
 }

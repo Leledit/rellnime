@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdmItem from "@/app/_components/adm/item";
-import { IEntitieAnime } from "@/app/_interface/dataBd";
+import { IEntitieAnime } from "@/app/_interface/returnFromApi";
 import adapterListOneAnime from "@/app/_adapter/anime/listOne";
-import Loading from "@/app/loading";
 import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
+import LoadingComponent from "@/app/_components/general/loading";
 
 interface IProps {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -15,7 +15,7 @@ export default function AnimeItem({ searchParams }: IProps) {
   const router = useRouter();
   const idAnime = searchParams ? searchParams.id : undefined;
 
-  const [loadingData, setLoadingData] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [dataAnime, setDataAnime] = useState<IEntitieAnime>();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function AnimeItem({ searchParams }: IProps) {
 
     async function lookingForInformationAboutAnAnime() {
       try {
-        setLoadingData(true);
+        setLoading(true);
 
         const dataAnime = await adapterListOneAnime(idAnime as string);
 
@@ -41,13 +41,13 @@ export default function AnimeItem({ searchParams }: IProps) {
       } catch (error) {
         console.error("Erro ao procurar informações sobre o anime:", error);
       } finally {
-        setLoadingData(false);
+        setLoading(false);
       }
     }
   }, [idAnime, router]);
 
-  if (loadingData) {
-    return <Loading />;
+  if (loading) {
+    return <LoadingComponent height={80} width={80} loading={loading} />;
   } else {
     if (dataAnime) {
       return (

@@ -8,6 +8,7 @@ import { Divider, Drawer, Tooltip } from "@mui/material";
 import styles from "./index.module.scss";
 import smallsoon from "../../../../../public/images/smalSoon.png";
 import ExitIcon from "@/app/_ui/exit";
+import { destroyTolkenCookie } from "@/app/_utils/cookies/cookies";
 
 export default function AdmMenu() {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
@@ -26,8 +27,9 @@ export default function AdmMenu() {
   };
 
   const HandleApplicationExitEvent = () => {
-    //Fazer evento de sair da aplicação
-    console.log("saindo da aplicação");
+    destroyTolkenCookie();
+    router.push("/home/");
+
     closeMenu();
   };
 

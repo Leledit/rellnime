@@ -1,11 +1,11 @@
 @import "../../../../../../public/css/palette.scss";
 .containerSideBar {
   background: $dark-black;
- 
+  min-height: 1150px;
+  margin-top: 50px;
   .containerPopular {
     width: 90%;
     margin-left: 5%;
-    margin-top: 50px;
     .popularTitle {
       color: $light-white;
       font-size: 26px;
@@ -72,7 +72,16 @@
       }
     }
   }
-  @media screen and (min-width:428px) {
+
+  .containerLoading {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 1150px;
+  }
+
+  @media screen and (min-width: 428px) {
     border-radius: 20px;
   }
 }

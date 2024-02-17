@@ -6,22 +6,37 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import adapterPopular from "@/app/_adapter/dashboard/popular";
 import iconStary from "../../../../../../public/images/user/iconStar.png";
+import LoadingComponent from "@/app/_components/general/loading";
+import { IDashboardPopular } from "@/app/_interface/returnFromApi";
 
 export default function UserSideBarPopular() {
-  useEffect(() => {
-    getDataFromPopular();
-  }, []);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [dataPopular, setDataPopular] = useState<IDashboardPopular[]>();
 
-  const [dataPopular, setDataPopular] = useState<any[]>();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resultData: IDashboardPopular[] | undefined =
+          await adapterPopular(5);
+        setDataPopular(resultData);
+        setLoading(false);
+      } catch (error) {
+        console.log("Problemas ao buscar os dados " + error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className={styles.containerSideBar}>
-      {dataPopular ? (
-        <div className={styles.containerPopular}>
-          <h3 className={styles.popularTitle}>Populares</h3>
-          <div className={styles.containerItens}>
-            {dataPopular?.map((item, index) => {
-              if (index < 5) {
+      {!loading ? (
+        dataPopular ? (
+          <div className={styles.containerPopular}>
+            <h3 className={styles.popularTitle}>Populares</h3>
+            <div className={styles.containerItens}>
+              {dataPopular?.map((item, index) => {
                 return (
                   <Link
                     href={`/home/item/${item.id}`}
@@ -47,20 +62,17 @@ export default function UserSideBarPopular() {
                     </div>
                   </Link>
                 );
-              } else {
-                return <></>;
-              }
-            })}
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )
       ) : (
-        <></>
+        <div className={styles.containerLoading}>
+          <LoadingComponent height={60} width={60} loading={loading} />
+        </div>
       )}
     </div>
   );
-
-  async function getDataFromPopular() {
-    const resultData = await adapterPopular();
-    setDataPopular(resultData);
-  }
 }

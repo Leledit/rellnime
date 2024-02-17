@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import adapterListOneFilme from "@/app/_adapter/films/listOne";
 import AdmItem from "@/app/_components/adm/item";
-import { IEntitieFilme } from "@/app/_interface/dataBd";
+import { IEntitieFilme, IItemListing } from "@/app/_interface/returnFromApi";
 import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 import Loading from "@/app/loading";
 
@@ -30,7 +30,7 @@ export default function FilmsItem({ searchParams }: IProps) {
     lookingForInformationAboutAnFilme();
 
     async function lookingForInformationAboutAnFilme() {
-      const dataFilme = await adapterListOneFilme(idFilme as string);
+      const dataFilme:IEntitieFilme | undefined = await adapterListOneFilme(idFilme as string);
 
       if (dataFilme) {
         setDataFilme(dataFilme);

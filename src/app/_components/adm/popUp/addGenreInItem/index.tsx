@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.scss";
-import { IGenre } from "@/app/_interface/dataBd";
+import { IDataGenre, IGenre } from "@/app/_interface/returnFromApi";
 import { ImensagemRequest } from "@/app/_interface/forms";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
@@ -18,19 +18,13 @@ import adapterQueryGenres from "@/app/_adapter/genres/query";
 import { adapterAnimeAddGenre } from "@/app/_adapter/anime/genre";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { adapterFilmeAddGenre } from "@/app/_adapter/films/genre";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 
 interface IProps {
   open: boolean;
-  onClosed: () => void;
+  onClosed: (backToThePreviousPage: boolean) => void;
   typeIten: string;
   idItem: string | undefined;
-}
-
-interface ICustonGenre {
-  name: string;
-  registrationDate: any;
-  selected: boolean;
-  id: string;
 }
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
@@ -45,7 +39,7 @@ export default function AdmPopUpAddGenre({
   typeIten,
   idItem,
 }: IProps) {
-  const [resultQuery, setResultQuery] = useState<ICustonGenre[]>([]);
+  const [resultQuery, setResultQuery] = useState<IDataGenre[]>([]);
   const [fieldQuery, setFieldQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedGenre, setSelectedGenre] = useState<IGenre>();
@@ -63,7 +57,11 @@ export default function AdmPopUpAddGenre({
         <IconButton
           aria-label="close"
           onClick={() => {
-            onClosed();
+            if (mensagemRequest.status === 200) {
+              onClosed(true);
+            } else {
+              onClosed(false);
+            }
           }}
           sx={{
             position: "absolute",
@@ -131,7 +129,11 @@ export default function AdmPopUpAddGenre({
         <DialogActions className={styles.containerButtons}>
           <button
             onClick={() => {
-              onClosed();
+              if (mensagemRequest.status === 200) {
+                onClosed(true);
+              } else {
+                onClosed(false);
+              }
             }}
             className={styles.button}
           >
@@ -161,10 +163,12 @@ export default function AdmPopUpAddGenre({
         status: 0,
       });
       //Realizando a pesquisa dos generos no banco de dados
-      const resultRequest = await adapterQueryGenres(fieldQuery);
+      const resultRequest: IDataGenre[] | undefined = await adapterQueryGenres(
+        fieldQuery
+      );
 
       if (resultRequest) {
-        let genres: ICustonGenre[] = [];
+        let genres: IDataGenre[] = [];
         resultRequest.map((item: IGenre) => {
           genres.push({
             id: item.id,
@@ -211,7 +215,7 @@ export default function AdmPopUpAddGenre({
     e.preventDefault();
 
     if (idItem && selectedGenre?.name) {
-      let resultRequest;
+      let resultRequest: IMessageReturn | undefined;
       if (typeIten === "anime") {
         resultRequest = await adapterAnimeAddGenre(
           idItem,
@@ -225,15 +229,12 @@ export default function AdmPopUpAddGenre({
           getTolkenCookie()
         );
       }
-
-      console.log(resultRequest);
-
-      if (resultRequest === 500) {
+      if (!resultRequest) {
         setMensagemRequest({
           status: 500,
           message: `Problemas ao adicionar o genero ao ${typeIten}`,
         });
-      } else {
+      } else if (resultRequest.message) {
         setMensagemRequest({
           status: 200,
           message: resultRequest.message,
@@ -241,6 +242,8 @@ export default function AdmPopUpAddGenre({
         setResultQuery([]);
         setFieldQuery("");
         setSelectedGenre(undefined);
+      } else {
+        setMensagemRequest({ message: resultRequest.details, status: 500 });
       }
     } else {
       setMensagemRequest({

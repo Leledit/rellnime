@@ -1,6 +1,5 @@
 "use client";
 import HeaderForms from "@/app/_components/general/form/headerFormes";
-import AccessByOtherProviders from "@/app/_components/user/accessByOtherProviders";
 import FormInput from "@/app/_components/general/form/input";
 import Button from "@/app/_components/general/button";
 import FormLink from "@/app/_components/general/link";
@@ -15,6 +14,7 @@ import { setTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { useRouter } from "next/navigation";
 import FormMessage from "@/app/_components/general/form/message";
 import FormLoading from "@/app/_components/general/form/loading";
+import { IAuthentication } from "@/app/_interface/returnFromApi";
 
 interface formFild {
   email: {
@@ -115,11 +115,10 @@ export default function AuthenticationLogin() {
         <FormMessage mensagemRequest={mensagemRequest} />
         <Button text="Cadastrar" type="submit" />
       </form>
-      <AccessByOtherProviders parentComponentIdentification="login" />
     </>
   );
 
-  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>){
+  async function handleRegisterEvent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
@@ -127,29 +126,34 @@ export default function AuthenticationLogin() {
 
     if (!Object.values(formsFilds).some((field) => field.error)) {
       if (checkPasswordMatch()) {
-        const resultRequest = await adapterAuthenticationRegister({
-          email: formsFilds.email.value,
-          name: formsFilds.name.value,
-          password: formsFilds.password.value,
-        });
+        const resultRequest: IAuthentication | undefined =
+          await adapterAuthenticationRegister({
+            email: formsFilds.email.value,
+            name: formsFilds.name.value,
+            password: formsFilds.password.value,
+          });
 
-        if (resultRequest === 500) {
+        if (!resultRequest) {
           setMensagemRequest({
             message: "Problemas ao realizar o cadastro",
             status: 500,
           });
-        } else {
+        } else if (resultRequest.message) {
           setMensagemRequest({
-            message: "Cadastro efetuado com sucesso",
+            message: resultRequest.message,
             status: 200,
           });
+          //Cadastrando o tolken do usuario
+          setTolkenCookie(resultRequest.tolken || "");
+
+          //redireciona o usuario apos o cadastro
+          router.push("/");
+        } else {
+          setMensagemRequest({
+            message: resultRequest.details || "",
+            status: 500,
+          });
         }
-
-        //Cadastrando o tolken do usuario
-        setTolkenCookie(resultRequest.tolken);
-
-        //redireciona o usuario apos o cadastro
-        router.push("/");
       } else {
         setMensagemRequest({
           message: "Senhas não corespondentes!",
@@ -161,13 +165,13 @@ export default function AuthenticationLogin() {
     } else {
       setLoading(false);
     }
-  };
+  }
 
-  function checkPasswordMatch(){
+  function checkPasswordMatch() {
     if (formsFilds.password.value === formsFilds.confirmPassword.value) {
       return true;
     } else {
       return false;
     }
-  };
+  }
 }

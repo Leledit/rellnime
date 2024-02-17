@@ -1,14 +1,18 @@
-'use server';
+"use server";
 
-export async function adapterAdmDashboard (){
-    const url = process.env.URL_API_BASE + "/dashboard/recentylAdded/";
+import { IItemListing } from "@/app/_interface/returnFromApi";
 
-    const result = await fetch(url,{ cache:'no-store' }); 
+export async function adapterAdmDashboard(): Promise<
+  IItemListing[] | undefined
+> {
+  const url = process.env.URL_API_BASE + "/dashboard/recentylAdded/";
 
-    if(result.status !== 200){
-        return undefined
-    }
+  const result = await fetch(url, { cache: "no-store" });
 
-    const dataResult = await result.json();
-    return dataResult;
+  if (result.status !== 200) {
+    return undefined;
+  }
+
+  const dataResult = await result.json();
+  return dataResult;
 }

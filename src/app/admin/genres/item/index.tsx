@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./index.module.scss";
-import { IGenre } from "@/app/_interface/dataBd";
+import { IGenre } from "@/app/_interface/returnFromApi";
 import AdmPopUpAvailableShares from "@/app/_components/adm/popUp/availableSharesGenre";
 import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 

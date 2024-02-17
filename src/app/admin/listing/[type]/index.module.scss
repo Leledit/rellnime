@@ -72,6 +72,14 @@
     }
   }
 
+  .containerLoading{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
   @media screen and (min-width: 428px) {
     .listingData {
       flex-direction: row;

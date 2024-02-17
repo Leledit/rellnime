@@ -3,7 +3,6 @@
 import HeaderForms from "@/app/_components/general/form/headerFormes";
 import FormInput from "@/app/_components/general/form/input";
 import Button from "@/app/_components/general/button";
-import AccessByOtherProviders from "@/app/_components/user/accessByOtherProviders";
 import FormLink from "@/app/_components/general/link";
 import { FormEvent, useState } from "react";
 import {
@@ -17,6 +16,7 @@ import FormMessage from "@/app/_components/general/form/message";
 import { setTolkenCookie } from "@/app/_utils/cookies/cookies";
 import getUserTypeFromToken from "@/app/_utils/tolken";
 import { useRouter } from "next/navigation";
+import { IAuthentication } from "@/app/_interface/returnFromApi";
 
 interface formFild {
   email: {
@@ -53,7 +53,7 @@ export default function AuthenticationLogin() {
   );
 
   return (
-    <> 
+    <>
       <HeaderForms titleForm="Login" />
       <form
         onSubmit={(e) => {
@@ -83,27 +83,27 @@ export default function AuthenticationLogin() {
         <FormMessage mensagemRequest={mensagemRequest} />
         <Button text="Login" type="submit" />
       </form>
-      <AccessByOtherProviders parentComponentIdentification="login" />
     </>
   );
 
-  async function handleLoginEvent(e: FormEvent<HTMLFormElement>){
+  async function handleLoginEvent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
     await onValidateFieldsEmpty(setFormsFilds);
 
     if (!Object.values(formsFilds).some((field) => field.error)) {
-      const resultRequest = await adapterAuthenticationLogin({
-        email: formsFilds.email.value,
-        password: formsFilds.password.value,
-      });
+      const resultRequest: IAuthentication | undefined =
+        await adapterAuthenticationLogin({
+          email: formsFilds.email.value,
+          password: formsFilds.password.value,
+        });
 
-      if (resultRequest === 500) {
+      if (!resultRequest) {
         setMensagemRequest({ message: "Usuario não encontrado!", status: 500 });
-      } else {
+      } else if (resultRequest.tolken && resultRequest.message) {
         setMensagemRequest({
-          message: "Login efetuado com sucesso!",
+          message: resultRequest.message,
           status: 200,
         });
 
@@ -117,10 +117,16 @@ export default function AuthenticationLogin() {
         } else {
           router.push("/");
         }
+      } else {
+        setMensagemRequest({
+          message: resultRequest.message || "",
+          status: 500,
+        });
       }
+
       setLoading(false);
     } else {
       setLoading(false);
     }
-  };
+  }
 }

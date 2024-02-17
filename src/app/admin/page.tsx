@@ -3,15 +3,19 @@ import { useEffect, useState } from "react";
 import { Divider } from "@mui/material";
 import styles from "./page.module.scss";
 import { adapterAdmDashboard } from "../_adapter/adm/dashboard";
-import { IEntitieAnime, IEntitieFilme } from "../_interface/dataBd";
+import {
+  IEntitieAnime,
+  IEntitieFilme,
+  IItemListing,
+} from "../_interface/returnFromApi";
 import ItemList from "../_components/general/itemList";
 import { checkingAdministratorJwtCredentials } from "../_utils/tolken";
 import { useRouter } from "next/navigation";
+import LoadingComponent from "../_components/general/loading";
 
 export default function PageAdmin() {
-  const [dataDashboard, setDataDashboard] = useState<
-    IEntitieAnime[] | IEntitieFilme[]
-  >();
+  const [dataDashboard, setDataDashboard] = useState<IItemListing[]>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
 
@@ -19,7 +23,22 @@ export default function PageAdmin() {
     if (!checkingAdministratorJwtCredentials()) {
       router.push("/authentication/login");
     }
-    fetchingPageData();
+
+    const fetchData = async () => {
+      try {
+        const resutlData: IItemListing[] | undefined =
+          await adapterAdmDashboard();
+        if (resutlData) {
+          setDataDashboard(resutlData);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("Problemas ao buscar os dados " + error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [router]);
 
   return (
@@ -29,8 +48,8 @@ export default function PageAdmin() {
         <Divider style={{ background: "#7BC0FF" }} />
       </div>
 
-      {dataDashboard ? (
-        <>
+      {!loading ? (
+        dataDashboard ? (
           <div className={styles.admData}>
             {dataDashboard.map((item, index) => {
               return (
@@ -45,21 +64,20 @@ export default function PageAdmin() {
               );
             })}
           </div>
-        </>
+        ) : (
+          <>
+            <div className={styles.containerMessage}>
+              <h2 className={styles.messageText}>
+                Nenhum registro foi encontrado!!
+              </h2>
+            </div>
+          </>
+        )
       ) : (
-        <div className={styles.containerMessage}>
-          <h2 className={styles.messageText}>
-            Nenhum registro foi encontrado!!
-          </h2>
+        <div className={styles.containerLoading}>
+          <LoadingComponent height={80} width={80} loading={loading} />
         </div>
       )}
     </div>
   );
-
-  async function fetchingPageData() {
-    const resutlData = await adapterAdmDashboard();
-    if (resutlData) {
-      setDataDashboard(resutlData);
-    }
-  }
 }

@@ -1,5 +1,10 @@
 "use server";
-export default async function adapterDashboarItem(idItem:string) {
+
+import { IDashboardItem } from "@/app/_interface/returnFromApi";
+
+export default async function adapterDashboarItem(
+  idItem: string
+): Promise<IDashboardItem | undefined> {
   const url = process.env.URL_API_BASE + `/dashboard/item/?id=${idItem}`;
 
   const result = await fetch(url, { cache: "no-store" });

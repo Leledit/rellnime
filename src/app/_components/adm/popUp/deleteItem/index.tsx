@@ -8,6 +8,7 @@ import { ImensagemRequest } from "@/app/_interface/forms";
 import AdapterAnimeDelete from "@/app/_adapter/anime/delete";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import AdapterFilmsDelete from "@/app/_adapter/films/delete";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   "& .css-1t1j96h-MuiPaper-root-MuiDialog-paper": {
@@ -47,7 +48,11 @@ export default function AdmPopUpDeleteItem({
         <IconButton
           aria-label="close"
           onClick={() => {
-            onClosed(false, typeIten);
+            if (mensagemRequest.status === 200) {
+              onClosed(true, typeIten);
+            } else {
+              onClosed(false, typeIten);
+            }
           }}
           sx={{
             position: "absolute",
@@ -70,7 +75,11 @@ export default function AdmPopUpDeleteItem({
             <div className={styles.containerButtons}>
               <button
                 onClick={() => {
-                  onClosed(true, typeIten);
+                  if (mensagemRequest.status === 200) {
+                    onClosed(true, typeIten);
+                  } else {
+                    onClosed(false, typeIten);
+                  }
                 }}
                 className={styles.button}
               >
@@ -104,30 +113,33 @@ export default function AdmPopUpDeleteItem({
   ) {
     e.preventDefault();
     if (typeIten === "anime") {
-      const resultDeleteAnime = await AdapterAnimeDelete(
-        idItem,
-        getTolkenCookie()
-      );
+      const resultDeleteAnime: IMessageReturn | undefined =
+        await AdapterAnimeDelete(idItem, getTolkenCookie());
 
-      if (resultDeleteAnime === 500) {
+      if (!resultDeleteAnime) {
         setMensagemRequest({
           status: 500,
           message: "Problemas ao excluir o anime.",
         });
-      } else {
+      } else if (resultDeleteAnime.details) {
         setMensagemRequest({ status: 200, message: resultDeleteAnime.details });
+      } else {
+        setMensagemRequest({ message: resultDeleteAnime.details, status: 500 });
       }
     } else {
-      const resultDeleteFilm = await AdapterFilmsDelete(
+      const resultDeleteFilm:IMessageReturn | undefined = await AdapterFilmsDelete(
         idItem,
         getTolkenCookie()
       );
-      if (resultDeleteFilm === 500) {
+
+      if(!resultDeleteFilm){
         setMensagemRequest({
           status: 500,
           message: "Problemas ao excluir o Filme.",
         });
-      } else {
+      }else if(resultDeleteFilm.message){
+        setMensagemRequest({ status: 200, message: resultDeleteFilm.message});
+      }else{
         setMensagemRequest({ status: 200, message: resultDeleteFilm.details });
       }
     }

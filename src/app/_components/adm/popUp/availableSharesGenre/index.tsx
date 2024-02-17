@@ -5,7 +5,7 @@ import { ImensagemRequest } from "@/app/_interface/forms";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
 import styles from "./index.module.scss";
-import { IGenre } from "@/app/_interface/dataBd";
+import { IGenre } from "@/app/_interface/returnFromApi";
 import AdmPopUpAvailableSharesOptions from "./options";
 import { AvailableSharesModalState } from "@/app/_interface/components";
 import AdmPopUpAvailableSharesDeletionsConfirmation from "./deletionConfirmation";

@@ -16,6 +16,7 @@ import { adapterAnimeDeleteGenre } from "@/app/_adapter/anime/genre";
 import { adapterFilmeDeleteGenre } from "@/app/_adapter/films/genre";
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 
 interface props {
   open: boolean;
@@ -108,7 +109,7 @@ export default function AdmPopUpDeleteGenre({
     setLoading(true);
 
     if (idItem && nameGenre) {
-      let resultRequest;
+      let resultRequest: IMessageReturn | undefined;
       if (typeIten === "anime") {
         resultRequest = await adapterAnimeDeleteGenre(
           idItem,
@@ -122,13 +123,13 @@ export default function AdmPopUpDeleteGenre({
           getTolkenCookie()
         );
       }
-      
-      if (resultRequest === 500) {
+
+      if (!resultRequest) {
         setMensagemRequest({
           status: 500,
           message: `Problemas ao remover o genero ao ${typeIten}!`,
         });
-      } else {
+      } else if (resultRequest.message) {
         setMensagemRequest({
           status: 200,
           message: resultRequest.message,

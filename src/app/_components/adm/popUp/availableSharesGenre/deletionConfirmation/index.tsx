@@ -4,6 +4,7 @@ import AdapterGenresDelete from "@/app/_adapter/genres/delete";
 import { AvailableSharesModalState } from "@/app/_interface/components";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { ImensagemRequest } from "@/app/_interface/forms";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 
 interface IProps {
   setModalState: Dispatch<SetStateAction<AvailableSharesModalState>>;
@@ -44,19 +45,27 @@ export default function AdmPopUpAvailableSharesDeletionsConfirmation({
   );
 
   async function handleTheDeleteAction(idGenre: string) {
-    const resultRequest = await AdapterGenresDelete(idGenre, accessToken);
+    const resultRequest: IMessageReturn | undefined = await AdapterGenresDelete(
+      idGenre,
+      accessToken
+    );
 
-    if (resultRequest === 500) {
+    if (!resultRequest) {
       setMensagemRequest({
         status: 500,
         message: "Problemas ao fazer a exclusão do genero!",
       });
-    } else {
+    } else if (resultRequest.message) {
       setMensagemRequest({
         status: 200,
         message: resultRequest.details,
       });
       setModalState("messages");
+    } else {
+      setMensagemRequest({
+        status: 500,
+        message: resultRequest.details,
+      });
     }
   }
 }

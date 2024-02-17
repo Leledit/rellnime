@@ -16,7 +16,7 @@ import { onValidateFieldsEmpty } from "@/app/_utils/formHandling";
 import adapterFilmsRegister from "@/app/_adapter/films/register";
 import { returnImageThatMustBeSent } from "@/app/_utils/images/preparingToSendToApi";
 import adapterListOneFilme from "@/app/_adapter/films/listOne";
-import { IEntitieFilme } from "@/app/_interface/dataBd";
+import { IEntitieFilme, IMessageReturn } from "@/app/_interface/returnFromApi";
 import adapterFilmsChanging from "@/app/_adapter/films/changing";
 import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
@@ -111,7 +111,9 @@ export default function FilmeForm({ params, searchParams }: IProps) {
     }
 
     async function lookingForInformationAboutFilm(idFilm: string) {
-      const dataFilm: IEntitieFilme = await adapterListOneFilme(idFilm);
+      const dataFilm: IEntitieFilme | undefined = await adapterListOneFilme(
+        idFilm
+      );
 
       if (dataFilm) {
         setFormsFilds({
@@ -281,46 +283,32 @@ export default function FilmeForm({ params, searchParams }: IProps) {
   }
 
   async function registerNewRecordInTheDatabase() {
-    const resultRequest = await adapterFilmsRegister(
-      {
-        name: formsFilds.name.value,
-        visa: formsFilds.visa.value,
-        duration: formsFilds.visa.value,
-        note: formsFilds.note.value,
-        synopsis: formsFilds.synopsis.value,
-        releaseYear: parseInt(formsFilds.launch.value),
-        img: await returnImageThatMustBeSent(formsFilds.img.value),
-      },
-      accessToken
-    );
+    const resultRequest: IMessageReturn | undefined =
+      await adapterFilmsRegister(
+        {
+          name: formsFilds.name.value,
+          visa: formsFilds.visa.value,
+          duration: formsFilds.visa.value,
+          note: formsFilds.note.value,
+          synopsis: formsFilds.synopsis.value,
+          releaseYear: parseInt(formsFilds.launch.value),
+          img: await returnImageThatMustBeSent(formsFilds.img.value),
+        },
+        accessToken
+      );
 
-    if (resultRequest === 409) {
-      setMensagemRequest({
-        message: "Existe outro filme no sistema com este nome",
-        status: 500,
-      });
-    }
-
-    if (resultRequest === 400) {
+    if (!resultRequest) {
       setMensagemRequest({
         message: "Problemas ao cadastrar o filme",
         status: 500,
       });
-    }
-
-    if (resultRequest === 401) {
-      //Criar ação adicional aqui(tipo deslogar a pessoa se necessario)
-      setMensagemRequest({
-        message: "Tolken expirado!, faça login novamente!",
-        status: 500,
-      });
-    }
-
-    if (resultRequest.message) {
+    } else if (resultRequest.message) {
       setMensagemRequest({ message: resultRequest.message, status: 200 });
 
       //Limpando os campos do formulario
       setFormsFilds(initialValueFormsFilds);
+    } else {
+      setMensagemRequest({ message: resultRequest.details, status: 200 });
     }
   }
 
@@ -383,32 +371,33 @@ export default function FilmeForm({ params, searchParams }: IProps) {
 
   async function editingAnAlreadyRegisteredAnime() {
     if (searchParams) {
-      const resultRequest = await adapterFilmsChanging(
-        {
-          name: formsFilds.name.value,
-          visa: formsFilds.visa.value,
-          duration: formsFilds.visa.value,
-          note: formsFilds.note.value,
-          synopsis: formsFilds.synopsis.value,
-          releaseYear: parseInt(formsFilds.launch.value),
-          img: await returnImageThatMustBeSent(formsFilds.img.value),
-        },
-        accessToken,
-        searchParams.id as string
-      );
+      const resultRequest: IMessageReturn | undefined =
+        await adapterFilmsChanging(
+          {
+            name: formsFilds.name.value,
+            visa: formsFilds.visa.value,
+            duration: formsFilds.visa.value,
+            note: formsFilds.note.value,
+            synopsis: formsFilds.synopsis.value,
+            releaseYear: parseInt(formsFilds.launch.value),
+            img: await returnImageThatMustBeSent(formsFilds.img.value),
+          },
+          accessToken,
+          searchParams.id as string
+        );
 
-      if (resultRequest === 400) {
+      if (!resultRequest) {
         setMensagemRequest({
           message: "Problemas ao editar o filme",
           status: 500,
         });
-      }
-
-      if (resultRequest.message) {
+      } else if (resultRequest.message) {
         setMensagemRequest({ message: resultRequest.message, status: 200 });
 
         //Limpando os campos do formulario
         setFormsFilds(initialValueFormsFilds);
+      } else {
+        setMensagemRequest({ message: resultRequest.details, status: 500 });
       }
     }
   }

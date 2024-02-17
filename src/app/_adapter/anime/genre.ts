@@ -1,12 +1,13 @@
 "use server";
 
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 import { delet, post } from "../http.service";
 
 export async function adapterAnimeAddGenre(
   idAnime: string,
   nameGenre: string,
   tolken: string
-) {
+): Promise<IMessageReturn | undefined> {
   const url = process.env.URL_API_BASE + "/animes/genres/add";
 
   const result = await post(
@@ -18,31 +19,31 @@ export async function adapterAnimeAddGenre(
     tolken
   );
 
-  if (result.status !== 200) {
-    return result.status;
+  if (result) {
+    const resutlData = await result.json();
+
+    return resutlData;
+  } else {
+    return undefined;
   }
-
-  const resutlData = await result.json();
-
-  return resutlData;
 }
 
 export async function adapterAnimeDeleteGenre(
   idAnime: string,
   nameGenre: string,
   tolken: string
-) {
+): Promise<IMessageReturn | undefined> {
   const url =
     process.env.URL_API_BASE +
     `/animes/genres/delete?id=${idAnime}&nameGenre=${nameGenre}`;
 
   const result = await delet(url, tolken);
 
-  if (result.status !== 200) {
-    return result.status;
+  if (result) {
+    const resutlData = await result.json();
+
+    return resutlData;
+  } else {
+    return undefined;
   }
-
-  const resutlData = await result.json();
-
-  return resutlData;
 }

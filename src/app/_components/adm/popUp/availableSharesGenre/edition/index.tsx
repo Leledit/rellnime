@@ -2,7 +2,7 @@
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import styles from "../index.module.scss";
 import { AvailableSharesModalState } from "@/app/_interface/components";
-import { IGenre } from "@/app/_interface/dataBd";
+import { IGenre, IMessageReturn } from "@/app/_interface/returnFromApi";
 import adapterGenresChanging from "@/app/_adapter/genres/changing";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
 import { ImensagemRequest } from "@/app/_interface/forms";
@@ -61,19 +61,26 @@ export default function AdmPopUpAvailableSharesEdition({
     e.preventDefault();
     if (fildGenre !== "" && fildGenre.length > 0) {
       setValidationMessages("");
-      const resultRequest = await adapterGenresChanging(
-        { id: genre.id, name: fildGenre },
-        accessToken
-      );
+      const resultRequest: IMessageReturn | undefined =
+        await adapterGenresChanging(
+          { id: genre.id, name: fildGenre },
+          accessToken
+        );
 
-      if (resultRequest === 500) {
+      if (!resultRequest) {
         setMensagemRequest({
           status: 500,
           message: "Problemas ao fazer a edição do genero!",
         });
-      } else {
+      } else if (resultRequest.message) {
         setMensagemRequest({
           status: 200,
+          message: resultRequest.message,
+        });
+        setModalState("messages");
+      } else {
+        setMensagemRequest({
+          status: 500,
           message: resultRequest.details,
         });
         setModalState("messages");

@@ -2,7 +2,7 @@
 "use client";
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IEntitieAnime, IEntitieFilme } from "@/app/_interface/dataBd";
+import { IEntitieAnime, IEntitieFilme } from "@/app/_interface/returnFromApi";
 import { Divider } from "@mui/material";
 import styles from "./index.module.scss";
 import AdmPopUpAddGenre from "../popUp/addGenreInItem";
@@ -61,7 +61,7 @@ export default function AdmItem({ typeIten, dataItem }: props) {
                   <button
                     className={styles.button}
                     onClick={(e) => {
-                      handleInformationChangeEvent(e,typeIten);
+                      handleInformationChangeEvent(e, typeIten);
                     }}
                   >
                     Alterar informações
@@ -138,15 +138,17 @@ export default function AdmItem({ typeIten, dataItem }: props) {
                 ) : (
                   <></>
                 )}
-                <p className={styles.listInfo}>
-                  <strong>Sinops: </strong>
-                  {dataItem.synopsis}
-                </p>
               </div>
             </div>
           </div>
-          <div className={styles.containerGenres}>
+          <div className={styles.containerSinops}>
             <Divider className={styles.genresLine} />
+            <p className={styles.sinops}>
+              <strong>Sinops: </strong>
+              {dataItem.synopsis}
+            </p>
+          </div>
+          <div className={styles.containerGenres}>
             <h2 className={styles.title}>Generos</h2>
             <div className={styles.genresItens}>{returnItemsOfTheGenre()}</div>
             <button
@@ -183,7 +185,10 @@ export default function AdmItem({ typeIten, dataItem }: props) {
     setOpenPopUpDelete(false);
   }
 
-  function handleInformationChangeEvent(e: MouseEvent<HTMLButtonElement>,typeItem:typeItem) {
+  function handleInformationChangeEvent(
+    e: MouseEvent<HTMLButtonElement>,
+    typeItem: typeItem
+  ) {
     e.preventDefault();
     const routeMapping: Record<typeItem, string> = {
       anime: `/admin/anime/editing?id=${dataItem.id}`,
@@ -193,9 +198,11 @@ export default function AdmItem({ typeIten, dataItem }: props) {
     router.push(routeMapping[typeItem]);
   }
 
-  function closedPopUpAddGender() {
+  function closedPopUpAddGender(backToThePreviousPage: boolean) {
+    if (backToThePreviousPage === true) {
+      location.reload();
+    }
     setOpenModalAddGenre(!openModalAddGenre);
-    location.reload();
   }
 
   function closedPopUpDeleteGender() {

@@ -9,8 +9,8 @@ interface IProps {
 }
 
 export default function UserCarrousel({ dataRecentlyAdded }: IProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [imagesPerSlide, setImagesPerSlide] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [imagesPerSlide, setImagesPerSlide] = useState<number>(1);
 
   const totalSlides = Math.ceil(dataRecentlyAdded.length / imagesPerSlide);
 

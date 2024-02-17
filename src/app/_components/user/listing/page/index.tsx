@@ -7,6 +7,8 @@ import UserListingDisplayItems from "../displayItems";
 import AdapterPaginationFilmes from "@/app/_adapter/films/pagination";
 import AdapterDashboarListByYear from "@/app/_adapter/dashboard/listByYear";
 import AdapterDashboarSearch from "@/app/_adapter/dashboard/search";
+import LoadingComponent from "@/app/_components/general/loading";
+import { IDataPagination, IItemListing } from "@/app/_interface/returnFromApi";
 
 interface IProps {
   params: any;
@@ -19,9 +21,10 @@ export default function UserListingPage({ params }: IProps) {
   const paramYear: string = _params["year"];
   const paramSearch: string = _params["search"];
 
-  const [dataItens, setDataItens] = useState<any>();
+  const [dataItens, setDataItens] = useState<IItemListing[]>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     searchDataBasedOnParameters(
@@ -55,16 +58,21 @@ export default function UserListingPage({ params }: IProps) {
         <h2 className={styles.listingTitle}>
           {returnPageTitle(paramAll, paramYear, paramSearch)}
         </h2>
-        <UserListingDisplayItems listing={dataItens} />
-        {!dataItens ? (
-          <div className={styles.containerMensagem}>
-            <p className={styles.mensagem}>
-              Opss. parece que não encontramos nada no nosso sitemas
-            </p>
-          </div>
-        ) : (
-          <></>
-        )}
+        <div className={styles.containerAlignment}>
+          {!loading ? (
+            dataItens ? (
+              <UserListingDisplayItems listing={dataItens} />
+            ) : (
+              <div className={styles.containerMensagem}>
+                <p className={styles.mensagem}>
+                  Opss. parece que não encontramos nada no nosso sitemas
+                </p>
+              </div>
+            )
+          ) : (
+            <LoadingComponent height={80} width={80} loading={loading} />
+          )}
+        </div>
       </div>
       {totalRecords > limit ? (
         <div className={styles.containerPages}>
@@ -114,49 +122,51 @@ export default function UserListingPage({ params }: IProps) {
     currentPage: number,
     limit: number
   ) {
-    if (paramAll) {
-      if (paramAll === "animes") {
-        const resultPagAllAnime: any = await AdapterPaginationAnime(
-          currentPage,
-          limit
-        );
-        if (resultPagAllAnime) {
-          setTotalRecords(resultPagAllAnime.totalRecords);
-          setDataItens(resultPagAllAnime.result);
-        }
-      } else if (paramAll === "filmes") {
-        const resultPagAllFilmes: any = await AdapterPaginationFilmes(
-          currentPage,
-          limit
-        );
-        if (resultPagAllFilmes) {
-          setTotalRecords(resultPagAllFilmes.totalRecords);
-          setDataItens(resultPagAllFilmes.result);
+    try {
+      if (paramAll) {
+        if (paramAll === "animes") {
+          const resultPagAllAnime: IDataPagination | undefined =
+            await AdapterPaginationAnime(currentPage, limit);
+          if (resultPagAllAnime) {
+            setTotalRecords(resultPagAllAnime.totalRecords);
+            setDataItens(resultPagAllAnime.result);
+          }
+        } else if (paramAll === "filmes") {
+          const resultPagAllFilmes: IDataPagination | undefined =
+            await AdapterPaginationFilmes(currentPage, limit);
+          if (resultPagAllFilmes) {
+            setTotalRecords(resultPagAllFilmes.totalRecords);
+            setDataItens(resultPagAllFilmes.result);
+          }
         }
       }
-    }
-    if (paramYear) {
-      const resultListByYear: any = await AdapterDashboarListByYear(
-        currentPage,
-        limit,
-        parseInt(paramYear)
-      );
-      if (resultListByYear) {
-        setTotalRecords(resultListByYear.totalRecords);
-        setDataItens(resultListByYear.result);
-      } else {
-        setTotalRecords(0);
-        setDataItens(undefined);
+      if (paramYear) {
+        const resultListByYear: IDataPagination | undefined =
+          await AdapterDashboarListByYear(
+            currentPage,
+            limit,
+            parseInt(paramYear)
+          );
+        if (resultListByYear) {
+          setTotalRecords(resultListByYear.totalRecords);
+          setDataItens(resultListByYear.result);
+        } else {
+          setTotalRecords(0);
+          setDataItens(undefined);
+        }
       }
-    }
-    if (paramSearch) {
-      const resultSearch: any = await AdapterDashboarSearch(
-        paramSearch,
-        currentPage,
-        limit
-      );
-      setTotalRecords(resultSearch.totalRecords);
-      setDataItens(resultSearch.result);
+      if (paramSearch) {
+        const resultSearch: IDataPagination | undefined =
+          await AdapterDashboarSearch(paramSearch, currentPage, limit);
+        if (resultSearch) {
+          setTotalRecords(resultSearch.totalRecords);
+          setDataItens(resultSearch.result);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log("Problemas ao buscar os dados " + error);
+      setLoading(false);
     }
   }
 

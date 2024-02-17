@@ -1,4 +1,5 @@
 "use server";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 import { post } from "../http.service";
 
 interface dataAnime {
@@ -17,7 +18,7 @@ interface dataAnime {
 export default async function adapterAnimeRegister(
   dataAnime: dataAnime,
   accessToken: string
-) {
+): Promise<IMessageReturn | undefined> {
   const url = process.env.URL_API_BASE + "/animes/";
 
   const result = await post(
@@ -37,11 +38,11 @@ export default async function adapterAnimeRegister(
     accessToken
   );
 
-  if (result.status !== 201) {
-    return result.status;
+  if (result) {
+    const resutlData = await result.json();
+
+    return resutlData;
+  } else {
+    return undefined;
   }
-
-  const resutlData = await result.json();
-
-  return resutlData;
 }

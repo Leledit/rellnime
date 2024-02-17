@@ -1,13 +1,18 @@
-'use server'
-export default async function adapterListAllGenres(){
-    const url = process.env.URL_API_BASE + `/genres/`;
+"use server";
 
-    const result = await fetch(url,{ cache:'no-store' }); 
+import { IGenre, IItemListing } from "@/app/_interface/returnFromApi";
 
-    if(result.status !== 200){
-        return undefined
-    }
+export default async function adapterListAllGenres(): Promise<
+  IGenre[] | undefined
+> {
+  const url = process.env.URL_API_BASE + `/genres/`;
 
-    const dataResult = await result.json();
-    return dataResult;
+  const result = await fetch(url, { cache: "no-store" });
+
+  if (result.status !== 200) {
+    return undefined;
+  }
+
+  const dataResult = await result.json();
+  return dataResult;
 }

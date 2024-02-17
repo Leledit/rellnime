@@ -45,6 +45,14 @@
     }
   }
 
+  .containerLoading{
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   @media screen and (min-width: 428px) {
     .admData {
       flex-direction: row;

@@ -1,14 +1,17 @@
-'use server'
-export default async function adapterListOneAnime(idAnime:string){
-    const url = process.env.URL_API_BASE + `/animes/${idAnime}`;
-    const { signal } = new AbortController();
-    const result = await fetch(url,{ cache:'no-store' }); 
+"use server";
 
-    if(result.status !== 200){
-        return undefined
-    }
+import { IEntitieAnime } from "@/app/_interface/returnFromApi";
 
-    const dataResult = await result.json();
-    return dataResult;
+export default async function adapterListOneAnime(
+  idAnime: string
+): Promise<IEntitieAnime | undefined> {
+  const url = process.env.URL_API_BASE + `/animes/${idAnime}`;
+  const result = await fetch(url, { cache: "no-store" });
 
+  if (result.status !== 200) {
+    return undefined;
+  }
+
+  const dataResult = await result.json();
+  return dataResult;
 }

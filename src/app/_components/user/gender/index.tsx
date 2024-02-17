@@ -5,54 +5,56 @@ import styles from "./index.module.scss";
 import adapterListAllGenres from "@/app/_adapter/genres/listAll";
 import AdapterDashboarListByGenre from "@/app/_adapter/dashboard/listByGenre";
 import UserListingDisplayItems from "../listing/displayItems";
+import PaginationControls from "../../general/paginationControls";
+import LoadingComponent from "../../general/loading";
+import {
+  IDataPagination,
+  IGenre,
+  IItemListing,
+} from "@/app/_interface/returnFromApi";
 
 export default function UserGender() {
   const limit = 24;
 
-  const [availableGenres, setAvailableGenres] = useState<any>();
+  const [availableGenres, setAvailableGenres] = useState<IGenre[]>();
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [dataItens, setDataItens] = useState<any>();
+  const [dataItens, setDataItens] = useState<IItemListing[]>();
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    searchAvailableGenres();
+    const fetchData = async () => {
+      try {
+        const resultRequest: IGenre[] | undefined =
+          await adapterListAllGenres();
+
+        if (resultRequest) {
+          setAvailableGenres(resultRequest);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log("Problemas ao buscar os dados " + error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
     async function searchForTitlesOfASpecificGenre(selectedGenre: string) {
       if (selectedGenre !== "") {
-        const result: any = await AdapterDashboarListByGenre(
-          currentPage,
-          limit,
-          selectedGenre
-        );
+        const result: IDataPagination | undefined =
+          await AdapterDashboarListByGenre(currentPage, limit, selectedGenre);
         if (result) {
           setDataItens(result.result);
           setTotalRecords(result.totalRecords);
-          console.log("----");
-          console.log(result.totalRecords);
         }
       }
     }
     searchForTitlesOfASpecificGenre(selectedGenre);
   }, [currentPage, selectedGenre]);
-
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const nextPage = () => {
-    if (currentPage !== totalRecords / limit) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <>
@@ -60,21 +62,32 @@ export default function UserGender() {
         <div className={styles.genderenderChoice}>
           <h2 className={styles.genderTitle}>Generos Disponiveis</h2>
           <hr className={styles.genderDetail} />
-          <div className={styles.containerGender}>
-            {availableGenres?.map((item: any, index: any) => {
-              return (
-                <div
-                  key={index}
-                  className={`${styles.item} ${
-                    selectedGenre === item.name ? styles.selectedItem : ""
-                  }`}
-                  onClick={() => setSelectedGenre(item.name)}
-                >
-                  {item.name}
-                </div>
-              );
-            })}
-          </div>
+
+          {!loading ? (
+            availableGenres ? (
+              <div className={styles.containerGender}>
+                {availableGenres?.map((item: any, index: any) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`${styles.item} ${
+                        selectedGenre === item.name ? styles.selectedItem : ""
+                      }`}
+                      onClick={() => setSelectedGenre(item.name)}
+                    >
+                      {item.name}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <></>
+            )
+          ) : (
+            <div className={styles.containerLoading}>
+              <LoadingComponent height={60} width={60} loading={loading} />
+            </div>
+          )}
         </div>
       </div>
       {dataItens ? (
@@ -88,20 +101,14 @@ export default function UserGender() {
       ) : (
         <></>
       )}
-
       {dataItens ? (
         totalRecords > limit ? (
-          <div className={styles.containerPages}>
-            <div className={styles.pages}>
-              <div className={styles.pagePrev} onClick={prevPage}>
-                Anterior
-              </div>
-              {renderPaginationButtons()}
-              <div className={styles.pageNext} onClick={nextPage}>
-                Próxima
-              </div>
-            </div>
-          </div>
+          <PaginationControls
+            currentPage={currentPage}
+            limit={limit}
+            setCurrentPage={setCurrentPage}
+            totalRecords={totalRecords}
+          />
         ) : (
           <></>
         )
@@ -110,35 +117,4 @@ export default function UserGender() {
       )}
     </>
   );
-
-  function renderPaginationButtons() {
-    const numButtons = 4; // Quantidade de botões a serem exibidos
-    const pageButtons = [];
-    const start = Math.max(1, currentPage - Math.floor(numButtons / 2));
-    const end = Math.min(totalRecords / limit, start + numButtons - 1);
-
-    for (let i = start; i <= Math.ceil(end); i++) {
-      pageButtons.push(
-        <div
-          className={`${styles.page} ${
-            currentPage === i ? styles.selectPag : ""
-          }`}
-          key={i}
-          onClick={() => goToPage(i)}
-        >
-          {i}
-        </div>
-      );
-    }
-
-    return pageButtons;
-  }
-
-  async function searchAvailableGenres() {
-    const resultRequest = await adapterListAllGenres();
-
-    if (resultRequest) {
-      setAvailableGenres(resultRequest);
-    }
-  }
 }

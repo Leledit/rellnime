@@ -13,14 +13,21 @@
       text-align: center;
       margin-left: 5%;
     }
-    .containerMensagem {
-      width: 100%;
-      margin-top: 50px;
-      .mensagem {
-        text-align: center;
-        vertical-align: middle;
-        color: $light-white;
-        font-size: 20px;
+    .containerAlignment {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+      .containerMensagem {
+        width: 100%;
+        margin-top: 50px;
+        .mensagem {
+          text-align: center;
+          vertical-align: middle;
+          color: $light-white;
+          font-size: 20px;
+        }
       }
     }
   }

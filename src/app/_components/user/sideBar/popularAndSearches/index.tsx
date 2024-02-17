@@ -8,18 +8,32 @@ import Link from "next/link";
 import adapterPopular from "@/app/_adapter/dashboard/popular";
 import iconStary from "../../../../../../public/images/user/iconStar.png";
 import { useRouter } from "next/navigation";
+import LoadingComponent from "@/app/_components/general/loading";
+import { IDashboardPopular, IItemListing } from "@/app/_interface/returnFromApi";
 
 export default function UserSideBarPopularAndSearches() {
-  useEffect(() => {
-    getDataFromPopular();
-  }, []);
-
   const [valueQuery, setValueQuery] = useState<string>("");
   const [messageError, setMessageError] = useState<string>();
-  const [dataPopular, setDataPopular] = useState<any[]>();
+  const [dataPopular, setDataPopular] = useState<IDashboardPopular[]>();
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   const yearAvailable: number[] = returnAvailableYears();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resultData: IDashboardPopular[] | undefined = await adapterPopular(5);
+        setDataPopular(resultData);
+        setLoading(false);
+      } catch (error) {
+        console.log("Problemas ao buscar os dados " + error);
+        setLoading(false);
+      }
+    }; //
+
+    fetchData();
+  }, []);
 
   return (
     <div className={styles.containerSideBar}>
@@ -43,7 +57,10 @@ export default function UserSideBarPopularAndSearches() {
         </div>
         <p className={styles.searchMensage}>{messageError}</p>
       </div>
-      <div className={styles.containerYear} style={{paddingBottom:dataPopular?'0':'50px'}}>
+      <div
+        className={styles.containerYear}
+        style={{ paddingBottom: dataPopular ? "0" : "50px" }}
+      >
         <h3 className={styles.yearTitle}>Ano</h3>
         <div className={styles.yearItens}>
           {yearAvailable.map((year, index) => {
@@ -59,14 +76,18 @@ export default function UserSideBarPopularAndSearches() {
           })}
         </div>
       </div>
-      {dataPopular ? (
-        <div className={styles.containerPopular}>
-          <h3 className={styles.popularTitle}>Populares</h3>
-          <div className={styles.containerItens}>
-            {dataPopular?.map((item, index) => {
-              if (index < 5) {
+      {!loading ? (
+        dataPopular ? (
+          <div className={styles.containerPopular}>
+            <h3 className={styles.popularTitle}>Populares</h3>
+            <div className={styles.containerItens}>
+              {dataPopular?.map((item, index) => {
                 return (
-                  <Link href={`/home/item/${item.id}`} className={styles.item} key={index}>
+                  <Link
+                    href={`/home/item/${item.id}`}
+                    className={styles.item}
+                    key={index}
+                  >
                     <img
                       src={item.urlImg}
                       className={styles.itemImg}
@@ -86,22 +107,19 @@ export default function UserSideBarPopularAndSearches() {
                     </div>
                   </Link>
                 );
-              } else {
-                return <></>;
-              }
-            })}
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )
       ) : (
-        <></>
+        <div className={styles.containerLoading}>
+          <LoadingComponent height={60} width={60} loading={loading} />
+        </div>
       )}
     </div>
   );
-
-  async function getDataFromPopular() {
-    const resultData = await adapterPopular();
-    setDataPopular(resultData);
-  }
 
   function handlingSearchButtonClick() {
     //Realizar redirect, passando o valor da busca como parametro.

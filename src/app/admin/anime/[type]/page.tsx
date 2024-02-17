@@ -19,7 +19,7 @@ import {
 import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import adapterListOneAnime from "@/app/_adapter/anime/listOne";
-import { IEntitieAnime } from "@/app/_interface/dataBd";
+import { IEntitieAnime, IMessageReturn } from "@/app/_interface/returnFromApi";
 import adapterAnimeChanging from "@/app/_adapter/anime/changing";
 import { checkingAdministratorJwtCredentials } from "@/app/_utils/tolken";
 
@@ -137,7 +137,9 @@ export default function AnimeForm({ params, searchParams }: IProps) {
     }
 
     async function lookingForInformationAboutAnAnime(idAnime: string) {
-      const dataAnime: IEntitieAnime = await adapterListOneAnime(idAnime);
+      const dataAnime: IEntitieAnime | undefined = await adapterListOneAnime(
+        idAnime
+      );
 
       if (dataAnime) {
         setFormsFilds({
@@ -215,7 +217,43 @@ export default function AnimeForm({ params, searchParams }: IProps) {
 
   async function editingAnAlreadyRegisteredAnime() {
     if (searchParams) {
-      const resultRequest = await adapterAnimeChanging(
+      const resultRequest: IMessageReturn | undefined =
+        await adapterAnimeChanging(
+          {
+            name: formsFilds.name.value,
+            watched: formsFilds.watched.value,
+            qtdEpisodes: formsFilds.qtdEpisodes.value,
+            releaseYear: formsFilds.releaseYear.value,
+            note: formsFilds.note.value,
+            status: formsFilds.status.value,
+            nextSeason: formsFilds.nextSeason.value,
+            previousSeason: formsFilds.previousSeason.value,
+            synopsis: formsFilds.synopsis.value,
+            img: await returnImageThatMustBeSent(),
+          },
+          accessToken,
+          searchParams.id as string
+        );
+
+      if (!resultRequest) {
+        setMensagemRequest({
+          message: "Problemas ao editar o anime",
+          status: 500,
+        });
+      } else if (resultRequest.message) {
+        setMensagemRequest({ message: resultRequest.message, status: 200 });
+
+        //Limpando os campos do formulario
+        setFormsFilds(initialValueFormsFilds);
+      } else {
+        setMensagemRequest({ message: resultRequest.details, status: 500 });
+      }
+    }
+  }
+
+  async function registerNewRecordInTheDatabase() {
+    const resultRequest: IMessageReturn | undefined =
+      await adapterAnimeRegister(
         {
           name: formsFilds.name.value,
           watched: formsFilds.watched.value,
@@ -228,62 +266,21 @@ export default function AnimeForm({ params, searchParams }: IProps) {
           synopsis: formsFilds.synopsis.value,
           img: await returnImageThatMustBeSent(),
         },
-        accessToken,
-        searchParams.id as string
+        accessToken
       );
 
-      if (resultRequest === 400) {
-        setMensagemRequest({
-          message: "Problemas ao editar o anime",
-          status: 500,
-        });
-      }
-
-      if (resultRequest.message) {
-        setMensagemRequest({ message: resultRequest.message, status: 200 });
-
-        //Limpando os campos do formulario
-        setFormsFilds(initialValueFormsFilds);
-      }
-    }
-  }
-
-  async function registerNewRecordInTheDatabase() {
-    const resultRequest = await adapterAnimeRegister(
-      {
-        name: formsFilds.name.value,
-        watched: formsFilds.watched.value,
-        qtdEpisodes: formsFilds.qtdEpisodes.value,
-        releaseYear: formsFilds.releaseYear.value,
-        note: formsFilds.note.value,
-        status: formsFilds.status.value,
-        nextSeason: formsFilds.nextSeason.value,
-        previousSeason: formsFilds.previousSeason.value,
-        synopsis: formsFilds.synopsis.value,
-        img: await returnImageThatMustBeSent(),
-      },
-      accessToken
-    );
-
-    if (resultRequest === 409) {
-      setMensagemRequest({
-        message: "Existe outro anime no sistema com este nome",
-        status: 500,
-      });
-    }
-
-    if (resultRequest === 400) {
+    if (!resultRequest) {
       setMensagemRequest({
         message: "Problemas ao cadastrar o anime",
         status: 500,
       });
-    }
-
-    if (resultRequest.message) {
+    } else if (resultRequest.message) {
       setMensagemRequest({ message: resultRequest.message, status: 200 });
 
       //Limpando os campos do formulario
       setFormsFilds(initialValueFormsFilds);
+    } else {
+      setMensagemRequest({ message: resultRequest.details, status: 500 });
     }
   }
 

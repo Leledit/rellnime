@@ -1,20 +1,31 @@
-'use server'
+"use server";
 
-export default async function AdapterPaginationFilmes(page:number,limit:number){
-    const url = process.env.URL_API_BASE + `/filmes/page/?page=${page}&limit=${limit}`;
+import { IDataPagination } from "@/app/_interface/returnFromApi";
 
-    const result = await fetch(url,{ cache:'no-store' }); 
+export default async function AdapterPaginationFilmes(
+  page: number,
+  limit: number
+): Promise<IDataPagination | undefined> {
+  const url =
+    process.env.URL_API_BASE + `/filmes/page/?page=${page}&limit=${limit}`;
 
-    if(result.status !== 200){
-        return undefined
-    }
+  const result = await fetch(url, { cache: "no-store" });
 
-    const totalRecords =  result.headers.get("X-Total-Count");
+  if (result.status !== 200) {
+    return undefined;
+  }
+
+  if (result) {
+    const totalRecords = parseInt(
+      result.headers.get("X-Total-Count") as string
+    );
 
     const dataResult = await result.json();
-        
     return {
-        result: dataResult,
-        totalRecords: totalRecords,
+      result: dataResult,
+      totalRecords: totalRecords,
     };
+  } else {
+    return undefined;
+  }
 }

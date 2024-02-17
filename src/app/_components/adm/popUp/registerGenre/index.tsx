@@ -15,6 +15,7 @@ import FormLoading from "@/app/_components/general/form/loading";
 import FormMessage from "@/app/_components/general/form/message";
 import adapterGenresRegister from "@/app/_adapter/genres/register";
 import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
+import { IMessageReturn } from "@/app/_interface/returnFromApi";
 
 interface IProps {
   open: boolean;
@@ -106,24 +107,25 @@ export default function AdmPopUpRegisterGenre({ open, onClosed }: IProps) {
       setLoading(true);
       setMensagemRequest({ message: "", status: 0 });
 
-      const resultRequest = await adapterGenresRegister(fildGenre, accessToken);
+      const resultRequest: IMessageReturn | undefined =
+        await adapterGenresRegister(fildGenre, accessToken);
 
-      if (resultRequest === 409) {
+      if (!resultRequest) {
         setMensagemRequest({
           status: 500,
           message: "Ja existe outro genero com esse nome cadastrado!",
         });
-      } else if (resultRequest === 500) {
-        setMensagemRequest({
-          status: 500,
-          message: "Problemas ao realizar o cadastro do genero",
-        });
-      } else {
+      } else if (resultRequest.message) {
         setMensagemRequest({
           status: 200,
-          message: resultRequest.details,
+          message: resultRequest.message,
         });
         setFildGenre("");
+      } else {
+        setMensagemRequest({
+          status: 500,
+          message: resultRequest.details,
+        });
       }
 
       setLoading(false);

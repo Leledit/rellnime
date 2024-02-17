@@ -1,0 +1,56 @@
+@import "../../../../../public/css/palette.scss";
+
+.containerPages {
+  background: $dark-black;
+  margin-top: 30px;
+  color: $light-white;
+  .pages {
+    width: 90%;
+    margin-left: 5%;
+    height: 170px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    .pagePrev,
+    .pageNext {
+      border: 1px solid $light-white;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .pagePrev:hover,
+    .pageNext:hover {
+      color: $light-blue;
+    }
+    .page {
+      border: 1px solid $light-white;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .selectPag {
+      background: $light-blue-800;
+    }
+    .page:hover {
+      color: $light-blue;
+    }
+  }
+  @media screen and (min-width: 500px) {
+    .pages {
+      width: 400px;
+      margin-left: calc(50% - 200px);
+    }
+  }
+  @media screen and (min-width: 700px) {
+    .pages {
+      width: 600px;
+      margin-left: calc(50% - 300px);
+      .page {
+        padding: 15px 25px;
+      }
+      .pagePrev,
+      .pageNext {
+        padding: 15px 25px;
+      }
+    }
+  }
+}
