@@ -5,13 +5,21 @@ import logo from "../../../../../public/images/smalSoon.png";
 import iconMenu from "../../../../../public/images/user/iconMenu.png";
 import iconButtonLogin from "../../../../../public/images/user/iconButtonLogin.png";
 import iconButtonRegister from "../../../../../public/images/user/iconButtonRegister.png";
+import iconButtonProfile from "../../../../../public/images/user/iconButtonProfile.png";
 import Image from "next/image";
 import Link from "next/link";
+import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
+import getUserTypeFromToken from "@/app/_utils/tolken";
+import { useRouter } from "next/navigation";
+import { Token } from "@mui/icons-material";
 
 export default function UserMenu() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [positionMenuItem, setPositionMenuItem] = useState<string>();
   const [marginBottomMenu, setMarginBottomMenu] = useState<string>();
+  const [loggedInUser, setLoggedInUser] = useState<boolean>(false);
+  const [processingTolkien, setProcessingTolkien] = useState<boolean>(true);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -53,6 +61,21 @@ export default function UserMenu() {
     };
   }, []);
 
+  useEffect(() => {
+    const tolken = getTolkenCookie();
+    const infoUser: any = getUserTypeFromToken(tolken);
+
+    if (infoUser) {
+      if (infoUser.papel !== "user") {
+        router.push("/admin");
+      } else {
+        setLoggedInUser(true);
+      }
+    }
+
+    setProcessingTolkien(false);
+  }, [router]);
+
   return (
     <>
       <div
@@ -88,23 +111,42 @@ export default function UserMenu() {
                 </Link>
               </div>
               <div className={styles.containerButtons}>
-                <Link href={"/authentication/login"}>
-                  <Image
-                    src={iconButtonLogin}
-                    alt="Icone que representa o login"
-                    className={styles.iconLogin}
-                    onClick={toggleMenu}
-                  />
-                </Link>
-                <hr className={styles.divider} />
-                <Link href={"/authentication/register"}>
-                  <Image
-                    src={iconButtonRegister}
-                    alt="Icone que representa o registro"
-                    className={styles.iconRegister}
-                    onClick={toggleMenu}
-                  />
-                </Link>
+                {!processingTolkien ? (
+                  !loggedInUser ? (
+                    <>
+                      <Link href={"/authentication/login"}>
+                        <Image
+                          src={iconButtonLogin}
+                          alt="Icone que representa o login"
+                          className={styles.iconLogin}
+                          onClick={toggleMenu}
+                        />
+                      </Link>
+                      <hr className={styles.divider} />
+                      <Link href={"/authentication/register"}>
+                        <Image
+                          src={iconButtonRegister}
+                          alt="Icone que representa o registro"
+                          className={styles.iconRegister}
+                          onClick={toggleMenu}
+                        />
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link href={"/home/profile"}>
+                        <Image
+                          src={iconButtonProfile}
+                          alt="Icone que representa o registro"
+                          className={styles.iconRegister}
+                          onClick={toggleMenu}
+                        />
+                      </Link>
+                    </>
+                  )
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

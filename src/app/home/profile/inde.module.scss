@@ -1,0 +1,129 @@
+@import "../../../../public/css/palette.scss";
+
+.containerProfile {
+  min-height: 500px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  background: $dark-black-900;
+
+  .profileTitle {
+    padding-top: 60px;
+    color: $light-white;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 60px;
+  }
+
+  .profileInfo {
+    .info {
+      color: $light-white;
+      width: 90%;
+      margin-left: 5%;
+      .infoLabel {
+        margin-bottom: 15px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .infoValue {
+        margin-left: 20px;
+        margin-bottom: 30px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .containerActions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+    .action {
+      margin-bottom: 20px;
+      width: 80%;
+      font-size: 24px;
+      height: 50px;
+      border-radius: 30px;
+      background: $light-blue;
+      color: $light-white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 40px;
+    }
+  }
+
+  .containerLoading{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .containerMensageError{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .mensageError{
+      color: $light-white;
+      font-size: 24px;
+      text-align: center;
+    }
+  }
+
+  @media screen and (min-width: 428px) {
+    width: 90%;
+    margin-left: 5%;
+    border-radius: 20px;
+    .containerActions {
+      .action {
+        width: 300px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 700px) {
+    .containerActions {
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    .profileInfo {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      .info {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        margin-bottom: 40px;
+        width: 40%;
+        margin-left: 0px;
+        .infoValue {
+          margin-bottom: 10px;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  @media screen and (min-width: 1600px) {
+    .profileInfo {
+        width: 90%;
+        margin-left: 5%;
+      .info {
+        width: 33%;
+      }
+    }
+  }
+}

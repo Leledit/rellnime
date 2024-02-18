@@ -82,3 +82,16 @@ export interface IAuthentication{
   error?:string,
   details?:string,
 }
+
+export interface IListUser{
+  email:string
+  name:string
+  password:string
+  type:string
+  id:string
+}
+
+export interface IErrorRequest{
+  error:string,
+  details:string,
+}
