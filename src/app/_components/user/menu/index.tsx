@@ -6,9 +6,13 @@ import iconMenu from "../../../../../public/images/user/iconMenu.png";
 import iconButtonLogin from "../../../../../public/images/user/iconButtonLogin.png";
 import iconButtonRegister from "../../../../../public/images/user/iconButtonRegister.png";
 import iconButtonProfile from "../../../../../public/images/user/iconButtonProfile.png";
+import iconButtonExit from "../../../../../public/images/user/iconButtonExit.png";
 import Image from "next/image";
 import Link from "next/link";
-import { getTolkenCookie } from "@/app/_utils/cookies/cookies";
+import {
+  destroyTolkenCookie,
+  getTolkenCookie,
+} from "@/app/_utils/cookies/cookies";
 import getUserTypeFromToken from "@/app/_utils/tolken";
 import { useRouter } from "next/navigation";
 import { Token } from "@mui/icons-material";
@@ -142,6 +146,13 @@ export default function UserMenu() {
                           onClick={toggleMenu}
                         />
                       </Link>
+                      <hr className={styles.divider} />
+                      <Image
+                        src={iconButtonExit}
+                        alt="Icone que representa o registro"
+                        className={styles.iconRegister}
+                        onClick={logOutOfTheApplication}
+                      />
                     </>
                   )
                 ) : (
@@ -154,4 +165,9 @@ export default function UserMenu() {
       </div>
     </>
   );
+
+  function logOutOfTheApplication() {
+    destroyTolkenCookie();
+    window.location.href = "/home/";
+  }
 }
