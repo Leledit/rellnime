@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">ReelNime</h1>
 
-## Getting Started
+![Linguagem mais usada](https://img.shields.io/github/languages/top/Leledit/rellnime)
+![Numero de lingaugens usadas](https://img.shields.io/github/languages/count/Leledit/rellnime)
+![Lincense](https://img.shields.io/github/license/Leledit/rellnime)
+![Tamanho do projeto](https://img.shields.io/github/languages/code-size/Leledit/rellnime)
 
-First, run the development server:
+# Project description
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project consists of a website that offers access to a catalog of anime and films. Previously, I used to keep track of the anime and films I was watching by writing down notes in a notebook, recording their names and descriptions. At a certain point, I realized that it would be advantageous to develop a system to manage this information, which gave rise to the idea for this project.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In addition to solving this control issue, another big motivation behind this project was the opportunity to improve my skills with Next.js. I was interested in exploring version 14 of this library, which was recently released. This project also marks my debut in creating websites, containing tests.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Starting the project
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To start the project, follow the steps below:
 
-## Learn More
+- Open a terminal in the project folder.
 
-To learn more about Next.js, take a look at the following resources:
+- Start the project with the command:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+        npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Start the project with the command:
 
-## Deploy on Vercel
+        npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Now you can open your browser and access the following URL:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+        http://localhost:3000
+
+Make sure all dependencies are installed correctly before starting the project.
+
+# Environment variables
+
+An environment variables file must be created, containing the following variables:
+
+    URL_API_BASE=http://localhost:8080/api/v1
+
+# API execution
+
+This project depends on an API that shares the same name and is hosted in the following repository:
+
+    https://github.com/Leledit/Api_ReelNime
+
+To use this project, you need to follow the steps below:
+
+- Clone the above project and start running it.
+- Configure a MongoDB database.
+- Populate the database with the data contained in the API 'Bd' folder.
+- It is essential to guarantee the execution of the project, as its use directly depends on this stage.
+
+# main features of the project
+
+The project offers the following functionalities:
+
+- Registration of anime and films.
+- Registration of genres.
+- Adding or removing genres from a title.
+- Title exclusion.
+- Title update.
+- Listing by category.
+- Listing by genre.
+- Title preview.
+- Creation of user account.
+- User profile.
+
+Note: whenever "title" is mentioned, it refers to anime/movies
+
+# Project Architecture
+
+
