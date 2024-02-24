@@ -69,4 +69,19 @@ Note: whenever "title" is mentioned, it refers to anime/movies
 
 # Project Architecture
 
+The folder structure adopted by the project was as follows:
 
+Public:
+
+- css: .css files used in different parts of the project.
+- images: Images used in the project, organized by category.
+  src/app:
+
+- \_adapter: Here are all external interactions, that is, calls to the API. These calls are grouped into subfolders by categories.
+- \_components: All components used in the application are stored here and are divided into three categories (adm/general/user), related to the location where they are applied.
+- \_interface: All interfaces used in the project are stored here.
+- \_ui: Application icons are kept here.
+- \_utils: The utility functions used in the project are stored here.
+- admin: Pages that make up the administrative area of the project.
+- authentication: Pages related to application authentication.
+- home: Pages available to users.

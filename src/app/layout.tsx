@@ -5,7 +5,7 @@ import "../../public/css/reset.css";
 const merienda = Merienda({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ReellNime archive",
+  title: "ReellNime",
   description: "Sua biblioteca de conteudo online",
 };
 

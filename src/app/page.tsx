@@ -1,16 +1,11 @@
-'use client';
+"use client";
 
 import { useEffect } from "react";
 
 export default function Home() {
-  
-  useEffect(()=>{
-    window.location.href = './home/'
-  },[])
+  useEffect(() => {
+    window.location.href = "./home/";
+  }, []);
 
-  return (
-    <div>
-       
-    </div>
-  )
+  return <div></div>;
 }
